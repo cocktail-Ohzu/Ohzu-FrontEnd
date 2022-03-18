@@ -57,11 +57,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 Icons.search,
                 size: 25,
               ),
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withOpacity(0.8),
             )),
         body: SingleChildScrollView(
             child: Container(
-              margin: const EdgeInsets.fromLTRB(20, 0, 20, 5),
+              margin: const EdgeInsets.fromLTRB(24, 0, 24, 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
