@@ -28,20 +28,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomCenter,
-            stops: [0.0, 0.2],
-            colors: [
-              Color(0xff8C5B40),
-              Color(0xff121212),
-            ],
-          )),
+        begin: Alignment.topLeft,
+        end: Alignment.bottomCenter,
+        stops: [0.0, 0.2],
+        colors: [
+          Color(0xff8C5B40),
+          Color(0xff121212),
+        ],
+      )),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -62,149 +61,154 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.white.withOpacity(0.6),
                 ),
               )
-            ]
-        ),
+            ]),
         body: SingleChildScrollView(
             child: Container(
-              margin: const EdgeInsets.fromLTRB(20, 0, 20, 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  /* 추천 칵테일 타이틀 */
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: const Text(
-                      "오늘의 추천 칵테일",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          margin: const EdgeInsets.fromLTRB(24, 0, 24, 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              /* 추천 칵테일 타이틀 */
+              Container(
+                alignment: Alignment.centerLeft,
+                child: const Text(
+                  "오늘의 추천 칵테일",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    color: Colors.white,
                   ),
+                ),
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              ),
 
-                  /* 추천 칵테일 컨테이너 */
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment(0.13, 0.0),
-                          end: Alignment.bottomCenter,
-                          stops: [
-                            0.5,
-                            0.8,
-                            1
-                          ],
-                          colors: <Color>[
-                            Color(0xFFF08FA4),
-                            Color(0xff956570),
-                            Color.fromRGBO(82, 82, 82, 0.6)
-                          ]),
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                    ),
-                    height: 460,
-                    child: Column(
-                      children: [
-                        /* 추천 칵테일 이미지 */
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(7, 7, 7, 0),
-                          width: double.infinity,
-                          height: 350,
-                          decoration: const BoxDecoration(
-                            color: Color(0xffF28093),
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
+              /* 추천 칵테일 컨테이너 */
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment(0.10, 0.0),
+                      end: Alignment.bottomCenter,
+                      stops: [
+                        0.4,
+                        0.8,
+                        1
+                      ],
+                      colors: <Color>[
+                        Color(0xFFF08FA4),
+                        Color(0xff956570),
+                        Color.fromRGBO(82, 82, 82, 0.6)
+                      ]),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                ),
+                height: 464,
+                child: Column(
+                  children: [
+                    /* 추천 칵테일 이미지 */
+                    Container(
+                        margin: const EdgeInsets.fromLTRB(7, 7, 7, 0),
+                        width: double.infinity,
+                        height: 328,
+                        decoration: const BoxDecoration(
+                          color: Color(0xffF08FA4),
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
+                        child: const Image(
+                            image: AssetImage('asset/images/image 58.png'),
+                            fit: BoxFit.cover)),
 
-                        /* 추천 칵테일 텍스트 */
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-                            alignment: Alignment.centerLeft,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 5),
-                                Text.rich(TextSpan(
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 22,
-                                    color: Colors.white,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(text: "미도리 사워"),
-                                    TextSpan(
-                                        text: " | ",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w900,
-                                          color: Colors.white.withOpacity(0.5),
-                                          fontSize: 25,
-                                        )),
-                                    TextSpan(
-                                        text: "Midori Sour",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white.withOpacity(0.5),
-                                          fontSize: 16,
-                                        )),
-                                  ],
-                                )),
-                                Text("90년대를 휩쓸었던 전설의 그 칵테일!",
+                    /* 추천 칵테일 텍스트 */
+                    Container(
+                        margin: const EdgeInsets.fromLTRB(25, 21, 25, 5),
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text.rich(TextSpan(
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                                color: Colors.white,
+                              ),
+                              children: <TextSpan>[
+                                const TextSpan(text: "미도리 사워"),
+                                TextSpan(
+                                    text: " | ",
                                     style: TextStyle(
-                                      height: 1.5,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w900,
-                                      color: Colors.white.withOpacity(0.7),
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.white.withOpacity(0.6),
+                                      fontSize: 24,
                                     )),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Text("alcohol 20%",
+                                TextSpan(
+                                    text: "Midori Sour",
                                     style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      color:
-                                      Colors.deepOrangeAccent.withOpacity(0.8),
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white.withOpacity(0.6),
+                                      fontSize: 16,
                                     )),
                               ],
-                            ))
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  /* 하단 버튼 1 */
-                  CupertinoButton(
-                    color: const Color(0xffA35C65),
-                    child: Text(
-                      "자세한 정보가 궁금해요",
-                      style: TextStyle(
-                          color: const Color(0xffDCC5B6).withOpacity(0.8),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w900),
-                    ),
-                    onPressed: () {},
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  /* 하단 버튼 2 */
-                  CupertinoButton(
-                    color: const Color(0xff351B1B),
-                    child: const Text(
-                      "나에게 맞는 칵테일로 추천 받을래요",
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    onPressed: () {},
-                  ),
-                ],
+                            )),
+                            Text("90년대를 휩쓸었던 전설의 그 칵테일!",
+                                style: TextStyle(
+                                  height: 1.5,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white.withOpacity(0.85),
+                                )),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            const Text("alcohol 20%",
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFFDA6C31),
+                                )),
+                          ],
+                        ))
+                  ],
+                ),
               ),
-            )),
+              const SizedBox(
+                height: 20,
+              ),
+              /* 하단 버튼 1 */
+              CupertinoButton(
+                padding: const EdgeInsets.all(19),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                color: const Color(0xffDA6C31),
+                child: const Text(
+                  "자세한 정보가 궁금해요",
+                  style: TextStyle(
+                      color: Color(0xffffffff),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400),
+                ),
+                onPressed: () {},
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              /* 하단 버튼 2 */
+              TextButton(
+                style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                ),
+                onPressed: () {},
+                child: const Text(
+                  "나에게 맞는 칵테일로 추천 받을래요",
+                  style: TextStyle(
+                      color: Color(0xffDA6C31),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+            ],
+          ),
+        )),
       ),
     );
   }
