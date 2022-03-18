@@ -76,22 +76,22 @@ flutter:
   fonts:
      - family: Pretendard
        fonts:
-         - asset: fonts/Pretendard-Regular.otf
+         - asset: asset/fonts/Pretendard-Regular.otf
            weight: 400
-         - asset: fonts/Pretendard-Medium.otf
+         - asset: asset/fonts/Pretendard-Medium.otf
            weight: 500
-         - asset: fonts/Pretendard-SemiBold.otf
+         - asset: asset/fonts/Pretendard-SemiBold.otf
            weight: 600
-         - asset: fonts/Pretendard-Bold.otf
+         - asset: asset/fonts/Pretendard-Bold.otf
            weight: 700
 
      - family: Montserrat
        fonts:
-         - asset: fonts/Montserrat-Regular.otf
+         - asset: asset/fonts/Montserrat-Regular.otf
            weight: 400
-         - asset: fonts/Montserrat-Medium.otf
+         - asset: asset/fonts/Montserrat-Medium.otf
            weight: 500
-         - asset: fonts/Montserrat-SemiBold.otf
+         - asset: asset/fonts/Montserrat-SemiBold.otf
            weight: 600
 
   # For details regarding fonts from package dependencies,
