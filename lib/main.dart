@@ -44,21 +44,26 @@ class _MyHomePageState extends State<MyHomePage> {
           )),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: CupertinoNavigationBar(
+        appBar: AppBar(
+            toolbarHeight: 40,
             backgroundColor: Colors.transparent,
-            border: const Border(bottom: BorderSide(color: Colors.transparent)),
+            elevation: 0,
             //middle: Text(widget.title),
-            trailing: IconButton(
-              onPressed: () {},
-              //splashColor: Colors.transparent,
-              splashRadius: 12,
-              highlightColor: Colors.transparent,
-              icon: const Icon(
-                Icons.search,
-                size: 25,
-              ),
-              color: Colors.white.withOpacity(0.8),
-            )),
+            actions: [
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
+                child: IconButton(
+                  onPressed: () {},
+                  splashRadius: 18,
+                  icon: const Icon(
+                    Icons.search,
+                    size: 25,
+                  ),
+                  color: Colors.white.withOpacity(0.6),
+                ),
+              )
+            ]
+        ),
         body: SingleChildScrollView(
             child: Container(
               margin: const EdgeInsets.fromLTRB(24, 0, 24, 5),
