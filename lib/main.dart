@@ -125,31 +125,38 @@ class _MyHomePageState extends State<MyHomePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text.rich(TextSpan(
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                                color: Colors.white,
-                              ),
-                              children: <TextSpan>[
-                                const TextSpan(text: "미도리 사워"),
-                                TextSpan(
-                                    text: " | ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w300,
-                                      color: Colors.white.withOpacity(0.6),
-                                      fontSize: 24,
-                                    )),
-                                TextSpan(
-                                    text: "Midori Sour",
+                            /* 첫째줄 */
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "미도리 사워",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                /* Vertical Divider */
+                                Container(
+                                  color: Colors.white.withOpacity(0.6),
+                                  height: 22,
+                                  width: 1,
+                                  margin: const EdgeInsets.fromLTRB(12, 3, 12, 0),
+                                ),
+                                Text(
+                                    "Midori Sour",
                                     style: TextStyle(
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.w400,
                                       color: Colors.white.withOpacity(0.6),
                                       fontSize: 16,
-                                    )),
-                              ],
-                            )),
+                                      height: 1.5,
+                                    ),
+                                ),
+                              ]
+                            ),
+                            /* 둘째줄 */
                             Text("90년대를 휩쓸었던 전설의 그 칵테일!",
                                 style: TextStyle(
                                   height: 1.5,
@@ -160,6 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             const SizedBox(
                               height: 15,
                             ),
+                            /* 셋째줄 */
                             const Text("alcohol 20%",
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
