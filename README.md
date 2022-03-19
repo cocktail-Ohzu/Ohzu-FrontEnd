@@ -1,7 +1,7 @@
 # ohzu
 
 cocktail recommendation application
-
+대박
 ## Getting Started
 
 This project is a starting point for a Flutter application.
