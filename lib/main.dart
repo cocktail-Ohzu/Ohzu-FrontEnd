@@ -41,7 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
               Color(0xff8C5B40),
               Color(0xff121212),
             ],
-          )),
+          )
+      ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -62,7 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.white.withOpacity(0.6),
                 ),
               )
-            ]),
+            ]
+        ),
         body: SingleChildScrollView(
             child: Container(
               margin: const EdgeInsets.fromLTRB(24, 0, 24, 5),
@@ -146,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   Row(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                        Text(
+                                        const Text(
                                           "미도리 사워",
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
