@@ -365,61 +365,113 @@ class _ProfileState extends State<Detail> {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
-                                fontWeight: FontWeight.w400),
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        IntrinsicHeight(
+                          child: Container(
+                              alignment: Alignment.centerLeft,
+                              margin: const EdgeInsets.fromLTRB(0, 16, 0, 44),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  /* 칵테일 이미지 */
+                                  Container(
+                                    width: 115,
+                                    height: 271,
+                                    margin: const EdgeInsets.only(right: 20),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xffF08FA4),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(12)),
+                                    ),
+                                    child: const Image(
+                                        image: AssetImage(
+                                            'asset/images/image 58.png'),
+                                        fit: BoxFit.cover),
+                                  ),
+                                  /* 칵테일 재료들 */
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        buildIngrediantItem(
+                                            context: context,
+                                            name: "미도리",
+                                            description: "멜론 리큐어",
+                                            ratio: "1/4",
+                                            isDrink: true),
+                                        buildIngrediantItem(
+                                            context: context,
+                                            name: "스윗 앤 사워 믹스",
+                                            description: "비알콜성 칵테일 부재료",
+                                            ratio: "1/4",
+                                            isDrink: false),
+                                        buildIngrediantItem(
+                                            context: context,
+                                            name: "스프라이트",
+                                            description: "탄산 음료 (사이다)",
+                                            ratio: "2/4",
+                                            isDrink: false),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: const Text(
+                            "제조 방법",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500),
                           ),
                         ),
                         Container(
-                            alignment: Alignment.centerLeft,
-                            margin: const EdgeInsets.fromLTRB(0, 16, 0, 44),
-                            child: Row(
-                              children: [
-                                /* 칵테일 이미지 */
-                                Container(
-                                  width: 115,
-                                  height: 271,
-                                  margin: const EdgeInsets.only(right: 20),
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xffF08FA4),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(12)),
-                                  ),
-                                  child: const Image(
-                                      image: AssetImage(
-                                          'asset/images/image 58.png'),
-                                      fit: BoxFit.cover),
-                                ),
-                                /* 칵테일 재료들 */
-                                Flexible(
-                                  fit: FlexFit.tight,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      buildIngrediantItem(
-                                          context: context,
-                                          name: "미도리",
-                                          description: "멜론 리큐어",
-                                          ratio: "1/4",
-                                          isDrink: true),
-                                      buildIngrediantItem(
-                                          context: context,
-                                          name: "스윗 앤 사워 믹스",
-                                          description: "비알콜성 칵테일 부재료",
-                                          ratio: "1/4",
-                                          isDrink: false),
-                                      buildIngrediantItem(
-                                          context: context,
-                                          name: "스프라이트",
-                                          description: "탄산 음료 (사이다)",
-                                          ratio: "2/4",
-                                          isDrink: false),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )),
+                          alignment: Alignment.centerLeft,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text(
+                            "미도리 : 스윗 앤 사워 믹스 : 스프라이트 = 1 : 1 : 2",
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.8),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w100),
+                          ),
+                        ),
+                        /* 제조 방법 */
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            buildRecipeItem(
+                                context: context,
+                                number: 1,
+                                description: "칵테일 잔에 얼음 넣고 잔 차갑게 만들기"),
+                            buildRecipeItem(
+                                context: context,
+                                number: 2,
+                                description:
+                                    "믹스할 컵에 준비한 미도리와 스윗 앤 사워 믹스 채우고 흔들어주기"),
+                            buildRecipeItem(
+                                context: context,
+                                number: 3,
+                                description:
+                                    "칵테일 잔을 다시 새얼음으로 채우고, 2번에서 섞어준 칵테일 부어주기"),
+                            buildRecipeItem(
+                                context: context,
+                                number: 4,
+                                description: "칵테일 잔에 스프라이트 채워주기"),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 122,
+                        ),
                       ],
                       onExpansionChanged: (bool isExpanded) {
                         setState(() => recipeExpanded = isExpanded);
@@ -515,3 +567,53 @@ Widget buildIngrediantItem(
     ),
   );
 }
+
+Widget buildRecipeItem(
+    {required BuildContext context,
+    required int number,
+    required String description}) {
+  return Container(
+      decoration: const BoxDecoration(
+        color: Color(0xFF1E1E1E),
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      padding: const EdgeInsets.fromLTRB(22, 22, 22, 24),
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+            margin: const EdgeInsets.fromLTRB(0, 3, 12, 0),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(4)),
+              color: Colors.white,
+            ),
+            child: Text(
+              number.toString(),
+              style: const TextStyle(
+                  color: Color(0xFF1E1E1E),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              alignment: Alignment.topLeft,
+              child: Text(
+                description,
+                textAlign: TextAlign.start,
+                style: const TextStyle(
+                    height: 1.5,
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+          ),
+        ],
+      ));
+}
+
+//
