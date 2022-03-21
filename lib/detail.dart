@@ -36,35 +36,43 @@ class _ProfileState extends State<Detail> {
             backgroundColor: Colors.transparent,
             elevation: 0,
             actions: [
-              Container(
-                margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
-                child: IconButton(
-                  onPressed: () {},
-                  splashRadius: 18,
-                  icon: const Icon(
-                    Icons.search,
-                    size: 25,
-                  ),
-                  color: Colors.white.withOpacity(0.6),
-                ),
-              )
+              // Container(
+              //   margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
+              //   child: IconButton(
+              //     onPressed: () {},
+              //     splashRadius: 18,
+              //     icon: const Icon(
+              //       Icons.search,
+              //       size: 25,
+              //     ),
+              //     color: Colors.white.withOpacity(0.6),
+              //   ),
+              // )
             ]),
         body: SingleChildScrollView(
             child: Column(
           children: [
             Container(
-                margin: const EdgeInsets.fromLTRB(7, 7, 7, 0),
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 width: double.infinity,
-                height: 328,
+                height: 388,
                 decoration: const BoxDecoration(
                   color: Color(0xffF08FA4),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(20),
+                      bottomLeft: Radius.circular(20)
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color.fromRGBO(240, 143, 164, 0.4),
+                        blurRadius: 28)
+                  ],
                 ),
                 child: const Image(
                     image: AssetImage('asset/images/image 58.png'),
                     fit: BoxFit.cover)),
             Container(
-                margin: const EdgeInsets.fromLTRB(24, 21, 24, 28),
+                margin: const EdgeInsets.fromLTRB(24, 32, 24, 28),
                 alignment: Alignment.centerLeft,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -84,17 +92,17 @@ class _ProfileState extends State<Detail> {
                           ),
                           /* Vertical Divider */
                           Container(
-                            color: Colors.white.withOpacity(0.6),
+                            color: Color(0xFF999999),
                             height: 20,
                             width: 1,
                             margin: const EdgeInsets.fromLTRB(12, 3, 12, 0),
                           ),
-                          Text(
+                          const Text(
                             "Midori Sour",
                             style: TextStyle(
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w500,
-                              color: Colors.white.withOpacity(0.6),
+                              color: Color(0xFF999999),
                               fontSize: 16,
                               height: 1.5,
                             ),
@@ -103,7 +111,7 @@ class _ProfileState extends State<Detail> {
                     /* 둘째줄 */
                     Text("90년대를 휩쓸었던 전설의 그 칵테일!",
                         style: TextStyle(
-                          height: 1.5,
+                          height: 1.7,
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
                           color: Colors.white.withOpacity(0.85),
@@ -136,7 +144,7 @@ class _ProfileState extends State<Detail> {
 
             /* 태그 */
             Container(
-                margin: const EdgeInsets.fromLTRB(24, 52, 24, 16),
+                margin: const EdgeInsets.fromLTRB(24, 50, 24, 16),
                 alignment: Alignment.centerLeft,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +153,7 @@ class _ProfileState extends State<Detail> {
                       "이 칵테일은,",
                       style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         fontSize: 20,
                       ),
                     ),
@@ -155,13 +163,14 @@ class _ProfileState extends State<Detail> {
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: const Color(0xFFDA6C31),
-                          width: 2,
+                          width: 1,
                         ),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(12)),
+                        color: Color(0xFF1E1E1E),
                       ),
-                      padding: const EdgeInsets.fromLTRB(23, 24, 23, 24),
-                      margin: const EdgeInsets.fromLTRB(0, 16, 0, 24),
+                      padding: const EdgeInsets.fromLTRB(23, 23, 23, 23),
+                      margin: const EdgeInsets.fromLTRB(0, 15, 0, 24),
                       child: Column(
                         children: [
                           /* 맛 태그 */
@@ -284,19 +293,20 @@ class _ProfileState extends State<Detail> {
                       margin: const EdgeInsets.fromLTRB(0, 0, 0, 96),
                       child: Text.rich(TextSpan(
                         children: [
-                          TextSpan(
-                              text: "Ohzu point! ",
+                          const TextSpan(
+                              text: "Ohzù point! ",
                               style: TextStyle(
                                   color:
-                                      const Color(0xFFEC5707).withOpacity(0.9),
+                                      Color(0xFFDA6C31),
                                   fontSize: 14,
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w700)),
                           TextSpan(
                               text:
-                                  "사워(Sour)는 '신', '시큼한'의 의미로, 미도리 사워는 증류주에 산미와 단맛을 더해 만든 칵테일입니다. 나라에 따라 소다수의 용량에 차이가 있어, 소다수를 사용하지 않는 경우와 레몬 주스와 설탕을 사용해 새콤달콤한 맛을 내며 청량감을 주는 경우가 있습니다. 다양한 증류주나 리큐어를 사용하여 여러 가지 사워 칵테일을 만들 수 있어요.",
+                                  "사워(Sour)는 '신', '시큼한'의 의미로, 미도리 사워는 증류주에 산미와 단맛을 더해 만든 칵테일입니다. \n나라에 따라 소다수의 용량에 차이가 있어, 소다수를 사용하지 않는 경우와 레몬 주스와 설탕을 사용해 새콤달콤한 맛을 내며 청량감을 주는 경우가 있습니다. 다양한 증류주나 리큐어를 사용하여 여러 가지 사워 칵테일을 만들 수 있어요.",
                               style: TextStyle(
-                                  color: Colors.white.withOpacity(0.6),
+                                  color: Colors.white.withOpacity(0.8),
+                                  height: 1.7,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w300))
                         ],
@@ -318,7 +328,7 @@ class _ProfileState extends State<Detail> {
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
-                                  fontWeight: FontWeight.w700),
+                                  fontWeight: FontWeight.w600),
                             ),
                           ),
                           Icon(
@@ -338,7 +348,7 @@ class _ProfileState extends State<Detail> {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
-                                fontWeight: FontWeight.w500),
+                                fontWeight: FontWeight.w400),
                           ),
                         ),
                         Container(
@@ -464,7 +474,6 @@ Widget buildTagItem(BuildContext context, String text, Color color) {
   return Container(
       decoration: BoxDecoration(
         color: color.withOpacity(0.4),
-        border: Border.all(),
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
       padding: const EdgeInsets.fromLTRB(11, 7, 11, 7),
