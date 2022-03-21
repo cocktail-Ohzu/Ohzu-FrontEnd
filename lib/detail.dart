@@ -60,8 +60,7 @@ class _ProfileState extends State<Detail> {
                   color: Color(0xffF08FA4),
                   borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20)
-                  ),
+                      bottomLeft: Radius.circular(20)),
                   boxShadow: [
                     BoxShadow(
                         color: Color.fromRGBO(240, 143, 164, 0.4),
@@ -178,9 +177,13 @@ class _ProfileState extends State<Detail> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               buildTagItem(
-                                  context, "상큼한", const Color(0xFFDA6C31)),
+                                  context: context,
+                                  text: "상큼한",
+                                  color: const Color(0xFFDA6C31)),
                               buildTagItem(
-                                  context, "달달한", const Color(0xFFF08FA4)),
+                                  context: context,
+                                  text: "달달한",
+                                  color: const Color(0xFFF08FA4)),
                               Container(
                                 alignment: Alignment.topCenter,
                                 margin: const EdgeInsets.fromLTRB(4, 0, 0, 4),
@@ -202,9 +205,13 @@ class _ProfileState extends State<Detail> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 buildTagItem(
-                                    context, "밝은", const Color(0xFFFFD233)),
+                                    context: context,
+                                    text: "밝은",
+                                    color: const Color(0xFFFFD233)),
                                 buildTagItem(
-                                    context, "청량한", const Color(0xFFABEDE1)),
+                                    context: context,
+                                    text: "청량한",
+                                    color: const Color(0xFFABEDE1)),
                                 Container(
                                   alignment: Alignment.topCenter,
                                   margin: const EdgeInsets.fromLTRB(4, 0, 0, 4),
@@ -228,11 +235,17 @@ class _ProfileState extends State<Detail> {
                               alignment: WrapAlignment.start,
                               children: [
                                 buildTagItem(
-                                    context, "봄", const Color(0xFFF08FA4)),
+                                    context: context,
+                                    text: "봄",
+                                    color: const Color(0xFFF08FA4)),
                                 buildTagItem(
-                                    context, "여름", const Color(0xFFABEDE1)),
+                                    context: context,
+                                    text: "여름",
+                                    color: const Color(0xFFABEDE1)),
                                 buildTagItem(
-                                    context, "맑은", const Color(0xFF8DD6FF)),
+                                    context: context,
+                                    text: "맑은",
+                                    color: const Color(0xFF8DD6FF)),
                                 Container(
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 6, 0, 0),
@@ -267,9 +280,13 @@ class _ProfileState extends State<Detail> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 buildTagItem(
-                                    context, "레몬", const Color(0xFFFFD233)),
+                                    context: context,
+                                    text: "레몬",
+                                    color: const Color(0xFFFFD233)),
                                 buildTagItem(
-                                    context, "체리", const Color(0xFFDA6C31)),
+                                    context: context,
+                                    text: "체리",
+                                    color: const Color(0xFFDA6C31)),
                                 Container(
                                   alignment: Alignment.topCenter,
                                   margin: const EdgeInsets.fromLTRB(4, 0, 0, 0),
@@ -296,8 +313,7 @@ class _ProfileState extends State<Detail> {
                           const TextSpan(
                               text: "Ohzù point! ",
                               style: TextStyle(
-                                  color:
-                                      Color(0xFFDA6C31),
+                                  color: Color(0xFFDA6C31),
                                   fontSize: 14,
                                   fontFamily: 'Montserrat',
                                   fontWeight: FontWeight.w700)),
@@ -313,10 +329,10 @@ class _ProfileState extends State<Detail> {
                       )),
                     ),
 
-                    /* 레시피 */
+                    /* 레시피 익스펜션 타일 */
                     ExpansionTile(
-                      tilePadding: const EdgeInsets.all(0),
-                      trailing: Text(""),
+                      tilePadding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+                      trailing: const Text(""),
                       key: expansionTileKey,
                       title: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -340,6 +356,7 @@ class _ProfileState extends State<Detail> {
                           ), //solid arrow
                         ],
                       ),
+                      /* 숨겨진 내용들 */
                       children: [
                         Container(
                           alignment: Alignment.centerLeft,
@@ -372,89 +389,37 @@ class _ProfileState extends State<Detail> {
                                       fit: BoxFit.cover),
                                 ),
                                 /* 칵테일 재료들 */
-                                Expanded(
+                                Flexible(
+                                  fit: FlexFit.tight,
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Container(
-                                        child: Stack(children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text("미도리"),
-                                              Text("멜론 리큐어"),
-                                              Text("1/4"),
-                                            ],
-                                          ),
-                                          Container(
-                                            alignment: Alignment.bottomRight,
-                                            child: Text("칵테일 한 잔 기준"),
-                                          ),
-                                        ]),
-                                      ),
-                                      Container(
-                                        child: Stack(children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text("미도리"),
-                                              Text("멜론 리큐어"),
-                                              Text("1/4"),
-                                            ],
-                                          ),
-                                          Container(
-                                            alignment: Alignment.bottomRight,
-                                            child: Text("칵테일 한 잔 기준"),
-                                          ),
-                                        ]),
-                                      ),
-                                      Container(
-                                        child: Stack(children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text("미도리"),
-                                              Text("멜론 리큐어"),
-                                              Text("1/4"),
-                                            ],
-                                          ),
-                                          Container(
-                                            alignment: Alignment.bottomRight,
-                                            child: Text("칵테일 한 잔 기준"),
-                                          ),
-                                        ]),
-                                      ),
+                                      buildIngrediantItem(
+                                          context: context,
+                                          name: "미도리",
+                                          description: "멜론 리큐어",
+                                          ratio: "1/4",
+                                          isDrink: true),
+                                      buildIngrediantItem(
+                                          context: context,
+                                          name: "스윗 앤 사워 믹스",
+                                          description: "비알콜성 칵테일 부재료",
+                                          ratio: "1/4",
+                                          isDrink: false),
+                                      buildIngrediantItem(
+                                          context: context,
+                                          name: "스프라이트",
+                                          description: "탄산 음료 (사이다)",
+                                          ratio: "2/4",
+                                          isDrink: false),
                                     ],
                                   ),
                                 ),
                               ],
                             )),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
-                        Text("확", style: TextStyle(color: Colors.white)),
                       ],
                       onExpansionChanged: (bool isExpanded) {
                         setState(() => recipeExpanded = isExpanded);
@@ -470,7 +435,10 @@ class _ProfileState extends State<Detail> {
   }
 }
 
-Widget buildTagItem(BuildContext context, String text, Color color) {
+Widget buildTagItem(
+    {required BuildContext context,
+    required String text,
+    required Color color}) {
   return Container(
       decoration: BoxDecoration(
         color: color.withOpacity(0.4),
@@ -484,4 +452,66 @@ Widget buildTagItem(BuildContext context, String text, Color color) {
         style: const TextStyle(
             fontSize: 16, color: Colors.white, fontWeight: FontWeight.w500),
       ));
+}
+
+//
+Widget buildIngrediantItem(
+    {required BuildContext context,
+    required String name,
+    required String description,
+    required String ratio,
+    required bool isDrink}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 3),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          name + " 💧",
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Text(
+          description,
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w100,
+              color: Colors.white.withOpacity(0.8)),
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              ratio,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white.withOpacity(0.6),
+                fontWeight: FontWeight.w100,
+              ),
+            ),
+            if (isDrink)
+              Container(
+                padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
+                decoration: BoxDecoration(
+                    border:
+                        Border.all(width: 1, color: const Color(0xFFDA6C31)),
+                    borderRadius: const BorderRadius.all(Radius.circular(8))),
+                alignment: Alignment.bottomRight,
+                child: const Text(
+                  "칵테일 한 잔 기준",
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Color(0xFFDA6C31)),
+                ),
+              ),
+          ],
+        ),
+      ],
+    ),
+  );
 }
