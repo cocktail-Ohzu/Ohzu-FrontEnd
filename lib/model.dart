@@ -223,4 +223,5 @@ Future<Details> fetchDetails({required String id}) async {
   }
 }
 
+
 /* 종료 */
