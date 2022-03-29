@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
+import './model.dart';
 import './detail.dart';
 
 void main() {
@@ -39,6 +41,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  /* api test */
+  void _callAPI() async {
+    var url = Uri.parse("https://ohzu.xyz/cocktails/1");
+    var response = await http.get(url);
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+  }
+  /* */
+
+  @override
+  void initState() {
+    super.initState();
+    _callAPI();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
