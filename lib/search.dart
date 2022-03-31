@@ -2,14 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class Search extends SearchDelegate<String> {
-  final dummyData = [
-    "진",
-    "진 토닉",
-    "진 토닉토닉 진",
-    "토닉 진",
-    "지아이조",
-    "진 장인",
-  ];
+  final dummyData = ["진", "진 토닉", "진 토닉토닉 진", "토닉 진", "지아이조", "진 장인"];
 
   final suggestions = ["검색", "기능", "따라하기", "힘들어", "살려줘"];
 
