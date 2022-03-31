@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import './model.dart';
+import './search.dart';
 import './detail.dart';
 
 void main() {
@@ -103,7 +104,9 @@ Widget buildScaffold(
             Container(
               margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  showSearch(context: context, delegate: Search());
+                },
                 splashRadius: 18,
                 icon: const Icon(
                   Icons.search,

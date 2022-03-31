@@ -113,6 +113,7 @@ class Details {
 class Info {
   int? id;
   String? name;
+  String? backgroundColor;
   String? engName;
   String? img;
   String? desc;
@@ -127,6 +128,7 @@ class Info {
   Info(
       {this.id,
       this.name,
+      this.backgroundColor,
       this.engName,
       this.img,
       this.desc,
@@ -141,6 +143,7 @@ class Info {
   Info.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    backgroundColor = json['background_color'];
     engName = json['eng_name'];
     img = json['img'];
     desc = json['desc'];
@@ -157,6 +160,7 @@ class Info {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = id;
     data['name'] = name;
+    data['background_color'] = backgroundColor;
     data['eng_name'] = engName;
     data['img'] = img;
     data['desc'] = desc;
