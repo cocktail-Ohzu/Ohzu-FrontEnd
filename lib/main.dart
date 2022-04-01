@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import './model.dart';
+import 'model/todaysCocktail.dart';
 import './search.dart';
 import './detail.dart';
 
@@ -26,135 +26,221 @@ class MyApp extends StatelessWidget {
           displayColor: Colors.white,
         ),
       ),
-      home: const MyHomePage(title: '오쥬'),
+      home: const MainPage(title: '오쥬'),
+      initialRoute: '/main',
+      onGenerateRoute: (route) => onGenerateRoute(route),
     );
+  }
+
+  /* 페이지 라우팅 */
+  static Route onGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      /* Fade out & Fade in Animation */
+      case '/search':
+        return PageRouteBuilder(
+          pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secAnimation) {
+            return const Search();
+          },
+          transitionDuration: Duration(milliseconds: 150),
+          transitionsBuilder: (BuildContext context,
+              Animation<double> animation,
+              Animation<double> secAnimation,
+              Widget child) {
+            return FadeTransition(
+              opacity: animation.drive(Tween<double>(begin: 0.0, end: 1.0)
+                  .chain(CurveTween(curve: Curves.linear))),
+              child: child,
+            );
+          },
+        );
+
+      case '/main':
+      default:
+        return CupertinoPageRoute(
+            builder: (context) => const MainPage(title: 'ohzu'),
+            settings: settings);
+    }
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class MainPage extends StatefulWidget {
+  const MainPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainPageState extends State<MainPage> {
   /* 메인 페이지 API 받아오는 객체 */
-  late Future<TodaysCocktail> todaysCocktail;
+  late Future<TodaysCocktail> data;
+  late TodaysCocktail todaysCocktail = TodaysCocktail(
+    id: 0,
+    img: "",
+    name: "",
+    engName: "",
+    backgroundColor: "000000",
+    desc: "칵테일 정보를 불러오는 중입니다",
+    strength: 0,
+  );
 
   @override
   void initState() {
     super.initState();
     /* 메인 페이지 API fetching */
-    todaysCocktail = fetchTodaysCocktail();
+    try {
+      data = fetchTodaysCocktail();
 
-    todaysCocktail.then((value) {
-      print("Main Cocktail Sucessfully Fetched!\n");
-    });
+      data.then((value) {
+        print("Main Cocktail Sucessfully Fetched!\n");
+
+        setState(() {
+          todaysCocktail = value;
+        });
+      });
+    } catch (err) {
+      print("fetch error in todaysCocktail");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomCenter,
-        stops: [0.0, 0.2],
-        colors: [
-          Color(0xff8C5B40),
-          Color(0xff121212),
-        ],
-      )),
-      child: FutureBuilder<TodaysCocktail>(
-          future: todaysCocktail,
-          builder: (context, AsyncSnapshot<TodaysCocktail> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                return buildScaffold(context: context, cocktail: snapshot.data);
-              } else {
-                return const Text("snapshot is empty");
-              }
-            } else if (snapshot.connectionState == ConnectionState.none) {
-              return const Text("snapshot Error");
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          }),
-    );
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomCenter,
+          stops: [0.0, 0.2],
+          colors: [
+            Color(0xff8C5B40),
+            Color(0xff121212),
+          ],
+        )),
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+                toolbarHeight: 40,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                //middle: Text(widget.title),
+                actions: [
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/search');
+                      },
+                      splashRadius: 18,
+                      icon: const Icon(
+                        Icons.search,
+                        size: 25,
+                      ),
+                      color: Colors.white.withOpacity(0.6),
+                    ),
+                  )
+                ]),
+            body: SingleChildScrollView(
+                child: Container(
+                    margin: const EdgeInsets.fromLTRB(24, 0, 24, 5),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          /* 추천 칵테일 타이틀 */
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: const Text(
+                              "오늘의 추천 칵테일",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18,
+                              ),
+                            ),
+                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          ),
+
+                          /* 추천 칵테일 컨테이너 */
+                          Container(
+                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              height: 464,
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: <Color>[
+                                    Color.fromRGBO(255, 172, 190, 1),
+                                    Color.fromRGBO(255, 241, 244, 0.06),
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromRGBO(240, 143, 164, 0.4),
+                                      blurRadius: 28)
+                                ],
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12)),
+                              ),
+                              child: Container(
+                                child: buildCocktailContainer(
+                                    context, data, todaysCocktail),
+                              )),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          /* 하단 버튼 1 */
+                          CupertinoButton(
+                            padding: const EdgeInsets.all(19),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
+                            color: const Color(0xffDA6C31),
+                            child: const Text(
+                              "자세한 정보가 궁금해요",
+                              style: TextStyle(
+                                  color: Color(0xffffffff),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => Detail(
+                                        id: todaysCocktail.id.toString()),
+                                  ));
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          /* 하단 버튼 2 */
+                          TextButton(
+                            style: ButtonStyle(
+                              overlayColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                            ),
+                            onPressed: () {},
+                            child: const Text(
+                              "나에게 맞는 칵테일로 추천 받을래요",
+                              style: TextStyle(
+                                  color: Color(0xffDA6C31),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        ])))));
   }
 }
 
-/* 메인 페이지 위젯 빌드 */
-Widget buildScaffold(
-    {required BuildContext context, required TodaysCocktail? cocktail}) {
-  if (cocktail == null) {
-    return const Text("error");
-  } else {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-          toolbarHeight: 40,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          //middle: Text(widget.title),
-          actions: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
-              child: IconButton(
-                onPressed: () {
-                  showSearch(context: context, delegate: Search());
-                },
-                splashRadius: 18,
-                icon: const Icon(
-                  Icons.search,
-                  size: 25,
-                ),
-                color: Colors.white.withOpacity(0.6),
-              ),
-            )
-          ]),
-      body: SingleChildScrollView(
-          child: Container(
-        margin: const EdgeInsets.fromLTRB(24, 0, 24, 5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            /* 추천 칵테일 타이틀 */
-            Container(
-              alignment: Alignment.centerLeft,
-              child: const Text(
-                "오늘의 추천 칵테일",
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                ),
-              ),
-              margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-            ),
-
-            /* 추천 칵테일 컨테이너 */
-            Container(
-              margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              height: 464,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: <Color>[
-                    Color.fromRGBO(255, 172, 190, 1),
-                    Color.fromRGBO(255, 241, 244, 0.06),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                      color: Color.fromRGBO(240, 143, 164, 0.4), blurRadius: 28)
-                ],
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-              ),
-              child: Container(
+@override
+Widget buildCocktailContainer(BuildContext context,
+    Future<TodaysCocktail> future, TodaysCocktail cocktail) {
+  return FutureBuilder<TodaysCocktail>(
+      future: future,
+      builder: (context, AsyncSnapshot<TodaysCocktail> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            return Container(
                 margin: const EdgeInsets.all(1.5),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -247,54 +333,16 @@ Widget buildScaffold(
                                   color: Color(0xFFDA6C31),
                                 )),
                           ],
-                        ))
+                        )),
                   ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            /* 하단 버튼 1 */
-            CupertinoButton(
-              padding: const EdgeInsets.all(19),
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              color: const Color(0xffDA6C31),
-              child: const Text(
-                "자세한 정보가 궁금해요",
-                style: TextStyle(
-                    color: Color(0xffffffff),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400),
-              ),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => Detail(id: cocktail.id.toString()),
-                    ));
-              },
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            /* 하단 버튼 2 */
-            TextButton(
-              style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-              ),
-              onPressed: () {},
-              child: const Text(
-                "나에게 맞는 칵테일로 추천 받을래요",
-                style: TextStyle(
-                    color: Color(0xffDA6C31),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400),
-              ),
-            ),
-          ],
-        ),
-      )),
-    );
-  }
+                ));
+          } else {
+            return const Text("snapshot is empty");
+          }
+        } else if (snapshot.connectionState == ConnectionState.none) {
+          return const Text("snapshot Error");
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      });
 }

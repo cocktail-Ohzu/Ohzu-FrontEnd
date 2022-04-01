@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './model.dart';
+import 'model/details.dart';
 
 class Detail extends StatefulWidget {
   const Detail({Key? key, required this.id}) : super(key: key);
@@ -26,7 +26,6 @@ class _DetailState extends State<Detail> {
     }
   }
 
-  final String drinkKo = "미도리 사워";
   final String drinkEn = "Midori Sour";
   final String description = "90년대를 휩쓸었던 전설의 그 칵테일!";
   final int strength = 20;
