@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: const MainPage(title: '오쥬'),
-      initialRoute: '/main',
       onGenerateRoute: (route) => onGenerateRoute(route),
     );
   }
@@ -195,20 +194,13 @@ class _MainPageState extends State<MainPage> {
                                 const BorderRadius.all(Radius.circular(8)),
                             color: const Color(0xffDA6C31),
                             child: const Text(
-                              "자세한 정보가 궁금해요",
+                              "나에게 맞는 칵테일로 추천 받을래요",
                               style: TextStyle(
                                   color: Color(0xffffffff),
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400),
                             ),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (context) => Detail(
-                                        id: todaysCocktail.id.toString()),
-                                  ));
-                            },
+                            onPressed: () {},
                           ),
                           const SizedBox(
                             height: 10,
@@ -219,9 +211,16 @@ class _MainPageState extends State<MainPage> {
                               overlayColor:
                                   MaterialStateProperty.all(Colors.transparent),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => Detail(
+                                        id: todaysCocktail.id.toString()),
+                                  ));
+                            },
                             child: const Text(
-                              "나에게 맞는 칵테일로 추천 받을래요",
+                              "자세한 정보가 궁금해요",
                               style: TextStyle(
                                   color: Color(0xffDA6C31),
                                   fontSize: 14,

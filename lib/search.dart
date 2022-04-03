@@ -280,7 +280,7 @@ Widget buildResultByTag(
   for (int i = 0; i < len; ++i) {
     cocktailName = list[i].name.toString();
     flavorRaw = list[i].flavor.toString();
-    flavorSplit = list[i].flavor.toString().split(',');
+    flavorSplit = list[i].flavor.toString().split(', ');
     if (flavorRaw.contains(replacedText)) {
       ret.add(
         Container(
@@ -302,44 +302,59 @@ Widget buildResultByTag(
                       color: Colors.white, fontWeight: FontWeight.w500),
                 )),
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-              child: RichText(
-                  text: TextSpan(
-                      style: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
-                          fontWeight: FontWeight.bold),
-                      children: [
-                    /* 태그 별 키워드 색상 하이라이트 부분 */
-                    for (int i = 0; i < flavorSplit.length; ++i)
-                      if (flavorSplit[i].contains(replacedText))
-                        (TextSpan(children: [
-                          TextSpan(
-                            text: flavorSplit[i].substring(
-                                0, flavorSplit[i].indexOf(replacedText)),
-                          ),
-                          /* 키워드 색상 하이라이트 */
-                          TextSpan(
-                              text: flavorSplit[i].substring(
-                                  flavorSplit[i].indexOf(replacedText),
-                                  flavorSplit[i].indexOf(replacedText) +
-                                      replacedText.length),
-                              style: TextStyle(
-                                  color: Colors.white.withOpacity(1.0))),
-                          TextSpan(
-                            text: flavorSplit[i].substring(
-                                flavorSplit[i].indexOf(replacedText) +
-                                    replacedText.length,
-                                flavorSplit[i].length),
-                          ),
-                        ]))
-                      else
-                        TextSpan(
-                            text: flavorSplit[i],
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.5),
-                                fontWeight: FontWeight.bold)),
-                  ])),
-            )
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      for (int i = 0; i < flavorSplit.length; ++i)
+                        buildTagItem(
+                            context: context,
+                            text: RichText(
+                                text: TextSpan(
+                                    style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                        fontWeight: FontWeight.bold),
+                                    children: [
+                                  /* 태그 별 키워드 색상 하이라이트 부분 */
+
+                                  if (flavorSplit[i].contains(replacedText))
+                                    (TextSpan(children: [
+                                      TextSpan(
+                                        text: flavorSplit[i].substring(
+                                            0,
+                                            flavorSplit[i]
+                                                .indexOf(replacedText)),
+                                      ),
+                                      /* 키워드 색상 하이라이트 */
+                                      TextSpan(
+                                          text: flavorSplit[i].substring(
+                                              flavorSplit[i]
+                                                  .indexOf(replacedText),
+                                              flavorSplit[i]
+                                                      .indexOf(replacedText) +
+                                                  replacedText.length),
+                                          style: TextStyle(
+                                              color: Colors.white
+                                                  .withOpacity(1.0))),
+                                      TextSpan(
+                                        text: flavorSplit[i].substring(
+                                            flavorSplit[i]
+                                                    .indexOf(replacedText) +
+                                                replacedText.length,
+                                            flavorSplit[i].length),
+                                      ),
+                                    ]))
+                                  else
+                                    TextSpan(
+                                        text: flavorSplit[i],
+                                        style: TextStyle(
+                                            color:
+                                                Colors.white.withOpacity(0.5),
+                                            fontWeight: FontWeight.bold)),
+                                ])),
+                            origtext: flavorSplit[i]),
+                    ]))
           ]),
         ),
       );
@@ -363,20 +378,20 @@ Widget buildTagItem(
     {required BuildContext context,
     required RichText text,
     required String origtext}) {
-  String getColor(String name) {
-    switch (name) {
-      case "상큼한":
-        return "DA6C31";
-      case "달콤한":
-        return "F08FA4";
-      default:
-        return "aaaaaa";
+  Color getColor(String name) {
+    if ("상큼한".contains(name)) {
+      return const Color(0xffDA6C31).withOpacity(0.4);
+    } else if ("달콤한".contains(name)) {
+      return const Color(0xffF08FA4).withOpacity(0.4);
+    } else if ("청량한".contains(name)) {
+      return const Color(0xffABEDE1).withOpacity(0.4);
     }
+    return const Color(0xffeeeeee).withOpacity(0.4);
   }
 
   return Container(
       decoration: BoxDecoration(
-        color: Color(int.parse("0xff" + getColor(origtext))),
+        color: getColor(origtext),
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
       padding: const EdgeInsets.fromLTRB(11, 7, 11, 7),
