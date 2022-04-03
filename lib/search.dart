@@ -10,66 +10,6 @@ class Search extends StatefulWidget {
 }
 
 /*
-클래스로 만들다가 만것들
-
-class NameItem {
-  String? name;
-  int? id;
-
-  NameItem(String name, int id) {
-    name = name;
-    id = id;
-  }
-}
-
-class TagItem {
-  String? name;
-  List<String>? tag;
-
-  TagItem(String name, List<String> tag) {
-    name = name;
-    tag = tag;
-  }
-
-  List<String>? getTag() {
-    return tag;
-  }
-}
-
-class _SearchState extends State<Search> {
-  //final suggestions = ["검색", "기능", "따라하기", "힘들어", "살려줘"];
-
-  List<NameItem> _listName = [
-    NameItem("진", 1),
-    NameItem("진 토닉", 1),
-    NameItem("토닉 진", 1),
-    NameItem("진진자라자라", 1),
-    NameItem("방탄소년단 진", 1),
-    NameItem("리그오브레전드 진 장인", 1),
-    NameItem("빌리진", 1),
-    NameItem("깔루아 밀크", 1),
-    NameItem("데킬라 선라이즈", 1),
-    NameItem("블랙 러시안", 1),
-    NameItem("블루하와이", 1),
-  ];
-  List<TagItem> _listTag = [
-    TagItem("모히토", ["상큼한", "청량한"]),
-    TagItem("마가리타", ["상큼한", "쓴"]),
-    TagItem("블루 하와이", ["상큼한", "달달한"]),
-    TagItem("미도리사워", ["상큼한", "달달한"]),
-    TagItem("이거 만드는거", ["쓴", "쓴"]),
-    TagItem("힘들었어요", ["쓴", "로맨틱한"]),
-    TagItem("ㅎ긓그후ㅡㄱ훅", ["상큼한", "청량한"]),
-    TagItem("오쥬화이팅", ["상큼한", "청량한"]),
-    TagItem("짱짱짱", ["상큼한", "청량한"]),
-  ];
-  List<Object> _search = [];
-  bool _onLoading = false;
-
-*/
-
-class _SearchState extends State<Search> {
-  //final suggestions = ["검색", "기능", "따라하기", "힘들어", "살려줘"];
 
   List<String> _listName = [
     "진",
@@ -116,18 +56,41 @@ class _SearchState extends State<Search> {
     "피나콜라다",
     "피치크러쉬"
   ];
-  List<String> _listTag = [
-    "상큼한",
-    "달달한",
-    "로맨틱한",
-    "쓴",
-    "힘들어요",
-    "한가한",
-    "이거 만드는거",
-    "흑흑흑ㅎ긓ㄱ한",
-    "오쥬화이팅한"
+
+*/
+class CocktailItem {
+  String? name;
+  String? flavor;
+  int? id;
+
+  CocktailItem({this.name, this.flavor, this.id});
+}
+
+class _SearchState extends State<Search> {
+  //final suggestions = ["검색", "기능", "따라하기", "힘들어", "살려줘"];
+
+  List<CocktailItem> _list = [
+    CocktailItem(name: "진 토닉", flavor: "상큼한, 청량한", id: 1),
+    CocktailItem(name: "진", flavor: "상큼한, 쓴", id: 1),
+    CocktailItem(name: "진진자라자라", flavor: "상큼, 달달한", id: 1),
+    CocktailItem(name: "토닉 진", flavor: "상큼한, 청량한", id: 1),
+    CocktailItem(name: "방탄소년단 진", flavor: "상큼한, 쓴", id: 1),
+    CocktailItem(name: "리그오브레전드 진", flavor: "상큼, 달달한", id: 1),
+    CocktailItem(name: "빌리진", flavor: "상큼한, 청량한", id: 1),
+    CocktailItem(name: "마가리타", flavor: "상큼한, 쓴", id: 1),
+    CocktailItem(name: "블루 하와이", flavor: "상큼, 달달한", id: 1),
+    CocktailItem(name: "모히토", flavor: "상큼한, 청량한", id: 1),
+    CocktailItem(name: "마가리타", flavor: "상큼한, 쓴", id: 1),
+    CocktailItem(name: "블루 하와이", flavor: "상큼, 달달한", id: 1),
+    CocktailItem(name: "미도리사워", flavor: "상큼한, 달달한", id: 1),
+    CocktailItem(name: "이거 만드는거", flavor: "쓴, 쓴", id: 1),
+    CocktailItem(name: "힘들었어요", flavor: "쓴, 로맨틱한", id: 1),
+    CocktailItem(name: "ㅎ긓그후ㅡㄱ훅", flavor: "상큼한, 청량한", id: 1),
+    CocktailItem(name: "오쥬화이팅", flavor: "상큼한, 청량한", id: 1),
+    CocktailItem(name: "짱짱짱", flavor: "상큼한, 청량한", id: 1),
   ];
-  List<String> _search = [];
+
+  List<CocktailItem> _search = [];
   bool _onLoading = false;
 
   /* 검색 바 컨트롤러 */
@@ -141,21 +104,29 @@ class _SearchState extends State<Search> {
       return;
     }
 
+    /* 해쉬태그로 검색시 */
     if (text.startsWith('#')) {
       text = text.substring(1);
-      _listTag.forEach((tagItem) {
-        if (tagItem.contains(text) || tagItem.toString().contains(text)) {
+      _list.forEach((tagItem) {
+        if (tagItem.flavor
+            .toString()
+            .toLowerCase()
+            .contains(text.toLowerCase())) {
           _search.add(tagItem);
 
-          print(tagItem + ", "); //출력되는지확인
+          print(tagItem.flavor.toString() + ", "); //출력되는지확인
         }
       });
+      /* 이름으로 검색 시 */
     } else {
-      _listName.forEach((nameItem) {
-        if (nameItem.contains(text) || nameItem.toString().contains(text)) {
+      _list.forEach((nameItem) {
+        if (nameItem.name
+            .toString()
+            .toLowerCase()
+            .contains(text.toLowerCase())) {
           _search.add(nameItem);
 
-          print(nameItem + ", "); //출력되는지확인
+          print(nameItem.name.toString() + ", "); //출력되는지확인
         }
       });
     }
@@ -239,13 +210,16 @@ Widget buildSuggestion(BuildContext context) {
 }
 
 @override
-Widget buildResultByName(BuildContext context, List<String> list, String text) {
+Widget buildResultByName(
+    BuildContext context, List<CocktailItem> list, String text) {
   final int len = list.length;
   List<Widget> ret = [];
+  String cocktailName;
   int textIndex;
 
   for (int i = 0; i < len; ++i) {
-    textIndex = list[i].indexOf(text);
+    cocktailName = list[i].name.toString();
+    textIndex = cocktailName.indexOf(text);
     if (textIndex != -1) {
       ret.add(GestureDetector(
         onTap: () {
@@ -264,18 +238,19 @@ Widget buildResultByName(BuildContext context, List<String> list, String text) {
                   : null),
           child: RichText(
               text: TextSpan(
-                  text: list[i].substring(0, textIndex),
+                  text: cocktailName.substring(0, textIndex),
                   style: TextStyle(
                       color: Colors.white.withOpacity(0.5),
                       fontWeight: FontWeight.bold),
                   children: [
                 /* 키워드 색상 하이라이트 */
                 TextSpan(
-                    text: list[i].substring(textIndex, textIndex + text.length),
+                    text: cocktailName.substring(
+                        textIndex, textIndex + text.length),
                     style: TextStyle(color: Colors.white.withOpacity(1.0))),
                 TextSpan(
-                  text: list[i]
-                      .substring(textIndex + text.length, list[i].length),
+                  text: cocktailName.substring(
+                      textIndex + text.length, cocktailName.length),
                 ),
               ])),
         ),
@@ -292,19 +267,25 @@ Widget buildResultByName(BuildContext context, List<String> list, String text) {
 }
 
 @override
-Widget buildResultByTag(BuildContext context, List<String> list, String text) {
+Widget buildResultByTag(
+    BuildContext context, List<CocktailItem> list, String text) {
   final int len = list.length;
   List<Widget> ret = [];
   String replacedText = text.replaceAll('#', '');
+  String cocktailName;
+  String flavorRaw;
+  List<String> flavorSplit;
   int textIndex;
 
   for (int i = 0; i < len; ++i) {
-    textIndex = list[i].indexOf(replacedText);
-    if (textIndex != -1) {
+    cocktailName = list[i].name.toString();
+    flavorRaw = list[i].flavor.toString();
+    flavorSplit = list[i].flavor.toString().split(',');
+    if (flavorRaw.contains(replacedText)) {
       ret.add(
         Container(
           decoration: BoxDecoration(
-              color: Color(0xffaaaaaa), //Color(0xff1e1e1e),
+              color: Color(0xff1e1e1e),
               borderRadius: BorderRadius.all(Radius.circular(12))),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -313,24 +294,50 @@ Widget buildResultByTag(BuildContext context, List<String> list, String text) {
               child: Image(
                   image: AssetImage('asset/images/c.png'), fit: BoxFit.cover),
             ),
+            Container(
+                padding: const EdgeInsets.fromLTRB(12, 13, 12, 12),
+                child: Text(
+                  cocktailName,
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w500),
+                )),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
               child: RichText(
                   text: TextSpan(
-                      text: list[i].substring(0, textIndex),
                       style: TextStyle(
                           color: Colors.white.withOpacity(0.5),
                           fontWeight: FontWeight.bold),
                       children: [
-                    /* 키워드 색상 하이라이트 */
-                    TextSpan(
-                        text: list[i].substring(
-                            textIndex, textIndex + replacedText.length),
-                        style: TextStyle(color: Colors.white.withOpacity(1.0))),
-                    TextSpan(
-                      text: list[i].substring(
-                          textIndex + replacedText.length, list[i].length),
-                    ),
+                    /* 태그 별 키워드 색상 하이라이트 부분 */
+                    for (int i = 0; i < flavorSplit.length; ++i)
+                      if (flavorSplit[i].contains(replacedText))
+                        (TextSpan(children: [
+                          TextSpan(
+                            text: flavorSplit[i].substring(
+                                0, flavorSplit[i].indexOf(replacedText)),
+                          ),
+                          /* 키워드 색상 하이라이트 */
+                          TextSpan(
+                              text: flavorSplit[i].substring(
+                                  flavorSplit[i].indexOf(replacedText),
+                                  flavorSplit[i].indexOf(replacedText) +
+                                      replacedText.length),
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(1.0))),
+                          TextSpan(
+                            text: flavorSplit[i].substring(
+                                flavorSplit[i].indexOf(replacedText) +
+                                    replacedText.length,
+                                flavorSplit[i].length),
+                          ),
+                        ]))
+                      else
+                        TextSpan(
+                            text: flavorSplit[i],
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.5),
+                                fontWeight: FontWeight.bold)),
                   ])),
             )
           ]),
@@ -348,4 +355,31 @@ Widget buildResultByTag(BuildContext context, List<String> list, String text) {
         crossAxisSpacing: 16,
         mainAxisSpacing: 12),
   );
+}
+
+/* 태그 블록 위젯 */
+@override
+Widget buildTagItem(
+    {required BuildContext context,
+    required RichText text,
+    required String origtext}) {
+  String getColor(String name) {
+    switch (name) {
+      case "상큼한":
+        return "DA6C31";
+      case "달콤한":
+        return "F08FA4";
+      default:
+        return "aaaaaa";
+    }
+  }
+
+  return Container(
+      decoration: BoxDecoration(
+        color: Color(int.parse("0xff" + getColor(origtext))),
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+      ),
+      padding: const EdgeInsets.fromLTRB(11, 7, 11, 7),
+      margin: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+      child: text);
 }
