@@ -26,11 +26,9 @@ class _DetailState extends State<Detail> {
     }
   }
 
-  final String drinkEn = "Midori Sour";
-  final String description = "90년대를 휩쓸었던 전설의 그 칵테일!";
-  final int strength = 20;
   bool recipeExpanded = false;
-
+  //레시피 스크롤바 컨트롤러
+  final ScrollController _recipeScrollController = ScrollController();
   /* API Fetching */
   late Future<Details> details;
   @override
@@ -273,30 +271,10 @@ class _DetailState extends State<Detail> {
                                 ),
 
                                 /* 오쥬 포인트 */
-                                Container(
-                                  margin:
-                                      const EdgeInsets.fromLTRB(0, 0, 0, 96),
-                                  child: Text.rich(TextSpan(
-                                    children: [
-                                      const TextSpan(
-                                          text: "Ohzù point! ",
-                                          style: TextStyle(
-                                              color: Color(0xFFDA6C31),
-                                              fontSize: 14,
-                                              fontFamily: 'Montserrat',
-                                              fontWeight: FontWeight.w700)),
-                                      TextSpan(
-                                          text:
-                                              "사워(Sour)는 '신', '시큼한'의 의미로, 미도리 사워는 증류주에 산미와 단맛을 더해 만든 칵테일입니다. \n나라에 따라 소다수의 용량에 차이가 있어, 소다수를 사용하지 않는 경우와 레몬 주스와 설탕을 사용해 새콤달콤한 맛을 내며 청량감을 주는 경우가 있습니다. 다양한 증류주나 리큐어를 사용하여 여러 가지 사워 칵테일을 만들 수 있어요.",
-                                          style: TextStyle(
-                                              color:
-                                                  Colors.white.withOpacity(0.8),
-                                              height: 1.7,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w300))
-                                    ],
-                                  )),
-                                ),
+                                buildOhzuPoint(
+                                    context: context,
+                                    description:
+                                        snapshot.data?.info?.ohzuPoint),
 
                                 /* 레시피 익스펜션 타일 */
                                 ExpansionTile(
@@ -339,68 +317,13 @@ class _DetailState extends State<Detail> {
                                             fontWeight: FontWeight.w500),
                                       ),
                                     ),
-                                    IntrinsicHeight(
-                                      child: Container(
-                                          alignment: Alignment.centerLeft,
-                                          margin: const EdgeInsets.fromLTRB(
-                                              0, 16, 0, 44),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            children: [
-                                              /* 칵테일 이미지 */
-                                              Container(
-                                                width: 115,
-                                                height: 271,
-                                                margin: const EdgeInsets.only(
-                                                    right: 20),
-                                                decoration: const BoxDecoration(
-                                                  color: Color(0xffF08FA4),
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(12)),
-                                                ),
-                                                child: const Image(
-                                                    image: AssetImage(
-                                                        'asset/images/image 58.png'),
-                                                    fit: BoxFit.cover),
-                                              ),
-                                              /* 칵테일 재료들 */
-                                              Flexible(
-                                                fit: FlexFit.tight,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
-                                                  children: [
-                                                    buildIngrediantItem(
-                                                        context: context,
-                                                        name: "미도리",
-                                                        description: "멜론 리큐어",
-                                                        ratio: "1/4",
-                                                        isDrink: true),
-                                                    buildIngrediantItem(
-                                                        context: context,
-                                                        name: "스윗 앤 사워 믹스",
-                                                        description:
-                                                            "비알콜성 칵테일 부재료",
-                                                        ratio: "1/4",
-                                                        isDrink: false),
-                                                    buildIngrediantItem(
-                                                        context: context,
-                                                        name: "스프라이트",
-                                                        description:
-                                                            "탄산 음료 (사이다)",
-                                                        ratio: "2/4",
-                                                        isDrink: false),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          )),
-                                    ),
+                                    buildIngredients(
+                                        context: context,
+                                        img: snapshot.data?.info?.img,
+                                        scrollController:
+                                            _recipeScrollController,
+                                        ingredients:
+                                            snapshot.data?.ingredients),
                                     Container(
                                       alignment: Alignment.centerLeft,
                                       child: const Text(
@@ -425,33 +348,9 @@ class _DetailState extends State<Detail> {
                                       ),
                                     ),
                                     /* 제조 방법 */
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        buildRecipeItem(
-                                            context: context,
-                                            number: 1,
-                                            description:
-                                                "칵테일 잔에 얼음 넣고 잔 차갑게 만들기"),
-                                        buildRecipeItem(
-                                            context: context,
-                                            number: 2,
-                                            description:
-                                                "믹스할 컵에 준비한 미도리와 스윗 앤 사워 믹스 채우고 흔들어주기"),
-                                        buildRecipeItem(
-                                            context: context,
-                                            number: 3,
-                                            description:
-                                                "칵테일 잔을 다시 새얼음으로 채우고, 2번에서 섞어준 칵테일 부어주기"),
-                                        buildRecipeItem(
-                                            context: context,
-                                            number: 4,
-                                            description: "칵테일 잔에 스프라이트 채워주기"),
-                                      ],
-                                    ),
+                                    buildRecipe(
+                                        context: context,
+                                        rawRecipe: snapshot.data?.info?.recipe),
                                     const SizedBox(
                                       height: 122,
                                     ),
@@ -492,14 +391,14 @@ Widget buildCocktailImg({
       width: double.infinity,
       height: 388,
       decoration: BoxDecoration(
+        image: DecorationImage(image: NetworkImage(img), fit: BoxFit.cover),
         color: Color(int.parse("0xf$color")),
         borderRadius: const BorderRadius.only(
             bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
         boxShadow: const [
           BoxShadow(color: Color.fromRGBO(240, 143, 164, 0.4), blurRadius: 28)
         ],
-      ),
-      child: Image.network(img, fit: BoxFit.cover));
+      ));
 }
 
 /* 칵테일 이름 및 도수 위젯 */
@@ -576,6 +475,112 @@ Widget buildCocktailName(
       ));
 }
 
+/* ohzu point 위젯 */
+Widget buildOhzuPoint(
+    {required BuildContext context, required String? description}) {
+  if (description == null || description == "") return Text("");
+  return /* 오쥬 포인트 */
+      Container(
+    margin: const EdgeInsets.fromLTRB(0, 0, 0, 96),
+    child: Text.rich(TextSpan(
+      children: [
+        const TextSpan(
+            text: "Ohzù point! ",
+            style: TextStyle(
+                color: Color(0xFFDA6C31),
+                fontSize: 14,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w700)),
+        TextSpan(
+            text: description,
+            style: TextStyle(
+                color: Colors.white.withOpacity(0.8),
+                height: 1.7,
+                fontSize: 14,
+                fontWeight: FontWeight.w300))
+      ],
+    )),
+  );
+}
+
+/* 재료 사진 및 리스트 위젯 */
+Widget buildIngredients(
+    {required BuildContext context,
+    required ScrollController scrollController,
+    required String? img,
+    required List? ingredients}) {
+  if (img == null || ingredients == null) return const Text("");
+  int listLength = ingredients.length;
+
+  return IntrinsicHeight(
+    child: Container(
+        height: 270, //재료 스크롤을 위한 높이지정
+        alignment: Alignment.centerLeft,
+        margin: const EdgeInsets.fromLTRB(0, 16, 0, 44),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            /* 칵테일 이미지 */
+            Container(
+              width: 115,
+              margin: const EdgeInsets.only(right: 20),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(img), fit: BoxFit.cover),
+                color: const Color(0xffF08FA4),
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+              ),
+            ),
+            /* 칵테일 재료들 */
+            Expanded(
+              child: Scrollbar(
+                isAlwaysShown: true,
+                controller: scrollController,
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      for (int i = 0; i < listLength; ++i)
+                        buildIngrediantItem(
+                          context: context,
+                          name: ingredients[i].ingredient,
+                          description: "멜론 리큐어",
+                          ratio: ingredients[i].amount,
+                          //isDrink: true
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        )),
+  );
+}
+
+/* 레시피 리스트 위젯 */
+Widget buildRecipe(
+    {required BuildContext context, required String? rawRecipe}) {
+  if (rawRecipe == null || rawRecipe == "") return const Text("");
+  List<String> recipeList = rawRecipe.split("||");
+  int recipeLength = recipeList.length;
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      for (int i = 0; i < recipeLength; ++i)
+        buildRecipeItem(
+            context: context, number: i + 1, description: recipeList[i]),
+    ],
+  );
+}
+
+/* ******************** */
+/* 각 아이템 생성 메소드 */
+/* ******************** */
+
 /* 태그 블록 위젯 */
 Widget buildTagItem(
     {required BuildContext context,
@@ -597,14 +602,15 @@ Widget buildTagItem(
 }
 
 //
-Widget buildIngrediantItem(
-    {required BuildContext context,
-    required String name,
-    required String description,
-    required String ratio,
-    required bool isDrink}) {
+Widget buildIngrediantItem({
+  required BuildContext context,
+  required String name,
+  required String description,
+  required String ratio,
+  //required bool isDrink
+}) {
   return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 3),
+    padding: const EdgeInsets.symmetric(vertical: 12),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -637,20 +643,20 @@ Widget buildIngrediantItem(
                 fontWeight: FontWeight.w100,
               ),
             ),
-            if (isDrink)
-              Container(
-                padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
-                decoration: BoxDecoration(
-                    border:
-                        Border.all(width: 1, color: const Color(0xFFDA6C31)),
-                    borderRadius: const BorderRadius.all(Radius.circular(8))),
-                alignment: Alignment.bottomRight,
-                child: const Text(
-                  "칵테일 한 잔 기준",
-                  textAlign: TextAlign.right,
-                  style: TextStyle(color: Color(0xFFDA6C31)),
-                ),
-              ),
+            // if (isDrink)
+            //   Container(
+            //     padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
+            //     decoration: BoxDecoration(
+            //         border:
+            //             Border.all(width: 1, color: const Color(0xFFDA6C31)),
+            //         borderRadius: const BorderRadius.all(Radius.circular(8))),
+            //     alignment: Alignment.bottomRight,
+            //     child: const Text(
+            //       "칵테일 한 잔 기준",
+            //       textAlign: TextAlign.right,
+            //       style: TextStyle(color: Color(0xFFDA6C31)),
+            //     ),
+            //   ),
           ],
         ),
       ],
