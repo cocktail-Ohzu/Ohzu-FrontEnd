@@ -103,7 +103,7 @@ class _DetailState extends State<Detail> {
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                   ),
                                 ),
 
@@ -292,7 +292,7 @@ class _DetailState extends State<Detail> {
                                           "레시피",
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 20,
+                                              fontSize: 18,
                                               fontWeight: FontWeight.w600),
                                         ),
                                       ),
@@ -313,7 +313,7 @@ class _DetailState extends State<Detail> {
                                         "필요한 재료",
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 18,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w500),
                                       ),
                                     ),
@@ -330,7 +330,7 @@ class _DetailState extends State<Detail> {
                                         "제조 방법",
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 18,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w500),
                                       ),
                                     ),
@@ -343,7 +343,7 @@ class _DetailState extends State<Detail> {
                                         style: TextStyle(
                                             color:
                                                 Colors.white.withOpacity(0.8),
-                                            fontSize: 16,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.w100),
                                       ),
                                     ),
@@ -422,9 +422,9 @@ Widget buildCocktailName(
           Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
             Text(
               koName,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 24,
+                fontSize: koName.length > 7 ? 21 : 24,
                 color: Colors.white,
               ),
             ),
@@ -437,11 +437,11 @@ Widget buildCocktailName(
             ),
             Text(
               enName,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w500,
                 color: Color(0xFF999999),
-                fontSize: 16,
+                fontSize: enName.length > 18 ? 13 : 16,
                 height: 1.5,
               ),
             ),
@@ -616,7 +616,7 @@ Widget buildIngrediantItem({
       children: [
         Text(
           name + " 💧",
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         ),
         const SizedBox(
           height: 8,
@@ -624,7 +624,7 @@ Widget buildIngrediantItem({
         Text(
           description,
           style: TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w100,
               color: Colors.white.withOpacity(0.8)),
         ),
@@ -638,7 +638,7 @@ Widget buildIngrediantItem({
             Text(
               ratio,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 12,
                 color: Colors.white.withOpacity(0.6),
                 fontWeight: FontWeight.w100,
               ),
@@ -690,7 +690,7 @@ Widget buildRecipeItem(
               number.toString(),
               style: const TextStyle(
                   color: Color(0xFF1E1E1E),
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: FontWeight.w500),
             ),
           ),
@@ -702,7 +702,7 @@ Widget buildRecipeItem(
                 textAlign: TextAlign.start,
                 style: const TextStyle(
                     height: 1.5,
-                    fontSize: 16,
+                    fontSize: 14,
                     color: Colors.white,
                     fontWeight: FontWeight.w500),
               ),

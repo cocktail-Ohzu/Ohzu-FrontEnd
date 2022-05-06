@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'model/todaysCocktail.dart';
 import './search.dart';
 import './detail.dart';
+import './recommend.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
               Animation<double> secAnimation) {
             return const Search();
           },
-          transitionDuration: Duration(milliseconds: 150),
+          transitionDuration: const Duration(milliseconds: 150),
           transitionsBuilder: (BuildContext context,
               Animation<double> animation,
               Animation<double> secAnimation,
@@ -53,7 +54,9 @@ class MyApp extends StatelessWidget {
             );
           },
         );
-
+      case '/recommend':
+        return CupertinoPageRoute(
+            builder: (context) => const Recommend(), settings: settings);
       case '/main':
       default:
         return CupertinoPageRoute(
@@ -200,7 +203,9 @@ class _MainPageState extends State<MainPage> {
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).pushNamed('/recommend');
+                            },
                           ),
                           const SizedBox(
                             height: 10,
@@ -287,9 +292,12 @@ Widget buildCocktailContainer(BuildContext context,
                                 children: [
                                   Text(
                                     cocktail.name.toString(),
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 24,
+                                      fontSize:
+                                          cocktail.name.toString().length > 7
+                                              ? 21
+                                              : 24,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -307,7 +315,11 @@ Widget buildCocktailContainer(BuildContext context,
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.w400,
                                       color: Colors.white.withOpacity(0.6),
-                                      fontSize: 16,
+                                      fontSize:
+                                          cocktail.engName.toString().length >
+                                                  18
+                                              ? 13
+                                              : 16,
                                       height: 1.5,
                                     ),
                                   ),
