@@ -126,10 +126,12 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                                           shape: BoxShape.circle,
                                           border: _baseDrink == baseList[i]
                                               ? Border.all(
-                                                  color: Colors.orange,
-                                                  width: 2)
+                                                  color:
+                                                      const Color(0xffce6228),
+                                                  width: 1)
                                               : null),
-                                      duration: Duration(milliseconds: 200),
+                                      duration:
+                                          const Duration(milliseconds: 200),
                                     ),
                                     Text(baseList[i]),
                                   ],
