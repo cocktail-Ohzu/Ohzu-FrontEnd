@@ -125,147 +125,48 @@ class _DetailState extends State<Detail> {
                                   child: Column(
                                     children: [
                                       /* 맛 태그 */
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          buildTagItem(
-                                              context: context,
-                                              text: "상큼한",
-                                              color: const Color(0xFFDA6C31)),
-                                          buildTagItem(
-                                              context: context,
-                                              text: "달달한",
-                                              color: const Color(0xFFF08FA4)),
-                                          Container(
-                                            alignment: Alignment.topCenter,
-                                            margin: const EdgeInsets.fromLTRB(
-                                                4, 0, 0, 4),
-                                            child: Text(
-                                              "맛이 나요.",
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white
-                                                      .withOpacity(0.7)),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                      buildTagItemList(
+                                          context: context,
+                                          tagList: snapshot.data?.info?.flavors,
+                                          tailString: "맛이 나요."),
 
                                       /* 분위기 태그 */
-                                      Container(
-                                        margin: const EdgeInsets.only(top: 8),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            buildTagItem(
-                                                context: context,
-                                                text: "밝은",
-                                                color: const Color(0xFFFFD233)),
-                                            buildTagItem(
-                                                context: context,
-                                                text: "청량한",
-                                                color: const Color(0xFFABEDE1)),
-                                            Container(
-                                              alignment: Alignment.topCenter,
-                                              margin: const EdgeInsets.fromLTRB(
-                                                  4, 0, 0, 4),
-                                              child: Text(
-                                                "분위기로,",
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.white
-                                                        .withOpacity(0.7)),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                      buildTagItemList(
+                                          context: context,
+                                          tagList: snapshot.data?.info?.moods,
+                                          tailString: "분위기로,"),
 
                                       /* 날씨 태그 */
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        margin: const EdgeInsets.only(top: 8),
-                                        child: Wrap(
-                                          alignment: WrapAlignment.start,
-                                          children: [
-                                            buildTagItem(
-                                                context: context,
-                                                text: "봄",
-                                                color: const Color(0xFFF08FA4)),
-                                            buildTagItem(
-                                                context: context,
-                                                text: "여름",
-                                                color: const Color(0xFFABEDE1)),
-                                            buildTagItem(
-                                                context: context,
-                                                text: "맑은",
-                                                color: const Color(0xFF8DD6FF)),
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 6, 0, 0),
-                                              child: Text(
-                                                "날에 어울려요.",
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.white
-                                                        .withOpacity(0.7)),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                      buildTagItemList(
+                                          context: context,
+                                          tagList:
+                                              snapshot.data?.info?.weathers,
+                                          tailString: "날에 어울려요."),
 
                                       /* 가니쉬 텍스트 */
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        margin: const EdgeInsets.fromLTRB(
-                                            0, 15, 0, 15),
-                                        child: Text(
-                                          "자주 올라가는 장식으로는",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white
-                                                  .withOpacity(0.7)),
-                                        ),
-                                      ),
-
-                                      /* 가니쉬 태그 */
-                                      Container(
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            buildTagItem(
-                                                context: context,
-                                                text: "레몬",
-                                                color: const Color(0xFFFFD233)),
-                                            buildTagItem(
-                                                context: context,
-                                                text: "체리",
-                                                color: const Color(0xFFDA6C31)),
-                                            Container(
-                                              alignment: Alignment.topCenter,
+                                      snapshot.data?.info?.ornaments?.length !=
+                                              0
+                                          ? Container(
+                                              alignment: Alignment.centerLeft,
                                               margin: const EdgeInsets.fromLTRB(
-                                                  4, 0, 0, 0),
+                                                  0, 15, 0, 7),
                                               child: Text(
-                                                "등이 있어요.",
+                                                "자주 올라가는 장식으로는",
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w600,
                                                     color: Colors.white
                                                         .withOpacity(0.7)),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                            )
+                                          : SizedBox(),
+
+                                      /* 가니쉬 태그 */
+                                      buildTagItemList(
+                                          context: context,
+                                          tagList:
+                                              snapshot.data?.info?.ornaments,
+                                          tailString: "등이 있어요."),
                                     ],
                                   ),
                                 ),
@@ -475,6 +376,23 @@ Widget buildCocktailName(
       ));
 }
 
+/* 태그 아이템 리스트 한 줄 생성 메소드 */
+Widget buildRecipe(
+    {required BuildContext context, required String? rawRecipe}) {
+  if (rawRecipe == null || rawRecipe == "") return const Text("");
+  List<String> recipeList = rawRecipe.split("||");
+  int recipeLength = recipeList.length;
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      for (int i = 0; i < recipeLength; ++i)
+        buildRecipeItem(
+            context: context, number: i + 1, description: recipeList[i]),
+    ],
+  );
+}
+
 /* ohzu point 위젯 */
 Widget buildOhzuPoint(
     {required BuildContext context, required String? description}) {
@@ -561,19 +479,38 @@ Widget buildIngredients(
 }
 
 /* 레시피 리스트 위젯 */
-Widget buildRecipe(
-    {required BuildContext context, required String? rawRecipe}) {
-  if (rawRecipe == null || rawRecipe == "") return const Text("");
-  List<String> recipeList = rawRecipe.split("||");
-  int recipeLength = recipeList.length;
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      for (int i = 0; i < recipeLength; ++i)
-        buildRecipeItem(
-            context: context, number: i + 1, description: recipeList[i]),
-    ],
+Widget buildTagItemList(
+    {required BuildContext context,
+    required List<Tag>? tagList,
+    required String? tailString}) {
+  if (tagList == null || tagList.isEmpty) return const Text("");
+  final int tagListLength = tagList.length;
+
+  return Container(
+    margin: const EdgeInsets.only(top: 8),
+    alignment: Alignment.centerLeft,
+    child: Wrap(
+      alignment: WrapAlignment.start,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        for (int i = 0; i < tagListLength; ++i)
+          (buildTagItem(
+            context: context,
+            text: tagList[i].name.toString(),
+            color: Color(int.parse("0xff${tagList[i].tagColor.toString()}")),
+          )),
+        Container(
+          padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),
+          child: Text(
+            tailString.toString(),
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.white.withOpacity(0.7)),
+          ),
+        ),
+      ],
+    ),
   );
 }
 
