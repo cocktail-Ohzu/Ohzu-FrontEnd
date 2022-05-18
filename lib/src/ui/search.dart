@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../blocs/serach_bloc/search_bloc.dart';
 import './detail.dart';
-import 'model/searchItem.dart';
+import '../models/search_model.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
@@ -13,79 +15,91 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   //final suggestions = ["검색", "기능", "따라하기", "힘들어", "살려줘"];
 
-  List<SearchItem> _list = []; //fetched data
-  List<SearchItem> _search = []; //searched data
-  bool _onLoading = false;
-
   /* 검색 바 컨트롤러 */
   final TextEditingController searchController = TextEditingController();
 
+  /* 리스트 가공 함수 */
+  List<SearchModel> getProcessedList(List<SearchModel> _list, String _text) {
+    if (_text.startsWith('#')) {
+      _text = _text.substring(1);
+      return _list
+          .where((element) =>
+              element.flavors!.toLowerCase().contains(_text.toLowerCase()) ||
+              element.moods!.toLowerCase().contains(_text.toLowerCase()) ||
+              element.weathers!.toLowerCase().contains(_text.toLowerCase()) ||
+              element.ornaments!.toLowerCase().contains(_text.toLowerCase()) ||
+              element.bases!.toLowerCase().contains(_text.toLowerCase()) ||
+              element.ingredients!.toLowerCase().contains(_text.toLowerCase()))
+          .toList();
+    } else {
+      return _list
+          .where((element) => element.name!
+              .toLowerCase()
+              .replaceAll(' ', '')
+              .contains(_text.toLowerCase().replaceAll(' ', '')))
+          // || element.name!
+          // .toLowerCase()
+          // .replaceAll(' ', '')
+          // .contains(_text.toLowerCase().replaceAll(' ', ''))) 영어이름 검색 추가필요
+          .toList();
+    }
+  }
+
   /* 텍스트 입력과 동시에 state 발생 */
   onSearch(String text) async {
-    _search.clear();
-    if (text.isEmpty) {
-      setState(() {});
-      return;
-    }
-
-    /* 해쉬태그로 검색시 */
-    if (text.startsWith('#')) {
-      text = text.substring(1);
-      _list.forEach((tagItem) {
-        if (tagItem.flavors
-            .toString()
-            .toLowerCase()
-            .contains(text.toLowerCase())) {
-          _search.add(tagItem);
-
-          print(tagItem.flavors.toString() + ", "); //출력되는지확인
-        }
-      });
-      /* 이름으로 검색 시 */
-    } else {
-      _list.forEach((nameItem) {
-        if (nameItem.name
-            .toString()
-            .toLowerCase()
-            .contains(text.toLowerCase())) {
-          _search.add(nameItem);
-
-          print(nameItem.name.toString() + ", "); //출력되는지확인
-        }
-      });
-    }
-
     setState(() {});
   }
 
-  late Future<List> searchItem;
   @override
   void initState() {
     super.initState();
-    /* 메인 페이지 API fetching */
-    searchItem = fetchSearchItem();
-
-    searchItem.then((value) {
-      _list = value as List<SearchItem>;
-    });
+    /* 검색 페이지 Bloc 주입 */
+    searchBloc.add(LoadSearchEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF121212),
-      appBar: AppBar(
-          toolbarHeight: 44,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: buildSearchBar(context, searchController, onSearch),
-          leadingWidth: 60,
-          actions: []),
-      body: searchController.text == ''
-          ? buildSuggestion(context)
-          : searchController.text.startsWith('#')
-              ? buildResultByTag(context, _search, searchController.text)
-              : buildResultByName(context, _search, searchController.text),
+    return BlocProvider(
+      create: (_) => searchBloc,
+      child: Scaffold(
+        backgroundColor: const Color(0xFF121212),
+        appBar: AppBar(
+            toolbarHeight: 44,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: buildSearchBar(context, searchController, onSearch),
+            leadingWidth: 60,
+            actions: []),
+        body: BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
+          if (state is SearchLoadingState) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is SearchLoadedState) {
+            if (searchController.text.isEmpty) {
+              return buildSuggestion(context);
+            } else if (searchController.text.startsWith('#')) {
+              return buildResultByTag(
+                  context,
+                  getProcessedList(state.search, searchController.text),
+                  searchController.text);
+            } else {
+              return buildResultByName(
+                  context,
+                  getProcessedList(state.search, searchController.text),
+                  searchController.text);
+            }
+          } else if (state is SearchErrorState) {
+            return const Text("search api error");
+          }
+          return Container();
+        }),
+        //searchController.text == ''
+        //     ? buildSuggestion(context)
+        //     : searchController.text.startsWith('#')
+        //         ? buildResultByTag(context, _search, searchController.text)
+        //         : buildResultByName(context, _search, searchController.text),
+      ),
     );
   }
 }
@@ -142,7 +156,7 @@ Widget buildSuggestion(BuildContext context) {
 /* 이름으로 검색할 시 뜨는 아이템 */
 @override
 Widget buildResultByName(
-    BuildContext context, List<SearchItem> list, String text) {
+    BuildContext context, List<SearchModel> list, String text) {
   final int len = list.length;
   List<Widget> ret = [];
   String cocktailName;
@@ -154,11 +168,7 @@ Widget buildResultByName(
     if (textIndex != -1) {
       ret.add(GestureDetector(
         onTap: () {
-          Navigator.push(
-              context,
-              CupertinoPageRoute(
-                builder: (context) => Detail(id: list[i].id.toString()),
-              ));
+          openDetailPage(context, list[i].id!);
         },
         child: Container(
           width: double.infinity,
@@ -200,7 +210,7 @@ Widget buildResultByName(
 /* 해쉬태그로 검색할 시 뜨는 아이템 */
 @override
 Widget buildResultByTag(
-    BuildContext context, List<SearchItem> list, String text) {
+    BuildContext context, List<SearchModel> list, String text) {
   final int len = list.length;
   List<Widget> ret = [];
   String replacedText = text.replaceAll('#', '');
@@ -219,11 +229,7 @@ Widget buildResultByTag(
       ret.add(
         GestureDetector(
           onTap: () {
-            Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => Detail(id: list[i].id.toString()),
-                ));
+            openDetailPage(context, list[i].id!);
           },
           child: Container(
             decoration: BoxDecoration(
