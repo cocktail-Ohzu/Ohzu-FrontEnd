@@ -2,16 +2,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 /* 칵테일 상세 정보 모델 */
-const String URL = "https://ohzu.xyz";
-
-class Details {
+class DetailModel {
   Info? info;
   List<Bases>? bases;
   List<Ingredients>? ingredients;
 
-  Details({this.info, this.bases, this.ingredients});
+  DetailModel({this.info, this.bases, this.ingredients});
 
-  Details.fromJson(Map<String, dynamic> json) {
+  DetailModel.fromJson(Map<String, dynamic> json) {
     info = json['info'] != null ? new Info.fromJson(json['info']) : null;
     if (json['bases'] != null) {
       bases = <Bases>[];
@@ -214,16 +212,5 @@ class Tag {
     data['name'] = this.name;
     data['tag_color'] = this.tagColor;
     return data;
-  }
-}
-
-Future<Details> fetchDetails({required String id}) async {
-  final url = Uri.parse("$URL/cocktails/$id");
-  final response = await http.get(url);
-
-  if (response.statusCode == 200) {
-    return Details.fromJson(json.decode(utf8.decode(response.bodyBytes)));
-  } else {
-    throw Exception("Failed to load TodaysCocktail");
   }
 }

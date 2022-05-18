@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'model/details.dart';
+import '../models/detail_model.dart';
 
 class Recommend extends StatefulWidget {
   const Recommend({Key? key}) : super(key: key);

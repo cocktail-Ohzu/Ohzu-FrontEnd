@@ -4,7 +4,7 @@ import 'dart:convert';
 /* 검색 데이터 모델 (리스트) */
 const String URL = "https://ohzu.xyz";
 
-class SearchItem {
+class SearchModel {
   int? id;
   String? name;
   String? img;
@@ -16,7 +16,7 @@ class SearchItem {
   String? ingredients;
   String? weathers;
 
-  SearchItem(
+  SearchModel(
       {this.id,
       this.name,
       this.img,
@@ -28,7 +28,7 @@ class SearchItem {
       this.ingredients,
       this.weathers});
 
-  SearchItem.fromJson(Map<String, dynamic> json) {
+  SearchModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     img = json['img'];
@@ -62,12 +62,12 @@ Future<List> fetchSearchItem() async {
   final url = Uri.parse("$URL/search");
   final response = await http.get(url);
   List jsonData;
-  List<SearchItem> ret = [];
+  List<SearchModel> ret = [];
 
   if (response.statusCode == 200) {
     jsonData = json.decode(utf8.decode(response.bodyBytes)); //Json List
     for (var elem in jsonData) {
-      ret.add(SearchItem.fromJson(elem)); //parse Json List
+      ret.add(SearchModel.fromJson(elem)); //parse Json List
     }
     return ret;
   } else {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import './detail.dart';
-import 'model/searchItem.dart';
+import '../models/search_model.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
@@ -13,8 +13,8 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   //final suggestions = ["검색", "기능", "따라하기", "힘들어", "살려줘"];
 
-  List<SearchItem> _list = []; //fetched data
-  List<SearchItem> _search = []; //searched data
+  List<SearchModel> _list = []; //fetched data
+  List<SearchModel> _search = []; //searched data
   bool _onLoading = false;
 
   /* 검색 바 컨트롤러 */
@@ -66,7 +66,7 @@ class _SearchState extends State<Search> {
     searchItem = fetchSearchItem();
 
     searchItem.then((value) {
-      _list = value as List<SearchItem>;
+      _list = value as List<SearchModel>;
     });
   }
 
@@ -142,7 +142,7 @@ Widget buildSuggestion(BuildContext context) {
 /* 이름으로 검색할 시 뜨는 아이템 */
 @override
 Widget buildResultByName(
-    BuildContext context, List<SearchItem> list, String text) {
+    BuildContext context, List<SearchModel> list, String text) {
   final int len = list.length;
   List<Widget> ret = [];
   String cocktailName;
@@ -157,7 +157,8 @@ Widget buildResultByName(
           Navigator.push(
               context,
               CupertinoPageRoute(
-                builder: (context) => Detail(id: list[i].id.toString()),
+                builder: (context) =>
+                    DetailPage(cocktailId: list[i].id.toString()),
               ));
         },
         child: Container(
@@ -200,7 +201,7 @@ Widget buildResultByName(
 /* 해쉬태그로 검색할 시 뜨는 아이템 */
 @override
 Widget buildResultByTag(
-    BuildContext context, List<SearchItem> list, String text) {
+    BuildContext context, List<SearchModel> list, String text) {
   final int len = list.length;
   List<Widget> ret = [];
   String replacedText = text.replaceAll('#', '');
@@ -222,7 +223,8 @@ Widget buildResultByTag(
             Navigator.push(
                 context,
                 CupertinoPageRoute(
-                  builder: (context) => Detail(id: list[i].id.toString()),
+                  builder: (context) =>
+                      DetailPage(cocktailId: list[i].id.toString()),
                 ));
           },
           child: Container(

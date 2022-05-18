@@ -10,13 +10,8 @@ https://www.notion.so/1-API-9eede01a48ca4bc5b6ffeceab8e773bc
 
 */
 
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-const String URL = "https://ohzu.xyz";
-
 /* 메인 페이지 오늘의 추천 칵테일 모델 */
-class TodaysCocktail {
+class TodaysCocktailModel {
   int? id;
   String? img;
   String? backgroundColor;
@@ -25,7 +20,7 @@ class TodaysCocktail {
   String? desc;
   int? strength;
 
-  TodaysCocktail(
+  TodaysCocktailModel(
       {this.id,
       this.img,
       this.backgroundColor,
@@ -34,7 +29,7 @@ class TodaysCocktail {
       this.desc,
       this.strength});
 
-  TodaysCocktail.fromJson(Map<String, dynamic> json) {
+  TodaysCocktailModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     img = json['img'];
     backgroundColor = json['background_color'];
@@ -55,17 +50,5 @@ class TodaysCocktail {
       "strength": strength,
     };
     return data;
-  }
-}
-
-Future<TodaysCocktail> fetchTodaysCocktail() async {
-  final url = Uri.parse("$URL/main");
-  final response = await http.get(url);
-
-  if (response.statusCode == 200) {
-    return TodaysCocktail.fromJson(
-        json.decode(utf8.decode(response.bodyBytes)));
-  } else {
-    throw Exception("Failed to load TodaysCocktail");
   }
 }
