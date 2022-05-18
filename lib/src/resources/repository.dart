@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:ohzu/src/models/detail_model.dart';
+import 'package:ohzu/src/models/todays_cocktail_model.dart';
+import 'package:ohzu/src/models/search_model.dart';
 import 'package:ohzu/src/resources/ohzu_api_provider.dart';
+import 'package:ohzu/src/ui/search.dart';
 
 import 'ohzu_api_provider.dart';
-import '../models/todays_cocktail_model.dart';
 
 class Repository {
   final ohzuApiProvider = OhzuApiProvider();
@@ -13,4 +15,7 @@ class Repository {
 
   Future<DetailModel> fetchDetail(int cocktailId) =>
       ohzuApiProvider.fetchDetail(cocktailId);
+
+  Future<List<SearchModel>> fetchSearchItem() =>
+      ohzuApiProvider.fetchSearchItem();
 }

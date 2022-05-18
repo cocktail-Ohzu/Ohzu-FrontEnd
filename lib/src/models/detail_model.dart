@@ -10,31 +10,31 @@ class DetailModel {
   DetailModel({this.info, this.bases, this.ingredients});
 
   DetailModel.fromJson(Map<String, dynamic> json) {
-    info = json['info'] != null ? new Info.fromJson(json['info']) : null;
+    info = json['info'] != null ? Info.fromJson(json['info']) : null;
     if (json['bases'] != null) {
       bases = <Bases>[];
       json['bases'].forEach((v) {
-        bases!.add(new Bases.fromJson(v));
+        bases!.add(Bases.fromJson(v));
       });
     }
     if (json['ingredients'] != null) {
       ingredients = <Ingredients>[];
       json['ingredients'].forEach((v) {
-        ingredients!.add(new Ingredients.fromJson(v));
+        ingredients!.add(Ingredients.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.info != null) {
-      data['info'] = this.info!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (info != null) {
+      data['info'] = info!.toJson();
     }
-    if (this.bases != null) {
-      data['bases'] = this.bases!.map((v) => v.toJson()).toList();
+    if (bases != null) {
+      data['bases'] = bases!.map((v) => v.toJson()).toList();
     }
-    if (this.ingredients != null) {
-      data['ingredients'] = this.ingredients!.map((v) => v.toJson()).toList();
+    if (ingredients != null) {
+      data['ingredients'] = ingredients!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -81,25 +81,25 @@ class Info {
     if (json['flavors'] != null) {
       flavors = <Tag>[];
       json['flavors'].forEach((v) {
-        flavors!.add(new Tag.fromJson(v));
+        flavors!.add(Tag.fromJson(v));
       });
     }
     if (json['moods'] != null) {
       moods = <Tag>[];
       json['moods'].forEach((v) {
-        moods!.add(new Tag.fromJson(v));
+        moods!.add(Tag.fromJson(v));
       });
     }
     if (json['weathers'] != null) {
       weathers = <Tag>[];
       json['weathers'].forEach((v) {
-        weathers!.add(new Tag.fromJson(v));
+        weathers!.add(Tag.fromJson(v));
       });
     }
     if (json['ornaments'] != null) {
       ornaments = <Tag>[];
       json['ornaments'].forEach((v) {
-        ornaments!.add(new Tag.fromJson(v));
+        ornaments!.add(Tag.fromJson(v));
       });
     }
     recipe = json['recipe'];
@@ -107,28 +107,28 @@ class Info {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['background_color'] = this.backgroundColor;
-    data['eng_name'] = this.engName;
-    data['img'] = this.img;
-    data['desc'] = this.desc;
-    data['strength'] = this.strength;
-    if (this.flavors != null) {
-      data['flavors'] = this.flavors!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['name'] = name;
+    data['background_color'] = backgroundColor;
+    data['eng_name'] = engName;
+    data['img'] = img;
+    data['desc'] = desc;
+    data['strength'] = strength;
+    if (flavors != null) {
+      data['flavors'] = flavors!.map((v) => v.toJson()).toList();
     }
-    if (this.moods != null) {
-      data['moods'] = this.moods!.map((v) => v.toJson()).toList();
+    if (moods != null) {
+      data['moods'] = moods!.map((v) => v.toJson()).toList();
     }
-    if (this.weathers != null) {
-      data['weathers'] = this.weathers!.map((v) => v.toJson()).toList();
+    if (weathers != null) {
+      data['weathers'] = weathers!.map((v) => v.toJson()).toList();
     }
-    if (this.ornaments != null) {
-      data['ornaments'] = this.ornaments!.map((v) => v.toJson()).toList();
+    if (ornaments != null) {
+      data['ornaments'] = ornaments!.map((v) => v.toJson()).toList();
     }
-    data['recipe'] = this.recipe;
-    data['ohzu_point'] = this.ohzuPoint;
+    data['recipe'] = recipe;
+    data['ohzu_point'] = ohzuPoint;
     return data;
   }
 }
@@ -145,9 +145,9 @@ class Flavors {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['tag_color'] = this.tagColor;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['tag_color'] = tagColor;
     return data;
   }
 }
@@ -166,10 +166,10 @@ class Bases {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['base'] = this.base;
-    data['tag_color'] = this.tagColor;
-    data['desc'] = this.desc;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['base'] = base;
+    data['tag_color'] = tagColor;
+    data['desc'] = desc;
     return data;
   }
 }
@@ -188,10 +188,10 @@ class Ingredients {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ingredient'] = this.ingredient;
-    data['tag_color'] = this.tagColor;
-    data['amount'] = this.amount;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['ingredient'] = ingredient;
+    data['tag_color'] = tagColor;
+    data['amount'] = amount;
     return data;
   }
 }
@@ -208,9 +208,9 @@ class Tag {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['tag_color'] = this.tagColor;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['tag_color'] = tagColor;
     return data;
   }
 }

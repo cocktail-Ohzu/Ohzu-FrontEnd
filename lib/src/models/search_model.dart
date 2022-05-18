@@ -58,7 +58,7 @@ class SearchModel {
   }
 }
 
-Future<List> fetchSearchItem() async {
+Future<List<SearchModel>> fetchSearchItem() async {
   final url = Uri.parse("$URL/search");
   final response = await http.get(url);
   List jsonData;

@@ -1,20 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ohzu/src/blocs/cocktail_detail_bloc_provider.dart';
 import '../models/detail_model.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../blocs/cocktail_detail_bloc/cocktail_detail_bloc.dart';
+import '../resources/repository.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({Key? key, required this.cocktailId}) : super(key: key);
 
-  final String cocktailId;
+  final int cocktailId;
 
   @override
   _DetailPageState createState() => _DetailPageState(cocktailId: cocktailId);
 }
 
 class _DetailPageState extends State<DetailPage> {
-  final String cocktailId;
-
+  final int cocktailId;
+  late CocktailDetailBloc bloc;
   /* 레시피 자동 스크롤 함수 */
   final GlobalKey expansionTileKey = GlobalKey();
   void _scrollToSelectedContent({required GlobalKey expansionTileKey}) {
@@ -31,271 +34,270 @@ class _DetailPageState extends State<DetailPage> {
   final ScrollController _recipeScrollController = ScrollController();
   bool recipeExpanded = false;
 
-  /* BloC 주입 */
-  late CocktailDetailBloc cocktailDetailBloc;
-  _DetailPageState({required this.cocktailId});
-
-  @override
   void initState() {
-    cocktailDetailBloc = CocktailDetailBlocProvider.of(context);
-    cocktailDetailBloc.fetchDetailsById(int.parse(cocktailId));
+    bloc = CocktailDetailBloc(cocktailId);
+    bloc.add(LoadCocktailDetailEvent());
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    cocktailDetailBloc = CocktailDetailBlocProvider.of(context);
-    cocktailDetailBloc.fetchDetailsById(int.parse(cocktailId));
-    print("recreated");
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    cocktailDetailBloc.dispose();
-    super.dispose();
-  }
+  /* BloC 주입 */
+  _DetailPageState({required this.cocktailId});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        extendBodyBehindAppBar: true,
-        backgroundColor: const Color(0xFF121212),
-        appBar: AppBar(
-            toolbarHeight: 40,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: [
-              // Container(
-              //   margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
-              //   child: IconButton(
-              //     onPressed: () {},
-              //     splashRadius: 18,
-              //     icon: const Icon(
-              //       Icons.search,
-              //       size: 25,
-              //     ),
-              //     color: Colors.white.withOpacity(0.6),
-              //   ),
-              // )
-            ]),
-        body: SingleChildScrollView(
-          child: StreamBuilder(
-              stream: cocktailDetailBloc.cocktailDetails,
-              builder: (context, AsyncSnapshot<DetailModel> snapshot) {
-                if (snapshot.hasData) {
-                  return Column(
-                    children: [
-                      if (snapshot.data!.info != null)
-                        buildCocktailImg(
-                          context: context,
-                          img: snapshot.data!.info!.img,
-                          color: snapshot.data!.info!.backgroundColor,
-                        ),
-                      buildCocktailName(
-                          context: context,
-                          koName: snapshot.data!.info!.name,
-                          enName: snapshot.data!.info!.engName,
-                          desc: snapshot.data!.info!.desc,
-                          strength: snapshot.data!.info!.strength),
-                      /* 중간 디바이드 바 */
-                      const Divider(
-                        color: Color(0xFF1E1E1E),
-                        thickness: 12,
-                      ),
+    return BlocProvider(
+      create: (_) => bloc,
+      child: Scaffold(
+          extendBodyBehindAppBar: true,
+          backgroundColor: const Color(0xFF121212),
+          appBar: AppBar(
+              toolbarHeight: 40,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              actions: [
+                // Container(
+                //   margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
+                //   child: IconButton(
+                //     onPressed: () {},
+                //     splashRadius: 18,
+                //     icon: const Icon(
+                //       Icons.search,
+                //       size: 25,
+                //     ),
+                //     color: Colors.white.withOpacity(0.6),
+                //   ),
+                // )
+              ]),
+          body: SingleChildScrollView(
+            child: BlocBuilder<CocktailDetailBloc, CocktailDetailState>(
+                builder: (context, state) {
+              if (state is CocktailDetailLoadingState) {
+                return Container(
+                  alignment: Alignment.center,
+                  height: MediaQuery.of(context).size.height,
+                  child: CircularProgressIndicator(
+                    color: Colors.white.withOpacity(0.5),
+                  ),
+                );
+              } else if (state is CocktailDetailLoadedState) {
+                return Column(
+                  children: [
+                    buildCocktailImg(
+                      context: context,
+                      img: state.cocktailDetail.info!.img!,
+                      color: state.cocktailDetail.info!.backgroundColor!,
+                    ),
+                    buildCocktailName(
+                        context: context,
+                        koName: state.cocktailDetail.info!.name,
+                        enName: state.cocktailDetail.info!.engName,
+                        desc: state.cocktailDetail.info!.desc,
+                        strength: state.cocktailDetail.info!.strength),
+                    /* 중간 디바이드 바 */
+                    const Divider(
+                      color: Color(0xFF1E1E1E),
+                      thickness: 12,
+                    ),
 
-                      /* 태그 */
-                      Container(
-                          margin: const EdgeInsets.fromLTRB(24, 50, 24, 16),
-                          alignment: Alignment.centerLeft,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "이 칵테일은,",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                ),
+                    /* 태그 */
+                    Container(
+                        margin: const EdgeInsets.fromLTRB(24, 50, 24, 16),
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "이 칵테일은,",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
                               ),
+                            ),
 
-                              /* 태그 및 설명 */
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: const Color(0xFFDA6C31),
-                                    width: 1,
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(12)),
-                                  color: Color(0xFF1E1E1E),
+                            /* 태그 및 설명 */
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: const Color(0xFFDA6C31),
+                                  width: 1,
                                 ),
-                                padding:
-                                    const EdgeInsets.fromLTRB(23, 23, 23, 23),
-                                margin: const EdgeInsets.fromLTRB(0, 15, 0, 24),
-                                child: Column(
-                                  children: [
-                                    /* 맛 태그 */
-                                    buildTagItemList(
-                                        context: context,
-                                        tagList: snapshot.data!.info!.flavors,
-                                        tailString: "맛이 나요."),
-
-                                    /* 분위기 태그 */
-                                    buildTagItemList(
-                                        context: context,
-                                        tagList: snapshot.data!.info!.moods,
-                                        tailString: "분위기로,"),
-
-                                    /* 날씨 태그 */
-                                    buildTagItemList(
-                                        context: context,
-                                        tagList: snapshot.data!.info!.weathers,
-                                        tailString: "날에 어울려요."),
-
-                                    /* 가니쉬 텍스트 */
-                                    snapshot.data!.info!.ornaments!.isNotEmpty
-                                        ? Container(
-                                            alignment: Alignment.centerLeft,
-                                            margin: const EdgeInsets.fromLTRB(
-                                                0, 15, 0, 7),
-                                            child: Text(
-                                              "자주 올라가는 장식으로는",
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white
-                                                      .withOpacity(0.7)),
-                                            ),
-                                          )
-                                        : const SizedBox(),
-
-                                    /* 가니쉬 태그 */
-                                    buildTagItemList(
-                                        context: context,
-                                        tagList: snapshot.data!.info!.ornaments,
-                                        tailString: "등이 있어요."),
-                                  ],
-                                ),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(12)),
+                                color: Color(0xFF1E1E1E),
                               ),
+                              padding:
+                                  const EdgeInsets.fromLTRB(23, 23, 23, 23),
+                              margin: const EdgeInsets.fromLTRB(0, 15, 0, 24),
+                              child: Column(
+                                children: [
+                                  /* 맛 태그 */
+                                  buildTagItemList(
+                                      context: context,
+                                      tagList:
+                                          state.cocktailDetail.info!.flavors,
+                                      tailString: "맛이 나요."),
 
-                              /* 오쥬 포인트 */
-                              buildOhzuPoint(
-                                  context: context,
-                                  description: snapshot.data!.info!.ohzuPoint),
+                                  /* 분위기 태그 */
+                                  buildTagItemList(
+                                      context: context,
+                                      tagList: state.cocktailDetail.info!.moods,
+                                      tailString: "분위기로,"),
 
-                              /* 레시피 익스펜션 타일 */
-                              ExpansionTile(
-                                tilePadding:
-                                    const EdgeInsets.fromLTRB(0, 0, 0, 12),
-                                trailing: const Text(""),
-                                key: expansionTileKey,
-                                title: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.only(right: 8),
-                                      child: const Text(
-                                        "레시피",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                    Icon(
-                                      recipeExpanded
-                                          ? Icons.keyboard_arrow_up_sharp
-                                          : Icons.keyboard_arrow_down_sharp,
-                                      size: 30,
-                                      color: Colors.white,
-                                    ), //solid arrow
-                                  ],
-                                ),
-                                /* 숨겨진 내용들 */
+                                  /* 날씨 태그 */
+                                  buildTagItemList(
+                                      context: context,
+                                      tagList:
+                                          state.cocktailDetail.info!.weathers,
+                                      tailString: "날에 어울려요."),
+
+                                  /* 가니쉬 텍스트 */
+                                  state.cocktailDetail.info!.ornaments!
+                                          .isNotEmpty
+                                      ? Container(
+                                          alignment: Alignment.centerLeft,
+                                          margin: const EdgeInsets.fromLTRB(
+                                              0, 15, 0, 7),
+                                          child: Text(
+                                            "자주 올라가는 장식으로는",
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white
+                                                    .withOpacity(0.7)),
+                                          ),
+                                        )
+                                      : const SizedBox(),
+
+                                  /* 가니쉬 태그 */
+                                  buildTagItemList(
+                                      context: context,
+                                      tagList:
+                                          state.cocktailDetail.info!.ornaments,
+                                      tailString: "등이 있어요."),
+                                ],
+                              ),
+                            ),
+
+                            /* 오쥬 포인트 */
+                            buildOhzuPoint(
+                                context: context,
+                                description:
+                                    state.cocktailDetail.info!.ohzuPoint),
+
+                            /* 레시피 익스펜션 타일 */
+                            ExpansionTile(
+                              tilePadding:
+                                  const EdgeInsets.fromLTRB(0, 0, 0, 12),
+                              trailing: const Text(""),
+                              key: expansionTileKey,
+                              title: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Container(
-                                    alignment: Alignment.centerLeft,
+                                    margin: const EdgeInsets.only(right: 8),
                                     child: const Text(
-                                      "필요한 재료",
+                                      "레시피",
                                       style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600),
                                     ),
                                   ),
-                                  buildIngredients(
-                                      context: context,
-                                      img: snapshot.data!.info!.img,
-                                      scrollController: _recipeScrollController,
-                                      ingredients: snapshot.data!.ingredients),
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: const Text(
-                                      "제조 방법",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 10),
-                                    child: Text(
-                                      "미도리 : 스윗 앤 사워 믹스 : 스프라이트 = 1 : 1 : 2",
-                                      style: TextStyle(
-                                          color: Colors.white.withOpacity(0.8),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w100),
-                                    ),
-                                  ),
-                                  /* 제조 방법 */
-                                  buildRecipe(
-                                      context: context,
-                                      rawRecipe: snapshot.data!.info!.recipe),
-                                  const SizedBox(
-                                    height: 122,
-                                  ),
+                                  Icon(
+                                    recipeExpanded
+                                        ? Icons.keyboard_arrow_up_sharp
+                                        : Icons.keyboard_arrow_down_sharp,
+                                    size: 30,
+                                    color: Colors.white,
+                                  ), //solid arrow
                                 ],
-                                onExpansionChanged: (bool isExpanded) {
-                                  setState(() => recipeExpanded = isExpanded);
-                                  /* 자동 스크롤 */
-                                  _scrollToSelectedContent(
-                                      expansionTileKey: expansionTileKey);
-                                },
-                              )
-                            ],
-                          ))
-                    ],
-                  );
-                } else {
-                  return const Text("snapshot is empty");
-                }
-              }),
-        ));
+                              ),
+                              /* 숨겨진 내용들 */
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: const Text(
+                                    "필요한 재료",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                buildIngredients(
+                                    context: context,
+                                    img: state.cocktailDetail.info!.img,
+                                    scrollController: _recipeScrollController,
+                                    ingredients:
+                                        state.cocktailDetail.ingredients),
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: const Text(
+                                    "제조 방법",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    "미도리 : 스윗 앤 사워 믹스 : 스프라이트 = 1 : 1 : 2",
+                                    style: TextStyle(
+                                        color: Colors.white.withOpacity(0.8),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w100),
+                                  ),
+                                ),
+                                /* 제조 방법 */
+                                buildRecipe(
+                                    context: context,
+                                    rawRecipe:
+                                        state.cocktailDetail.info!.recipe),
+                                const SizedBox(
+                                  height: 122,
+                                ),
+                              ],
+                              onExpansionChanged: (bool isExpanded) {
+                                setState(() => recipeExpanded = isExpanded);
+                                /* 자동 스크롤 */
+                                _scrollToSelectedContent(
+                                    expansionTileKey: expansionTileKey);
+                              },
+                            )
+                          ],
+                        ))
+                  ],
+                );
+              }
+              if (state is CocktailDetailErrorState) {
+                return Text("snapshot is empty");
+              }
+              return Container();
+            }),
+          )),
+    );
   }
 }
 
-openDetailPage(context, int idx) {
-  final page =
-      CocktailDetailBlocProvider(child: DetailPage(cocktailId: idx.toString()));
+openDetailPage(context, int id) {
   Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => page,
+        builder: (context) => DetailPage(cocktailId: id),
       ));
 }
 
 /* 최상단 칵테일 위젯 */
 Widget buildCocktailImg({
   required BuildContext context,
-  required String? img,
-  required String? color,
+  required String img,
+  required String color,
 }) {
-  if (img == null || color == null) return const Text("파라미터 값 오류입니다");
   return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       width: double.infinity,
