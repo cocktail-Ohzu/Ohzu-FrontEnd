@@ -1,9 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/serach_bloc/search_bloc.dart';
-import './detail.dart';
-import '../models/search_model.dart';
+import 'package:ohzu/src/blocs/serach_bloc/search_bloc.dart';
+import 'package:ohzu/src/models/search_model.dart';
+import 'package:ohzu/src/ui/detail.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
@@ -20,29 +22,22 @@ class _SearchState extends State<Search> {
 
   /* 리스트 가공 함수 */
   List<SearchModel> getProcessedList(List<SearchModel> _list, String _text) {
+    _text = _text.substring(1).toLowerCase().replaceAll(' ', '');
     if (_text.startsWith('#')) {
-      _text = _text.substring(1);
       return _list
           .where((element) =>
-              element.flavors!.toLowerCase().contains(_text.toLowerCase()) ||
-              element.moods!.toLowerCase().contains(_text.toLowerCase()) ||
-              element.weathers!.toLowerCase().contains(_text.toLowerCase()) ||
-              element.ornaments!.toLowerCase().contains(_text.toLowerCase()) ||
-              element.bases!.toLowerCase().contains(_text.toLowerCase()) ||
-              element.ingredients!.toLowerCase().contains(_text.toLowerCase()))
-          .toList();
-    } else {
-      return _list
-          .where((element) => element.name!
-              .toLowerCase()
-              .replaceAll(' ', '')
-              .contains(_text.toLowerCase().replaceAll(' ', '')))
-          // || element.name!
-          // .toLowerCase()
-          // .replaceAll(' ', '')
-          // .contains(_text.toLowerCase().replaceAll(' ', ''))) 영어이름 검색 추가필요
+              hasTag(element.flavors!, _text) ||
+              hasTag(element.moods!, _text) ||
+              hasTag(element.weathers!, _text) ||
+              hasTag(element.ornaments!, _text) ||
+              hasTag(element.bases!, _text) ||
+              hasTag(element.ingredients!, _text))
           .toList();
     }
+    return _list
+        .where((element) =>
+            hasTag(element.name!, _text) || hasTag(element.engName!, _text))
+        .toList();
   }
 
   /* 텍스트 입력과 동시에 state 발생 */
@@ -207,39 +202,80 @@ Widget buildResultByName(
   );
 }
 
+/* 해쉬태그 검색 시 해당 텍스트가 있는지 검사 */
+bool hasTag(dynamic _list, String _text) {
+  if (_list is List<Tag>) {
+    return _list
+        .where((elem) => elem.name!
+            .toLowerCase()
+            .replaceAll(' ', '')
+            .contains(_text.toLowerCase()))
+        .isNotEmpty;
+  } else if (_list is Tag) {
+    return _list.name!.toLowerCase().contains(_text.toLowerCase());
+  } else if (_list is String) {
+    return _list.toLowerCase().contains(_text.toLowerCase());
+  }
+  return false;
+}
+
+/** SearchModel _elem 에서
+* text 가 포함되어 있는 Tag 들의 리스트를 추출하는 함수
+* @return List<Tag>
+*/
+List<Tag> getTag(SearchModel _elem, String _text) {
+  List<Tag> ret = [];
+  ret +=
+      _elem.flavors!.where((flavorElem) => hasTag(flavorElem, _text)).toList();
+  ret += _elem.moods!.where((moodElem) => hasTag(moodElem, _text)).toList();
+  ret += _elem.weathers!
+      .where((weatherElem) => hasTag(weatherElem, _text))
+      .toList();
+  ret += _elem.ornaments!
+      .where((ornamentElem) => hasTag(ornamentElem, _text))
+      .toList();
+  ret += _elem.bases!
+      .where((ingredientElem) => hasTag(ingredientElem, _text))
+      .toList();
+  ret += _elem.ingredients!
+      .where((ingredientElem) => hasTag(ingredientElem, _text))
+      .toList();
+  return ret;
+}
+
 /* 해쉬태그로 검색할 시 뜨는 아이템 */
 @override
 Widget buildResultByTag(
-    BuildContext context, List<SearchModel> list, String text) {
-  final int len = list.length;
+    BuildContext context, List<SearchModel> _list, String _text) {
+  final int len = _list.length;
   List<Widget> ret = [];
-  String replacedText = text.replaceAll('#', '');
+  String replacedText = _text.replaceAll('#', '');
   String cocktailName;
-  String flavorRaw;
-  List<String> flavorSplit;
-  int textIndex;
-  int flavorLen;
+
+  List<Tag> tagToShow = [];
+  int tagToShowLen;
 
   for (int i = 0; i < len; ++i) {
-    cocktailName = list[i].name.toString();
-    flavorRaw = list[i].flavors.toString();
-    flavorSplit = list[i].flavors.toString().split(', ');
-    flavorLen = flavorSplit.length > 2 ? 2 : flavorSplit.length;
-    if (flavorRaw.contains(replacedText)) {
+    cocktailName = _list[i].name!;
+
+    tagToShow = getTag(_list[i], replacedText);
+    tagToShowLen = tagToShow.length > 2 ? 2 : tagToShow.length;
+
+    if (tagToShowLen > 0) {
       ret.add(
         GestureDetector(
           onTap: () {
-            openDetailPage(context, list[i].id!);
+            openDetailPage(context, _list[i].id!);
           },
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Color(0xff1e1e1e),
                 borderRadius: BorderRadius.all(Radius.circular(12))),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Container(
                 alignment: Alignment.topCenter,
-                child: Image(
+                child: const Image(
                     image: AssetImage('asset/images/c.png'), fit: BoxFit.cover),
               ),
 
@@ -264,7 +300,7 @@ Widget buildResultByTag(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        for (int i = 0; i < flavorLen; ++i)
+                        for (int i = 0; i < tagToShowLen; ++i)
                           buildTagItem(
                               context: context,
                               text: RichText(
@@ -273,44 +309,38 @@ Widget buildResultByTag(
                                           color: Colors.white.withOpacity(0.5),
                                           fontWeight: FontWeight.bold),
                                       children: [
-                                    /* 태그 별 키워드 색상 하이라이트 부분 */
-
-                                    if (flavorSplit[i].contains(replacedText))
-                                      (TextSpan(children: [
-                                        TextSpan(
-                                          text: flavorSplit[i].substring(
-                                              0,
-                                              flavorSplit[i]
-                                                  .indexOf(replacedText)),
-                                        ),
-                                        /* 키워드 색상 하이라이트 */
-                                        TextSpan(
-                                            text: flavorSplit[i].substring(
-                                                flavorSplit[i]
-                                                    .indexOf(replacedText),
-                                                flavorSplit[i]
+                                    /* 태그 별 키워드 색상 하이라이트 부분 */ TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: tagToShow[i].name!.substring(
+                                                0,
+                                                tagToShow[i]
+                                                    .name!
+                                                    .indexOf(replacedText)),
+                                          ),
+                                          /* 키워드 색상 하이라이트 */
+                                          TextSpan(
+                                              text: tagToShow[i].name!.substring(
+                                                  tagToShow[i]
+                                                      .name!
+                                                      .indexOf(replacedText),
+                                                  tagToShow[i].name!.indexOf(
+                                                          replacedText) +
+                                                      replacedText.length),
+                                              style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(1.0))),
+                                          TextSpan(
+                                            text: tagToShow[i].name!.substring(
+                                                tagToShow[i]
+                                                        .name!
                                                         .indexOf(replacedText) +
-                                                    replacedText.length),
-                                            style: TextStyle(
-                                                color: Colors.white
-                                                    .withOpacity(1.0))),
-                                        TextSpan(
-                                          text: flavorSplit[i].substring(
-                                              flavorSplit[i]
-                                                      .indexOf(replacedText) +
-                                                  replacedText.length,
-                                              flavorSplit[i].length),
-                                        ),
-                                      ]))
-                                    else
-                                      TextSpan(
-                                          text: flavorSplit[i],
-                                          style: TextStyle(
-                                              color:
-                                                  Colors.white.withOpacity(0.5),
-                                              fontWeight: FontWeight.bold)),
+                                                    replacedText.length,
+                                                tagToShow[i].name!.length),
+                                          ),
+                                        ]),
                                   ])),
-                              origtext: flavorSplit[i]),
+                              colorCode: tagToShow[i].tagColor!),
                       ]))
             ]),
           ),
@@ -335,21 +365,10 @@ Widget buildResultByTag(
 Widget buildTagItem(
     {required BuildContext context,
     required RichText text,
-    required String origtext}) {
-  Color getColor(String name) {
-    if ("상큼한".contains(name)) {
-      return const Color(0xffDA6C31).withOpacity(0.4);
-    } else if ("달콤한".contains(name)) {
-      return const Color(0xffF08FA4).withOpacity(0.4);
-    } else if ("청량한".contains(name)) {
-      return const Color(0xffABEDE1).withOpacity(0.4);
-    }
-    return const Color(0xffeeeeee).withOpacity(0.4);
-  }
-
+    required String colorCode}) {
   return Container(
       decoration: BoxDecoration(
-        color: getColor(origtext),
+        color: Color(int.parse("0xf$colorCode")).withOpacity(0.5),
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
       padding: const EdgeInsets.fromLTRB(11, 7, 11, 7),

@@ -1,76 +1,117 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-/* 검색 데이터 모델 (리스트) */
-const String URL = "https://ohzu.xyz";
-
 class SearchModel {
   int? id;
   String? name;
+  String? engName;
   String? img;
   String? backgroundColor;
-  String? bases;
-  String? flavors;
-  String? moods;
-  String? ornaments;
-  String? ingredients;
-  String? weathers;
+  List<Tag>? bases;
+  List<Tag>? ingredients;
+  List<Tag>? flavors;
+  List<Tag>? moods;
+  List<Tag>? weathers;
+  List<Tag>? ornaments;
 
   SearchModel(
       {this.id,
       this.name,
+      this.engName,
       this.img,
       this.backgroundColor,
       this.bases,
+      this.ingredients,
       this.flavors,
       this.moods,
-      this.ornaments,
-      this.ingredients,
-      this.weathers});
+      this.weathers,
+      this.ornaments});
 
   SearchModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    engName = json['eng_name'];
     img = json['img'];
     backgroundColor = json['background_color'];
-    bases = json['bases'];
-    flavors = json['flavors'];
-    moods = json['moods'];
-    ornaments = json['ornaments'];
-    ingredients = json['ingredients'];
-    weathers = json['weathers'];
+    if (json['bases'] != null) {
+      bases = <Tag>[];
+      json['bases'].forEach((v) {
+        bases!.add(Tag.fromJson(v));
+      });
+    }
+    if (json['ingredients'] != null) {
+      ingredients = <Tag>[];
+      json['ingredients'].forEach((v) {
+        ingredients!.add(Tag.fromJson(v));
+      });
+    }
+    if (json['flavors'] != null) {
+      flavors = <Tag>[];
+      json['flavors'].forEach((v) {
+        flavors!.add(Tag.fromJson(v));
+      });
+    }
+    if (json['moods'] != null) {
+      moods = <Tag>[];
+      json['moods'].forEach((v) {
+        moods!.add(Tag.fromJson(v));
+      });
+    }
+    if (json['weathers'] != null) {
+      weathers = <Tag>[];
+      json['weathers'].forEach((v) {
+        weathers!.add(Tag.fromJson(v));
+      });
+    }
+    if (json['ornaments'] != null) {
+      ornaments = <Tag>[];
+      json['ornaments'].forEach((v) {
+        ornaments!.add(Tag.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{
-      'id': id,
-      'name': name,
-      'img': img,
-      'background_color': backgroundColor,
-      'bases': bases,
-      'flavors': flavors,
-      'moods': moods,
-      'ornaments': ornaments,
-      'ingredients': ingredients,
-      'weathers': weathers
-    };
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['eng_name'] = engName;
+    data['img'] = img;
+    data['background_color'] = backgroundColor;
+    if (bases != null) {
+      data['bases'] = bases!.map((v) => v.toJson()).toList();
+    }
+    if (ingredients != null) {
+      data['ingredients'] = ingredients!.map((v) => v.toJson()).toList();
+    }
+    if (flavors != null) {
+      data['flavors'] = flavors!.map((v) => v.toJson()).toList();
+    }
+    if (moods != null) {
+      data['moods'] = moods!.map((v) => v.toJson()).toList();
+    }
+    if (weathers != null) {
+      data['weathers'] = weathers!.map((v) => v.toJson()).toList();
+    }
+    if (ornaments != null) {
+      data['ornaments'] = ornaments!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
 
-Future<List<SearchModel>> fetchSearchItem() async {
-  final url = Uri.parse("$URL/search");
-  final response = await http.get(url);
-  List jsonData;
-  List<SearchModel> ret = [];
+class Tag {
+  String? name;
+  String? tagColor;
 
-  if (response.statusCode == 200) {
-    jsonData = json.decode(utf8.decode(response.bodyBytes)); //Json List
-    for (var elem in jsonData) {
-      ret.add(SearchModel.fromJson(elem)); //parse Json List
-    }
-    return ret;
-  } else {
-    throw Exception("Failed to load SearchData");
+  Tag({this.name, this.tagColor});
+
+  Tag.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    tagColor = json['tag_color'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['tag_color'] = tagColor;
+    return data;
   }
 }

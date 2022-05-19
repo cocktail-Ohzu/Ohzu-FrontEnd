@@ -1,6 +1,3 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 /* 칵테일 상세 정보 모델 */
 class DetailModel {
   Info? info;

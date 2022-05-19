@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../models/detail_model.dart';
 
 class Recommend extends StatefulWidget {
   const Recommend({Key? key}) : super(key: key);
@@ -79,7 +78,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                     unselectedLabelColor: Colors.white.withOpacity(0.5),
                   )),
               /* 중간선 */
-              Divider(
+              const Divider(
                 height: 1,
                 color: Color(0xff2B2B2B),
               ),
@@ -90,7 +89,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                     children: [
                       /* 타이틀 및 설명 */
                       Container(
-                        padding: EdgeInsets.only(top: 38, bottom: 40),
+                        padding: const EdgeInsets.only(top: 38, bottom: 40),
                         alignment: Alignment.centerLeft,
                         child: buildTabViewTitle(
                             title: "원하는 베이스 술을 선택해 주세요",
@@ -122,7 +121,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                                       margin: const EdgeInsets.only(bottom: 8),
                                       height: 64,
                                       decoration: BoxDecoration(
-                                          color: Color(0xff474747),
+                                          color: const Color(0xff474747),
                                           shape: BoxShape.circle,
                                           border: _baseDrink == baseList[i]
                                               ? Border.all(

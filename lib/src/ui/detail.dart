@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../models/detail_model.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/cocktail_detail_bloc/cocktail_detail_bloc.dart';
-import '../resources/repository.dart';
+import 'package:ohzu/src/models/detail_model.dart';
+import 'package:ohzu/src/blocs/cocktail_detail_bloc/cocktail_detail_bloc.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({Key? key, required this.cocktailId}) : super(key: key);
@@ -34,6 +32,7 @@ class _DetailPageState extends State<DetailPage> {
   final ScrollController _recipeScrollController = ScrollController();
   bool recipeExpanded = false;
 
+  @override
   void initState() {
     bloc = CocktailDetailBloc(cocktailId);
     bloc.add(LoadCocktailDetailEvent());
@@ -275,7 +274,7 @@ class _DetailPageState extends State<DetailPage> {
                 );
               }
               if (state is CocktailDetailErrorState) {
-                return Text("snapshot is empty");
+                return const Text("snapshot is empty");
               }
               return Container();
             }),
@@ -463,7 +462,7 @@ Widget buildIngredients(
             /* 칵테일 재료들 */
             Expanded(
               child: Scrollbar(
-                isAlwaysShown: true,
+                thumbVisibility: true,
                 controller: scrollController,
                 child: SingleChildScrollView(
                   controller: scrollController,
