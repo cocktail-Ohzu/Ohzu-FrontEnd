@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'ui/search.dart';
-import 'ui/detail.dart';
-import 'ui/recommend.dart';
-import 'ui/today.dart';
+import 'package:ohzu/src/ui/search.dart';
+import 'package:ohzu/src/ui/recommend.dart';
+import 'package:ohzu/src/ui/today.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -36,7 +35,7 @@ class MyApp extends StatelessWidget {
         return PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
               Animation<double> secAnimation) {
-            return const Search();
+            return const SearchPage();
           },
           transitionDuration: const Duration(milliseconds: 150),
           transitionsBuilder: (BuildContext context,

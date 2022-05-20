@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:http/http.dart' show Client;
 import 'dart:convert';
+import 'package:http/http.dart' show Client;
 import 'package:ohzu/src/models/detail_model.dart';
-import 'package:ohzu/src/models/todays_cocktail_model.dart';
 import 'package:ohzu/src/models/search_model.dart';
+import 'package:ohzu/src/models/todays_cocktail_model.dart';
 
 class OhzuApiProvider {
   Client client = Client();
@@ -32,7 +32,7 @@ class OhzuApiProvider {
   }
 
   Future<List<SearchModel>> fetchSearchItem() async {
-    final url = Uri.parse("$URL/search");
+    final url = Uri.parse("$_baseurl/search");
     final response = await client.get(url);
     List jsonData;
     List<SearchModel> ret = [];

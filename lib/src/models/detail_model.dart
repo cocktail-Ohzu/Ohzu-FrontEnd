@@ -1,6 +1,3 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 /* 칵테일 상세 정보 모델 */
 class DetailModel {
   Info? info;
@@ -107,7 +104,7 @@ class Info {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
     data['background_color'] = backgroundColor;
@@ -155,7 +152,7 @@ class Flavors {
 class Bases {
   String? base;
   String? tagColor;
-  Null? desc;
+  String? desc;
 
   Bases({this.base, this.tagColor, this.desc});
 

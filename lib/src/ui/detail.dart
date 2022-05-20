@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../models/detail_model.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/cocktail_detail_bloc/cocktail_detail_bloc.dart';
-import '../resources/repository.dart';
+import 'package:ohzu/src/models/detail_model.dart';
+import 'package:ohzu/src/blocs/cocktail_detail_bloc/cocktail_detail_bloc.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({Key? key, required this.cocktailId}) : super(key: key);
@@ -34,6 +32,7 @@ class _DetailPageState extends State<DetailPage> {
   final ScrollController _recipeScrollController = ScrollController();
   bool recipeExpanded = false;
 
+  @override
   void initState() {
     bloc = CocktailDetailBloc(cocktailId);
     bloc.add(LoadCocktailDetailEvent());
@@ -54,7 +53,7 @@ class _DetailPageState extends State<DetailPage> {
               toolbarHeight: 40,
               backgroundColor: Colors.transparent,
               elevation: 0,
-              actions: [
+              actions: const [
                 // Container(
                 //   margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
                 //   child: IconButton(
@@ -124,7 +123,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(12)),
-                                color: Color(0xFF1E1E1E),
+                                color: const Color(0xFF1E1E1E),
                               ),
                               padding:
                                   const EdgeInsets.fromLTRB(23, 23, 23, 23),
@@ -275,7 +274,7 @@ class _DetailPageState extends State<DetailPage> {
                 );
               }
               if (state is CocktailDetailErrorState) {
-                return Text("snapshot is empty");
+                return const Text("snapshot is empty");
               }
               return Container();
             }),
@@ -352,7 +351,7 @@ Widget buildCocktailName(
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF999999),
+                color: const Color(0xFF999999),
                 fontSize: enName.length > 18 ? 13 : 16,
                 height: 1.5,
               ),
@@ -407,7 +406,7 @@ Widget buildRecipe(
 /* ohzu point 위젯 */
 Widget buildOhzuPoint(
     {required BuildContext context, required String? description}) {
-  if (description == null || description == "") return Text("");
+  if (description == null || description == "") return const Text("");
   return /* 오쥬 포인트 */
       Container(
     margin: const EdgeInsets.fromLTRB(0, 0, 0, 96),
@@ -463,7 +462,7 @@ Widget buildIngredients(
             /* 칵테일 재료들 */
             Expanded(
               child: Scrollbar(
-                isAlwaysShown: true,
+                trackVisibility: true,
                 controller: scrollController,
                 child: SingleChildScrollView(
                   controller: scrollController,

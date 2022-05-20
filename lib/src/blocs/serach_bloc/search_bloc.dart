@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../models/search_model.dart';
-import '../../resources/repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:ohzu/src/models/search_model.dart';
+import 'package:ohzu/src/resources/repository.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -23,5 +23,3 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     });
   }
 }
-
-final searchBloc = SearchBloc();

@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ohzu/src/blocs/todays_cocktail_bloc/todays_cocktail_bloc.dart';
-import '../models/todays_cocktail_model.dart';
-import './search.dart';
-import './detail.dart';
-import './recommend.dart';
+import 'package:ohzu/src/models/todays_cocktail_model.dart';
+import 'package:ohzu/src/ui/detail.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key, required this.title}) : super(key: key);
@@ -18,7 +16,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   /* 메인 페이지 API 받아오는 객체 */
-
+  final todaysCocktailbloc = TodaysCocktailBloc();
   @override
   void initState() {
     super.initState();
@@ -120,7 +118,7 @@ class _MainPageState extends State<MainPage> {
                                           context, state.todaysCocktail);
                                     }
                                     if (state is TodaysCocktailErrorState) {
-                                      return Text("snapshot is empty");
+                                      return const Text("snapshot is empty");
                                     }
                                     return Container();
                                   })),
@@ -146,7 +144,7 @@ class _MainPageState extends State<MainPage> {
                                       context, state.todaysCocktail.id!);
                                 }
                                 if (state is TodaysCocktailErrorState) {
-                                  return Text("snapshot is empty");
+                                  return const Text("snapshot is empty");
                                 }
                                 return Container();
                               }),
