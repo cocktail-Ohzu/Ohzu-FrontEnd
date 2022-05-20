@@ -25,5 +25,3 @@ class TodaysCocktailBloc
     });
   }
 }
-
-final todaysCocktailbloc = TodaysCocktailBloc();

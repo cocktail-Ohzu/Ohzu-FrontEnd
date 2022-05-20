@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         return PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
               Animation<double> secAnimation) {
-            return const Search();
+            return const SearchPage();
           },
           transitionDuration: const Duration(milliseconds: 150),
           transitionsBuilder: (BuildContext context,

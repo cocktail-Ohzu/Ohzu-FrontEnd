@@ -16,7 +16,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   /* 메인 페이지 API 받아오는 객체 */
-
+  final todaysCocktailbloc = TodaysCocktailBloc();
   @override
   void initState() {
     super.initState();
@@ -118,7 +118,7 @@ class _MainPageState extends State<MainPage> {
                                           context, state.todaysCocktail);
                                     }
                                     if (state is TodaysCocktailErrorState) {
-                                      return Text("snapshot is empty");
+                                      return const Text("snapshot is empty");
                                     }
                                     return Container();
                                   })),
@@ -144,7 +144,7 @@ class _MainPageState extends State<MainPage> {
                                       context, state.todaysCocktail.id!);
                                 }
                                 if (state is TodaysCocktailErrorState) {
-                                  return Text("snapshot is empty");
+                                  return const Text("snapshot is empty");
                                 }
                                 return Container();
                               }),

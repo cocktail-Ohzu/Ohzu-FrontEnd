@@ -104,7 +104,7 @@ class Info {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
     data['background_color'] = backgroundColor;
@@ -152,7 +152,7 @@ class Flavors {
 class Bases {
   String? base;
   String? tagColor;
-  Null? desc;
+  String? desc;
 
   Bases({this.base, this.tagColor, this.desc});
 

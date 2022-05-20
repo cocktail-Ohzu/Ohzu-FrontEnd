@@ -24,8 +24,8 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    _tabController = TabController(length: 9, vsync: this);
     super.initState();
+    _tabController = TabController(length: 9, vsync: this);
   }
 
   @override
