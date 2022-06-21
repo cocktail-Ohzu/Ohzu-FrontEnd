@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:ohzu/src/models/detail_model.dart';
 import 'package:ohzu/src/models/todays_cocktail_model.dart';
 import 'package:ohzu/src/models/search_model.dart';
+import 'package:ohzu/src/models/recommend_model.dart';
 import 'package:ohzu/src/resources/ohzu_api_provider.dart';
 
 class Repository {
@@ -15,4 +16,7 @@ class Repository {
 
   Future<List<SearchModel>> fetchSearchItem() =>
       ohzuApiProvider.fetchSearchItem();
+
+  Future<RecommendModel> fetchRecommendItem(List<List<int>> itemList) =>
+      ohzuApiProvider.fetchRecommendItem(itemList);
 }

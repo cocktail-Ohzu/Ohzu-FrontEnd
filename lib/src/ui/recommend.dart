@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ohzu/src/ui/recommend_confirm.dart';
 
 class Recommend extends StatefulWidget {
   const Recommend({Key? key}) : super(key: key);
@@ -21,13 +22,15 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
     "위스키"
   ];
 
-  List<int> baseId = [];
-  List<int> ingredientId = [];
-  List<int> strength = [];
-  List<int> flavorId = [];
-  List<int> moodId = [];
-  List<int> weatherId = [];
-  List<int> ornamentId = [];
+  List<List<int>> itemListController = [
+    [], //0 baseId
+    [], //1 ingredientId
+    [], //2 strength
+    [], //3 flavorId
+    [], //4 moodId
+    [], //5 weatherId
+    [] //6 ornamentId
+  ];
 
   @override
   void initState() {
@@ -58,7 +61,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                 Container(
                   margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
                   child: TextButton(
-                    child: Text(
+                    child: const Text(
                       "완료",
                       style: TextStyle(
                           color: Colors.white,
@@ -66,7 +69,8 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                           fontWeight: FontWeight.w100,
                           height: 0.4),
                     ),
-                    onPressed: () {},
+                    onPressed: () => //선택한 내역으로 추천 진행하기
+                        openRecommendConfirmPage(context, itemListController),
                   ),
                 )
               ]),
@@ -102,27 +106,33 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                 Expanded(
                   child: TabBarView(controller: _tabController, children: [
                     buildTabView(
-                        name: "베이스 술을", item: baseList, controllerList: baseId),
+                        name: "베이스 술을",
+                        item: baseList,
+                        controllerList: itemListController[0]),
                     buildTabView(
                         name: "재료를",
                         item: baseList,
-                        controllerList: ingredientId),
+                        controllerList: itemListController[1]),
                     buildTabView(
-                        name: "도수를", item: baseList, controllerList: strength),
+                        name: "도수를",
+                        item: baseList,
+                        controllerList: itemListController[2]),
                     buildTabView(
-                        name: "맛을", item: baseList, controllerList: weatherId),
+                        name: "맛을",
+                        item: baseList,
+                        controllerList: itemListController[3]),
                     buildTabView(
                         name: "무드나 기분을",
                         item: baseList,
-                        controllerList: moodId),
+                        controllerList: itemListController[4]),
                     buildTabView(
                         name: "날씨나 계절을",
                         item: baseList,
-                        controllerList: weatherId),
+                        controllerList: itemListController[5]),
                     buildTabView(
                         name: "가니쉬를",
                         item: baseList,
-                        controllerList: ornamentId),
+                        controllerList: itemListController[6]),
                   ]),
                 )
               ],
@@ -162,6 +172,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                         controllerList.add(i);
                       }
                       print(controllerList); //
+                      print(itemListController); //
                     })
                   },
                   child: (Column(
@@ -272,6 +283,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                         _tabController!.index++;
                       } else {
                         //선택한 내역으로 추천 진행하기
+                        openRecommendConfirmPage(context, itemListController);
                       }
                     },
                   ),
