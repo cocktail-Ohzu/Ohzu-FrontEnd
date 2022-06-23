@@ -19,20 +19,10 @@ class _RecommendResultState extends State<RecommendResult> {
   late RecommendBloc bloc;
   final List<List<int>> itemList;
 
-  final List<List<int>> dummyList = [
-    [1, 3, 4, 5],
-    [],
-    [],
-    [],
-    [1, 4],
-    [],
-    []
-  ];
-
   @override
   void initState() {
     super.initState();
-    bloc = RecommendBloc(dummyList);
+    bloc = RecommendBloc(itemList);
     bloc.add(LoadRecommendEvent());
   }
 
@@ -58,11 +48,25 @@ class _RecommendResultState extends State<RecommendResult> {
             toolbarHeight: 40,
             backgroundColor: Colors.transparent,
             elevation: 0,
-            actions: []),
+            leading: const Text(""),
+            actions: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                    iconSize: 24,
+                    onPressed: Navigator.of(context).pop,
+                    icon: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                    )),
+              )
+            ]),
         body: BlocProvider(
             create: (_) => bloc,
             child: Container(
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+              padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,30 +76,60 @@ class _RecommendResultState extends State<RecommendResult> {
                   BlocBuilder<RecommendBloc, RecommendState>(
                       builder: (context, state) {
                     if (state is RecommendLoadingState) {
-                      return CircularProgressIndicator(
-                        color: Colors.white.withOpacity(0.5),
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white.withOpacity(0.5),
+                        ),
                       );
                     } else if (state is RecommendLoadedState) {
-                      return Container(
-                        margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
-                        alignment: Alignment.topLeft,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const Text(
-                                "당신을 위한 오늘의 칵테일은",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                                child: Text("${state.recommend.name} 네요!",
-                                    textAlign: TextAlign.start,
-                                    style: const TextStyle(fontSize: 20)),
-                              )
-                            ]),
-                      );
+                      /* 추천 칵테일이 존재할 경우 */
+                      return Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              alignment: Alignment.topLeft,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text(
+                                      state.recommend.fitCocktails!.isNotEmpty
+                                          ? "당신을 위한 오늘의 칵테일은"
+                                          : "일치하는 검색 결과가 없어요.",
+                                      textAlign: TextAlign.start,
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                    Container(
+                                      margin:
+                                          const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                                      child: Text(
+                                          state.recommend.fitCocktails!
+                                                  .isNotEmpty
+                                              ? "${state.recommend.fitCocktails![0].name} 네요!"
+                                              : "유사한 칵테일을 추천해드릴게요!",
+                                          textAlign: TextAlign.start,
+                                          style: const TextStyle(fontSize: 20)),
+                                    )
+                                  ]),
+                            ),
+                            if (state.recommend.fitCocktails!.isNotEmpty)
+                              buildCocktailContainer(
+                                  state.recommend.fitCocktails![0].id!,
+                                  state.recommend.fitCocktails![0].name!,
+                                  state.recommend.fitCocktails![0].img!,
+                                  state.recommend.fitCocktails![0]
+                                      .backgroundColor!)
+                            else
+                              buildCocktailContainer(
+                                  state.recommend.similarCocktails![0].id!,
+                                  state.recommend.similarCocktails![0].name!,
+                                  state.recommend.similarCocktails![0].img!,
+                                  state.recommend.similarCocktails![0]
+                                      .backgroundColor!),
+                          ]);
                     }
                     if (state is RecommendErrorState) {
                       return const Text("snapshot is empty");
@@ -107,39 +141,37 @@ class _RecommendResultState extends State<RecommendResult> {
 
                   Expanded(
                     child: Container(
-                      margin: const EdgeInsets.only(bottom: 40),
+                      //margin: const EdgeInsets.only(bottom: 40),
                       child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 20),
-                              child: const Text("이런 칵테일은 어때요?",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  )),
-                            ),
-                            Row(
-                              children: [
-                                BlocBuilder<RecommendBloc, RecommendState>(
-                                    builder: (context, state) {
-                                  if (state is RecommendLoadingState) {
-                                    return CircularProgressIndicator(
-                                      color: Colors.white.withOpacity(0.5),
-                                    );
-                                  } else if (state is RecommendLoadedState) {
-                                    return Center(
-                                      child: Text("done"),
-                                    );
-                                  }
-                                  if (state is RecommendErrorState) {
-                                    return const Text("snapshot is empty");
-                                  }
-                                  return Container();
-                                }),
-                              ],
-                            )
-                          ]),
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 20),
+                            child: const Text("이런 칵테일은 어때요?",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                )),
+                          ),
+                          BlocBuilder<RecommendBloc, RecommendState>(
+                              builder: (context, state) {
+                            if (state is RecommendLoadingState) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white.withOpacity(0.5),
+                                ),
+                              );
+                            } else if (state is RecommendLoadedState) {
+                              return buildSimilarCocktailCards(
+                                  state.recommend.similarCocktails!);
+                            }
+                            if (state is RecommendErrorState) {
+                              return const Text("snapshot is empty");
+                            }
+                            return Container();
+                          })
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -149,56 +181,63 @@ class _RecommendResultState extends State<RecommendResult> {
     );
   }
 
-  Widget buildSimilarCocktailCards(int id, String name, String imgUrl) {
-    final int len = 5;
+  Widget buildSimilarCocktailCards(List<SimilarCocktails> sc) {
+    if (sc.isEmpty) return const Text("");
+    final int len = sc.length;
+
     List<Widget> ret = [];
 
     for (int i = 0; i < len; ++i) {
       ret.add(
         GestureDetector(
           onTap: () {
-            openDetailPage(context, id);
+            openDetailPage(context, sc[i].id!);
           },
-          child: Container(
-            decoration: const BoxDecoration(
-                color: Color(0xff1e1e1e),
-                borderRadius: BorderRadius.all(Radius.circular(12))),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(
-                alignment: Alignment.topCenter,
-                child: Image.network(imgUrl, fit: BoxFit.cover),
-              ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              decoration: const BoxDecoration(
+                  color: Color(0xff1e1e1e),
+                  borderRadius: BorderRadius.all(Radius.circular(12))),
+              width: 98,
+              height: 98,
+              alignment: Alignment.topCenter,
+              child: Image.network(sc[i].img!, fit: BoxFit.cover),
+            ),
 
-              /* 이미지
+            /* 이미지
               Container(
                 alignment: Alignment.topCenter,
                 child: Image.network(list[i].img.toString(), fit: BoxFit.cover),
               ),
               */
-              Container(
-                  padding: const EdgeInsets.fromLTRB(12, 13, 12, 12),
-                  child: Text(
-                    name,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16),
-                  )),
-            ]),
-          ),
+            Container(
+                padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+                child: Text(
+                  sc[i].name!,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: 14),
+                )),
+          ]),
         ),
       );
     }
 
-    return GridView(
-      padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
-      children: [for (int i = 0; i < ret.length; ++i) ret[i]],
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          mainAxisExtent: 220,
-          crossAxisCount: 1,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 12),
+    return SizedBox(
+      height: 130,
+      child: GridView(
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        children: [for (int i = 0; i < ret.length; ++i) ret[i]],
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 1,
+            crossAxisSpacing: 0,
+            mainAxisExtent: 98,
+            mainAxisSpacing: 16),
+      ),
     );
   }
 
@@ -230,14 +269,16 @@ class _RecommendResultState extends State<RecommendResult> {
 
 //   }
 
-  Widget buildCocktailContainer(int id, String name, String imgUrl) {
+  Widget buildCocktailContainer(
+      int id, String name, String imgUrl, String backgroundColor) {
     return Container(
-        margin: const EdgeInsets.all(1.5),
+        margin: const EdgeInsets.fromLTRB(0, 22, 0, 0),
         decoration: const BoxDecoration(
           color: Colors.pink,
           borderRadius: BorderRadius.all(Radius.circular(11.5)),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             /* 추천 칵테일 이미지 */
             Container(
@@ -253,7 +294,7 @@ class _RecommendResultState extends State<RecommendResult> {
 
             /* 추천 칵테일 텍스트 */
             Container(
-                margin: const EdgeInsets.fromLTRB(25, 21, 25, 5),
+                margin: const EdgeInsets.fromLTRB(20, 21, 20, 14),
                 child: CupertinoButton(
                   padding: const EdgeInsets.all(16),
                   borderRadius: const BorderRadius.all(Radius.circular(8)),

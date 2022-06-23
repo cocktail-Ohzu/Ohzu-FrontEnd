@@ -4,6 +4,7 @@ import 'package:http/http.dart' show Client, Request, Response;
 import 'package:ohzu/src/models/detail_model.dart';
 import 'package:ohzu/src/models/search_model.dart';
 import 'package:ohzu/src/models/todays_cocktail_model.dart';
+import 'package:ohzu/src/models/ingredient_model.dart';
 import 'package:ohzu/src/models/recommend_model.dart';
 
 class OhzuApiProvider {
@@ -49,6 +50,18 @@ class OhzuApiProvider {
     }
   }
 
+  Future<IngredientModel> fetchIngredientItem() async {
+    final url = Uri.parse("$_baseurl/recommend");
+    final response = await client.get(url);
+
+    if (response.statusCode == 200) {
+      return IngredientModel.fromJson(
+          json.decode(utf8.decode(response.bodyBytes)));
+    } else {
+      throw Exception("Failed to load Ingredients for selection");
+    }
+  }
+
   Future<RecommendModel> fetchRecommendItem(List<List<int>> itemList) async {
     print("called"); //
 
@@ -61,30 +74,30 @@ class OhzuApiProvider {
       "weather_id",
       "ornament_id"
     ];
-    Map<String, String> header = {};
+    Map<String, List<int>> body = {};
     final url = Uri.parse("$_baseurl/recommend");
 
     try {
       for (int i = 0; i < name.length; ++i) {
         if (i < itemList.length && itemList[i].isNotEmpty) {
-          var a = <String, String>{name[i]: itemList[i].toString()};
-          header.addAll(a);
+          var a = <String, List<int>>{name[i]: itemList[i]};
+          body.addAll(a);
         }
       }
     } catch (err) {
       print(err);
     }
 
-    final request = Request('GET', url);
-    //request.body = header.toString();
-    request.body = '{base_id: [1, 3, 4, 5], mood_id: [1, 4]}';
-    final streamedResponse = await request.send();
-    final response = await Response.fromStream(streamedResponse);
+    print(body);
+    print(json.encode(body));
 
-    print(request);
-    print(request.method);
-    print(request.headers);
-    print(request.body);
+    final response = await client.post(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(body));
+
+    print("response = ${response.body}");
 
     if (response.statusCode == 200) {
       print(response); //

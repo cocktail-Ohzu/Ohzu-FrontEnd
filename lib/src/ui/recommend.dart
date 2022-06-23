@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ohzu/src/blocs/ingredient_bloc/ingredient_bloc.dart';
+import 'package:ohzu/src/models/ingredient_model.dart';
 import 'package:ohzu/src/ui/recommend_confirm.dart';
 
 class Recommend extends StatefulWidget {
@@ -11,16 +14,7 @@ class Recommend extends StatefulWidget {
 
 class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
   TabController? _tabController;
-  final List<String> baseList = [
-    "와인",
-    "데낄라",
-    "럼",
-    "진",
-    "샴페인",
-    "리퀴어",
-    "보드카",
-    "위스키"
-  ];
+  final ingredientBloc = IngredientBloc();
 
   List<List<int>> itemListController = [
     [], //0 baseId
@@ -36,114 +30,135 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 7, vsync: this);
+    ingredientBloc.add(LoadIngredientEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomCenter,
-        stops: [0.0, 0.2],
-        colors: [
-          Color(0xff8C5B40),
-          Color(0xff121212),
-        ],
-      )),
-      child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-              toolbarHeight: 40,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              actions: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
-                  child: TextButton(
-                    child: const Text(
-                      "완료",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w100,
-                          height: 0.4),
+    return BlocProvider(
+      create: (_) => ingredientBloc,
+      child: Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomCenter,
+          stops: [0.0, 0.2],
+          colors: [
+            Color(0xff8C5B40),
+            Color(0xff121212),
+          ],
+        )),
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+                toolbarHeight: 40,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                actions: [
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
+                    child: TextButton(
+                      child: const Text(
+                        "완료",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w100,
+                            height: 0.4),
+                      ),
+                      onPressed: () => //선택한 내역으로 추천 진행하기
+                          openRecommendConfirmPage(context, itemListController),
                     ),
-                    onPressed: () => //선택한 내역으로 추천 진행하기
-                        openRecommendConfirmPage(context, itemListController),
+                  )
+                ]),
+            body: Container(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+              child: Column(
+                children: [
+                  /* 탭 바 */
+                  Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 26),
+                      child: TabBar(
+                        labelPadding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                        tabs: [
+                          buildTabBarItem(name: "베이스"),
+                          buildTabBarItem(name: "재료"),
+                          buildTabBarItem(name: "도수"),
+                          buildTabBarItem(name: "맛"),
+                          buildTabBarItem(name: "무드/기분"),
+                          buildTabBarItem(name: "날씨/계절"),
+                          buildTabBarItem(name: "가니쉬"),
+                        ],
+                        controller: _tabController,
+                        isScrollable: true,
+                        indicatorColor: Colors.transparent,
+                        unselectedLabelColor: Colors.white.withOpacity(0.5),
+                      )),
+                  /* 중간선 */
+                  const Divider(
+                    height: 1,
+                    color: Color(0xff2B2B2B),
                   ),
-                )
-              ]),
-          body: Container(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-            child: Column(
-              children: [
-                /* 탭 바 */
-                Container(
-                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 26),
-                    child: TabBar(
-                      labelPadding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-                      tabs: [
-                        buildTabBarItem(name: "베이스"),
-                        buildTabBarItem(name: "재료"),
-                        buildTabBarItem(name: "도수"),
-                        buildTabBarItem(name: "맛"),
-                        buildTabBarItem(name: "무드/기분"),
-                        buildTabBarItem(name: "날씨/계절"),
-                        buildTabBarItem(name: "가니쉬"),
-                      ],
-                      controller: _tabController,
-                      isScrollable: true,
-                      indicatorColor: Colors.transparent,
-                      unselectedLabelColor: Colors.white.withOpacity(0.5),
-                    )),
-                /* 중간선 */
-                const Divider(
-                  height: 1,
-                  color: Color(0xff2B2B2B),
-                ),
-                /* 뷰 */
-                Expanded(
-                  child: TabBarView(controller: _tabController, children: [
-                    buildTabView(
-                        name: "베이스 술을",
-                        item: baseList,
-                        controllerList: itemListController[0]),
-                    buildTabView(
-                        name: "재료를",
-                        item: baseList,
-                        controllerList: itemListController[1]),
-                    buildTabView(
-                        name: "도수를",
-                        item: baseList,
-                        controllerList: itemListController[2]),
-                    buildTabView(
-                        name: "맛을",
-                        item: baseList,
-                        controllerList: itemListController[3]),
-                    buildTabView(
-                        name: "무드나 기분을",
-                        item: baseList,
-                        controllerList: itemListController[4]),
-                    buildTabView(
-                        name: "날씨나 계절을",
-                        item: baseList,
-                        controllerList: itemListController[5]),
-                    buildTabView(
-                        name: "가니쉬를",
-                        item: baseList,
-                        controllerList: itemListController[6]),
-                  ]),
-                )
-              ],
-            ),
-          )),
+                  /* 뷰 */
+                  BlocBuilder<IngredientBloc, IngredientState>(
+                      builder: (context, state) {
+                    if (state is IngredientLoadingState) {
+                      return Container(
+                        alignment: Alignment.center,
+                        height: MediaQuery.of(context).size.height / 2,
+                        child: CircularProgressIndicator(
+                          color: Colors.white.withOpacity(0.5),
+                        ),
+                      );
+                    } else if (state is IngredientLoadedState) {
+                      return Expanded(
+                        child:
+                            TabBarView(controller: _tabController, children: [
+                          buildTabView(
+                              name: "베이스 술을",
+                              item: state.ingredient.bases!.toList(),
+                              controllerList: itemListController[0]),
+                          buildTabView(
+                              name: "재료를",
+                              item: state.ingredient.ingredients!.toList(),
+                              controllerList: itemListController[1]),
+                          buildTabView(
+                              name: "도수를",
+                              item: state.ingredient.flavors!.toList(),
+                              controllerList: itemListController[2]),
+                          buildTabView(
+                              name: "맛을",
+                              item: state.ingredient.flavors!.toList(),
+                              controllerList: itemListController[3]),
+                          buildTabView(
+                              name: "무드나 기분을",
+                              item: state.ingredient.moods!.toList(),
+                              controllerList: itemListController[4]),
+                          buildTabView(
+                              name: "날씨나 계절을",
+                              item: state.ingredient.weathers!.toList(),
+                              controllerList: itemListController[5]),
+                          buildTabView(
+                              name: "가니쉬를",
+                              item: state.ingredient.ornaments!.toList(),
+                              controllerList: itemListController[6]),
+                        ]),
+                      );
+                    } else if (state is IngredientErrorState) {
+                      return const Text("Ingredient api error");
+                    }
+                    return Container();
+                  }),
+                ],
+              ),
+            )),
+      ),
     );
   }
 
   Widget buildTabView(
       {required String name,
-      required List<String> item,
+      required List<IngredientElement> item,
       required List<int> controllerList}) {
     return Column(
       children: [
@@ -157,7 +172,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
         ),
         /* 베이스 술 선택 */
         SizedBox(
-          height: 200,
+          height: 212,
           child: GridView(
             shrinkWrap: true,
             children: [
@@ -166,10 +181,10 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                 GestureDetector(
                   onTap: () => {
                     setState(() {
-                      if (controllerList.contains(i)) {
-                        controllerList.remove(i);
+                      if (controllerList.contains(item[i].id)) {
+                        controllerList.remove(item[i].id);
                       } else {
-                        controllerList.add(i);
+                        controllerList.add(item[i].id!);
                       }
                       print(controllerList); //
                       print(itemListController); //
@@ -183,13 +198,17 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                         decoration: BoxDecoration(
                             color: const Color(0xff474747),
                             shape: BoxShape.circle,
-                            border: controllerList.contains(i)
+                            border: controllerList.contains(item[i].id)
                                 ? Border.all(
                                     color: const Color(0xffce6228), width: 1)
                                 : null),
                         duration: const Duration(milliseconds: 200),
                       ),
-                      Text(baseList[i]),
+                      Text(
+                        item[i].name!,
+                        style: const TextStyle(fontSize: 12),
+                        textAlign: TextAlign.center,
+                      ),
                     ],
                   )),
                 ),
@@ -237,7 +256,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
         ),
         /* 하단 버튼 */
         Container(
-            margin: const EdgeInsets.fromLTRB(0, 0, 0, 54),
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
             alignment: Alignment.bottomCenter,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
