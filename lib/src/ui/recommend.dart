@@ -16,7 +16,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
   TabController? _tabController;
   final ingredientBloc = IngredientBloc();
 
-  List<List<int>> itemListController = [
+  List<List<IngredientElement>> itemListController = [
     [], //0 baseId
     [], //1 ingredientId
     [], //2 strength
@@ -159,7 +159,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
   Widget buildTabView(
       {required String name,
       required List<IngredientElement> item,
-      required List<int> controllerList}) {
+      required List<IngredientElement> controllerList}) {
     return Column(
       children: [
         /* 타이틀 및 설명 */
@@ -181,10 +181,10 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                 GestureDetector(
                   onTap: () => {
                     setState(() {
-                      if (controllerList.contains(item[i].id)) {
-                        controllerList.remove(item[i].id);
+                      if (controllerList.contains(item[i])) {
+                        controllerList.remove(item[i]);
                       } else {
-                        controllerList.add(item[i].id!);
+                        controllerList.add(item[i]);
                       }
                       print(controllerList); //
                       print(itemListController); //
@@ -198,7 +198,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                         decoration: BoxDecoration(
                             color: const Color(0xff474747),
                             shape: BoxShape.circle,
-                            border: controllerList.contains(item[i].id)
+                            border: controllerList.contains(item[i])
                                 ? Border.all(
                                     color: const Color(0xffce6228), width: 1)
                                 : null),
@@ -225,35 +225,40 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
           child: Text(""),
         ),
         /* 설명 칸 */
-        Center(
-          child: Container(
-            alignment: Alignment.bottomCenter,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: const Color(0xFFDA6C31),
-                width: 1,
+        if (controllerList.isNotEmpty && controllerList.last.desc != null)
+          Center(
+            child: Container(
+              alignment: Alignment.bottomLeft,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: const Color(0xFFDA6C31),
+                  width: 1,
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                color: const Color(0xFF1E1E1E),
               ),
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
-              color: const Color(0xFF1E1E1E),
+              padding: const EdgeInsets.fromLTRB(29, 20, 29, 20),
+              margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      controllerList.last.name!,
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Text(
+                      controllerList.last.desc!,
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.start,
+                    ),
+                  ]),
             ),
-            padding: const EdgeInsets.fromLTRB(29, 20, 29, 20),
-            margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                "위스키",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              Text(
-                "엿기름 또는 곡류 따위를 효모로 알코올 발효하여 증류하고, 오크통에 저장하여 숙성한 술.",
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-              ),
-            ]),
           ),
-        ),
         /* 하단 버튼 */
         Container(
             margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),

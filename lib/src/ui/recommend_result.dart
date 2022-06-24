@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ohzu/src/models/recommend_model.dart';
+import 'package:ohzu/src/models/ingredient_model.dart';
 import 'package:ohzu/src/blocs/recommend_bloc/recommend_bloc.dart';
 
 import 'detail.dart';
 
 class RecommendResult extends StatefulWidget {
   const RecommendResult({Key? key, required this.itemList}) : super(key: key);
-  final List<List<int>> itemList;
+  final List<List<IngredientElement>> itemList;
 
   @override
   _RecommendResultState createState() =>
@@ -17,7 +18,7 @@ class RecommendResult extends StatefulWidget {
 
 class _RecommendResultState extends State<RecommendResult> {
   late RecommendBloc bloc;
-  final List<List<int>> itemList;
+  final List<List<IngredientElement>> itemList;
 
   @override
   void initState() {
@@ -51,13 +52,12 @@ class _RecommendResultState extends State<RecommendResult> {
             leading: const Text(""),
             actions: [
               Container(
-                width: MediaQuery.of(context).size.width,
-                margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
                 alignment: Alignment.centerRight,
                 child: IconButton(
                     iconSize: 24,
                     onPressed: Navigator.of(context).pop,
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.close,
                       color: Colors.white,
                     )),
@@ -96,26 +96,35 @@ class _RecommendResultState extends State<RecommendResult> {
                                       CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
-                                      state.recommend.fitCocktails!.isNotEmpty
+                                      state.recommend.fitCocktails != null &&
+                                              state.recommend.fitCocktails!
+                                                  .isNotEmpty
                                           ? "당신을 위한 오늘의 칵테일은"
                                           : "일치하는 검색 결과가 없어요.",
                                       textAlign: TextAlign.start,
-                                      style: const TextStyle(fontSize: 20),
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600),
                                     ),
                                     Container(
                                       margin:
                                           const EdgeInsets.fromLTRB(0, 8, 0, 0),
                                       child: Text(
-                                          state.recommend.fitCocktails!
-                                                  .isNotEmpty
+                                          state.recommend.fitCocktails !=
+                                                      null &&
+                                                  state.recommend.fitCocktails!
+                                                      .isNotEmpty
                                               ? "${state.recommend.fitCocktails![0].name} 네요!"
                                               : "유사한 칵테일을 추천해드릴게요!",
                                           textAlign: TextAlign.start,
-                                          style: const TextStyle(fontSize: 20)),
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w600)),
                                     )
                                   ]),
                             ),
-                            if (state.recommend.fitCocktails!.isNotEmpty)
+                            if (state.recommend.fitCocktails != null &&
+                                state.recommend.fitCocktails!.isNotEmpty)
                               buildCocktailContainer(
                                   state.recommend.fitCocktails![0].id!,
                                   state.recommend.fitCocktails![0].name!,
@@ -150,8 +159,7 @@ class _RecommendResultState extends State<RecommendResult> {
                             margin: const EdgeInsets.only(bottom: 20),
                             child: const Text("이런 칵테일은 어때요?",
                                 style: TextStyle(
-                                  fontSize: 20,
-                                )),
+                                    fontSize: 20, fontWeight: FontWeight.w600)),
                           ),
                           BlocBuilder<RecommendBloc, RecommendState>(
                               builder: (context, state) {
@@ -282,7 +290,7 @@ class _RecommendResultState extends State<RecommendResult> {
           children: [
             /* 추천 칵테일 이미지 */
             Container(
-                margin: const EdgeInsets.fromLTRB(7, 7, 7, 0),
+                margin: const EdgeInsets.fromLTRB(11, 11, 11, 11),
                 width: double.infinity,
                 height: 328,
                 decoration: const BoxDecoration(
@@ -294,7 +302,7 @@ class _RecommendResultState extends State<RecommendResult> {
 
             /* 추천 칵테일 텍스트 */
             Container(
-                margin: const EdgeInsets.fromLTRB(20, 21, 20, 14),
+                margin: const EdgeInsets.fromLTRB(20, 0, 20, 11),
                 child: CupertinoButton(
                   padding: const EdgeInsets.all(16),
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -313,7 +321,8 @@ class _RecommendResultState extends State<RecommendResult> {
   }
 }
 
-void openRecommendResultPage(BuildContext context, List<List<int>> itemList) {
+void openRecommendResultPage(
+    BuildContext context, List<List<IngredientElement>> itemList) {
   Navigator.push(
       context,
       CupertinoPageRoute(

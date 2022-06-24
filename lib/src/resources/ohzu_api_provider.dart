@@ -62,7 +62,8 @@ class OhzuApiProvider {
     }
   }
 
-  Future<RecommendModel> fetchRecommendItem(List<List<int>> itemList) async {
+  Future<RecommendModel> fetchRecommendItem(
+      List<List<IngredientElement>> itemList) async {
     print("called"); //
 
     final List<String> name = [
@@ -80,7 +81,9 @@ class OhzuApiProvider {
     try {
       for (int i = 0; i < name.length; ++i) {
         if (i < itemList.length && itemList[i].isNotEmpty) {
-          var a = <String, List<int>>{name[i]: itemList[i]};
+          var a = <String, List<int>>{
+            name[i]: itemList[i].map((e) => e.id!).toList()
+          };
           body.addAll(a);
         }
       }

@@ -21,6 +21,7 @@ class Repository {
   Future<IngredientModel> fetchIngredientItem() =>
       ohzuApiProvider.fetchIngredientItem();
 
-  Future<RecommendModel> fetchRecommendItem(List<List<int>> itemList) =>
+  Future<RecommendModel> fetchRecommendItem(
+          List<List<IngredientElement>> itemList) =>
       ohzuApiProvider.fetchRecommendItem(itemList);
 }
