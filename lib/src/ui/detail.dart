@@ -34,9 +34,9 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   void initState() {
+    super.initState();
     bloc = CocktailDetailBloc(cocktailId);
     bloc.add(LoadCocktailDetailEvent());
-    super.initState();
   }
 
   /* BloC 주입 */
@@ -281,14 +281,6 @@ class _DetailPageState extends State<DetailPage> {
           )),
     );
   }
-}
-
-openDetailPage(context, int id) {
-  Navigator.push(
-      context,
-      CupertinoPageRoute(
-        builder: (context) => DetailPage(cocktailId: id),
-      ));
 }
 
 /* 최상단 칵테일 위젯 */
@@ -656,5 +648,13 @@ Widget buildRecipeItem(
             ),
           ),
         ],
+      ));
+}
+
+void openDetailPage(BuildContext context, int id) {
+  Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => DetailPage(cocktailId: id),
       ));
 }
