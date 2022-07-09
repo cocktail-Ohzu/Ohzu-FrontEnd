@@ -126,7 +126,7 @@ class _DetailPageState extends State<DetailPage> {
                                 color: const Color(0xFF1E1E1E),
                               ),
                               padding:
-                                  const EdgeInsets.fromLTRB(23, 23, 23, 23),
+                                  const EdgeInsets.fromLTRB(22, 23, 22, 23),
                               margin: const EdgeInsets.fromLTRB(0, 15, 0, 24),
                               child: Column(
                                 children: [

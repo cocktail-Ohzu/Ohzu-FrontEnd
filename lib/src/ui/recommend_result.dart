@@ -293,10 +293,9 @@ class _RecommendResultState extends State<RecommendResult> {
                 margin: const EdgeInsets.fromLTRB(11, 11, 11, 11),
                 width: double.infinity,
                 height: 328,
-                decoration: const BoxDecoration(
-                  //color: Color(int.parse("0xff${cocktail.backgroundColor}")),
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                decoration: BoxDecoration(
+                  color: Color(int.parse("0xff$backgroundColor")),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
                 child: Image.network(imgUrl, fit: BoxFit.cover)),
 

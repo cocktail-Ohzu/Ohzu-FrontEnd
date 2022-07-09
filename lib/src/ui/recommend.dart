@@ -197,6 +197,9 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                         height: 64,
                         decoration: BoxDecoration(
                             color: const Color(0xff474747),
+                            // color: controllerList.contains(item[i])
+                            //     ? Color(0xff474747)
+                            //     : Color(int.parse("0xff${item[i].tagColor!}")),//태그컬러로사용?임시
                             shape: BoxShape.circle,
                             border: controllerList.contains(item[i])
                                 ? Border.all(
