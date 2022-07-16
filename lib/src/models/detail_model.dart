@@ -43,6 +43,7 @@ class Info {
   String? backgroundColor;
   String? engName;
   String? img;
+  String? img2;
   String? desc;
   int? strength;
   List<Tag>? flavors;
@@ -58,6 +59,7 @@ class Info {
       this.backgroundColor,
       this.engName,
       this.img,
+      this.img2,
       this.desc,
       this.strength,
       this.flavors,
@@ -73,6 +75,7 @@ class Info {
     backgroundColor = json['background_color'];
     engName = json['eng_name'];
     img = json['img'];
+    img2 = json['img2'];
     desc = json['desc'];
     strength = json['strength'];
     if (json['flavors'] != null) {
@@ -110,6 +113,7 @@ class Info {
     data['background_color'] = backgroundColor;
     data['eng_name'] = engName;
     data['img'] = img;
+    data['img2'] = img2;
     data['desc'] = desc;
     data['strength'] = strength;
     if (flavors != null) {

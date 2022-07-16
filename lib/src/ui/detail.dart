@@ -83,7 +83,7 @@ class _DetailPageState extends State<DetailPage> {
                   children: [
                     buildCocktailImg(
                       context: context,
-                      img: state.cocktailDetail.info!.img!,
+                      img: state.cocktailDetail.info!.img2!,
                       color: state.cocktailDetail.info!.backgroundColor!,
                     ),
                     buildCocktailName(
@@ -298,8 +298,10 @@ Widget buildCocktailImg({
         color: Color(int.parse("0xf$color")),
         borderRadius: const BorderRadius.only(
             bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
-        boxShadow: const [
-          BoxShadow(color: Color.fromRGBO(240, 143, 164, 0.4), blurRadius: 28)
+        boxShadow: [
+          BoxShadow(
+              color: Color(int.parse("0xf$color")).withOpacity(0.4),
+              blurRadius: 28),
         ],
       ));
 }

@@ -285,7 +285,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
               children: [
                 Expanded(
                   child: CupertinoButton(
-                    padding: const EdgeInsets.all(19),
+                    padding: const EdgeInsets.all(17),
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                     color: const Color(0xff181818),
                     child: const Text(
@@ -309,7 +309,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                 ),
                 Expanded(
                   child: CupertinoButton(
-                    padding: const EdgeInsets.all(19),
+                    padding: const EdgeInsets.all(17),
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                     color: const Color(0xffDA6C31),
                     child: const Text(
@@ -432,7 +432,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
             children: [
               Expanded(
                 child: CupertinoButton(
-                  padding: const EdgeInsets.all(19),
+                  padding: const EdgeInsets.all(17),
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
                   color: const Color(0xff181818),
                   child: const Text(
@@ -456,7 +456,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
               ),
               Expanded(
                 child: CupertinoButton(
-                  padding: const EdgeInsets.all(19),
+                  padding: const EdgeInsets.all(17),
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
                   color: const Color(0xffDA6C31),
                   child: const Text(
