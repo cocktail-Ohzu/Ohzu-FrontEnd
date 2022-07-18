@@ -39,6 +39,15 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
     [] //6 ornamentId
   ];
 
+  bool isControllerEmpty() {
+    for (var list in itemListController) {
+      if (list.isNotEmpty) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -71,16 +80,23 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                   Container(
                     margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
                     child: TextButton(
-                      child: const Text(
+                      style: const ButtonStyle(
+                          splashFactory: NoSplash.splashFactory),
+                      child: Text(
                         "완료",
                         style: TextStyle(
-                            color: Colors.white,
+                            color: isControllerEmpty()
+                                ? Colors.grey.withOpacity(0.5)
+                                : Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.w100,
                             height: 0.4),
                       ),
                       onPressed: () => //선택한 내역으로 추천 진행하기
-                          openRecommendConfirmPage(context, itemListController),
+                          isControllerEmpty()
+                              ? null
+                              : openRecommendConfirmPage(
+                                  context, itemListController),
                     ),
                   )
                 ]),
@@ -313,7 +329,9 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                   child: CupertinoButton(
                     padding: const EdgeInsets.all(17),
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    color: const Color(0xffDA6C31),
+                    color: controllerList.isNotEmpty
+                        ? Color(0xffDA6C31)
+                        : Colors.grey,
                     child: const Text(
                       "추가하기",
                       style: TextStyle(
@@ -322,9 +340,10 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                           fontWeight: FontWeight.w400),
                     ),
                     onPressed: () {
-                      if (_tabController!.index + 1 < _tabController!.length) {
+                      if (_tabController!.index + 1 < _tabController!.length &&
+                          controllerList.isNotEmpty) {
                         _tabController!.index++;
-                      } else {
+                      } else if (!isControllerEmpty()) {
                         //선택한 내역으로 추천 진행하기
                         openRecommendConfirmPage(context, itemListController);
                       }
@@ -529,7 +548,9 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                 child: CupertinoButton(
                   padding: const EdgeInsets.all(17),
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  color: const Color(0xffDA6C31),
+                  color: controllerList.isNotEmpty
+                      ? const Color(0xffDA6C31)
+                      : Colors.grey,
                   child: const Text(
                     "추가하기",
                     style: TextStyle(
@@ -538,11 +559,8 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                         fontWeight: FontWeight.w400),
                   ),
                   onPressed: () {
-                    if (_tabController!.index + 1 < _tabController!.length) {
+                    if (controllerList.isNotEmpty) {
                       _tabController!.index++;
-                    } else {
-                      //선택한 내역으로 추천 진행하기
-                      openRecommendConfirmPage(context, itemListController);
                     }
                   },
                 ),
@@ -660,7 +678,9 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                 child: CupertinoButton(
                   padding: const EdgeInsets.all(17),
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  color: const Color(0xffDA6C31),
+                  color: controllerList.isNotEmpty
+                      ? const Color(0xffDA6C31)
+                      : Colors.grey,
                   child: const Text(
                     "추가하기",
                     style: TextStyle(
@@ -669,11 +689,8 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                         fontWeight: FontWeight.w400),
                   ),
                   onPressed: () {
-                    if (_tabController!.index + 1 < _tabController!.length) {
+                    if (controllerList.isNotEmpty) {
                       _tabController!.index++;
-                    } else {
-                      //선택한 내역으로 추천 진행하기
-                      openRecommendConfirmPage(context, itemListController);
                     }
                   },
                 ),
