@@ -75,6 +75,8 @@ class _RecommendConfirmState extends State<RecommendConfirm> {
 
                 /* 중앙 박스 */
                 Container(
+                  constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height / 2),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: const Color(0xFFDA6C31),
@@ -85,28 +87,33 @@ class _RecommendConfirmState extends State<RecommendConfirm> {
                   ),
                   padding: const EdgeInsets.fromLTRB(33, 20, 30, 20),
                   margin: const EdgeInsets.fromLTRB(0, 28, 0, 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      /* 아이템 태그 리스트 */
-                      for (int i = 0; i < title.length; ++i)
-                        if (itemList[i].isNotEmpty)
-                          buildSelectedItemLine(
-                              title: title[i], itemList: itemList[i]),
-                    ],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        /* 아이템 태그 리스트 */
+                        for (int i = 0; i < title.length; ++i)
+                          if (itemList[i].isNotEmpty)
+                            buildSelectedItemLine(
+                                title: title[i], itemList: itemList[i]),
+                      ],
+                    ),
                   ),
                 ),
 
                 /* 하단 버튼 */
                 Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        buildConfirmButton(),
-                        buildReturnButton(),
-                      ]),
+                  child: Container(
+                    height: 196,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          buildConfirmButton(),
+                          buildReturnButton(),
+                        ]),
+                  ),
                 ),
               ],
             ),
@@ -152,18 +159,19 @@ class _RecommendConfirmState extends State<RecommendConfirm> {
   /* 태그 블록 위젯 */
   Widget buildTagItem({required String text, required Color color}) {
     return Container(
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.4),
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-        ),
-        padding: const EdgeInsets.fromLTRB(11, 7, 11, 7),
-        margin: const EdgeInsets.fromLTRB(8, 5, 0, 5),
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-              fontSize: 14, color: Colors.white, fontWeight: FontWeight.w500),
-        ));
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.4),
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+      ),
+      padding: const EdgeInsets.fromLTRB(11, 7, 11, 7),
+      margin: const EdgeInsets.fromLTRB(8, 5, 0, 5),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+            fontSize: 14, color: Colors.white, fontWeight: FontWeight.w500),
+      ),
+    );
   }
 
   /* 칵테일 추천 확정 버튼 */
@@ -209,8 +217,9 @@ class _RecommendConfirmState extends State<RecommendConfirm> {
 void openRecommendConfirmPage(
     BuildContext context, List<List<IngredientElement>> itemList) {
   Navigator.push(
-      context,
-      CupertinoPageRoute(
-        builder: (context) => RecommendConfirm(itemList: itemList),
-      ));
+    context,
+    CupertinoPageRoute(
+      builder: (context) => RecommendConfirm(itemList: itemList),
+    ),
+  );
 }

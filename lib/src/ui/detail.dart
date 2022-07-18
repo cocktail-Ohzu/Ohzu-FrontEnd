@@ -226,7 +226,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                                 buildIngredients(
                                     context: context,
-                                    img: state.cocktailDetail.info!.img,
+                                    img: state.cocktailDetail.info!.img2,
                                     scrollController: _recipeScrollController,
                                     ingredients:
                                         state.cocktailDetail.ingredients),

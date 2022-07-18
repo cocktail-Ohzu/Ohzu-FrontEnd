@@ -178,65 +178,62 @@ Widget buildCocktailContainer(
           child: Image.network(cocktail.img.toString(), fit: BoxFit.cover)),
 
       /* 추천 칵테일 텍스트 */
-      Expanded(
-        child: Container(
-            margin: const EdgeInsets.fromLTRB(24, 21, 24, 22),
-            alignment: Alignment.bottomLeft,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /* 첫째줄 */
-                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  Text(
-                    cocktail.name.toString(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: cocktail.name.toString().length > 7 ? 21 : 24,
-                      color: Colors.white,
-                    ),
+      Container(
+          margin: const EdgeInsets.fromLTRB(24, 21, 24, 25),
+          alignment: Alignment.bottomLeft,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /* 첫째줄 */
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                Text(
+                  cocktail.name.toString(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: cocktail.name.toString().length > 7 ? 21 : 24,
+                    color: Colors.white,
                   ),
-                  /* Vertical Divider */
-                  Container(
-                    color: Colors.white.withOpacity(0.6),
-                    height: 22,
-                    width: 1,
-                    margin: const EdgeInsets.fromLTRB(12, 3, 12, 0),
-                  ),
-                  Text(
-                    cocktail.engName.toString(),
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white.withOpacity(0.6),
-                      fontSize:
-                          cocktail.engName.toString().length > 18 ? 13 : 16,
-                      height: 1.5,
-                    ),
-                  ),
-                ]),
-                /* 둘째줄 */
-                Text(cocktail.desc.toString(),
-                    style: TextStyle(
-                      height: 1.5,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white.withOpacity(0.85),
-                    )),
-                const SizedBox(
-                  height: 15,
                 ),
-                /* 셋째줄 */
-                Text("alcohol ${cocktail.strength.toString()}%",
-                    style: const TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFFDA6C31),
-                    )),
-              ],
-            )),
-      ),
+                /* Vertical Divider */
+                Container(
+                  color: Colors.white.withOpacity(0.6),
+                  height: 22,
+                  width: 1,
+                  margin: const EdgeInsets.fromLTRB(12, 3, 12, 0),
+                ),
+                Text(
+                  cocktail.engName.toString(),
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white.withOpacity(0.6),
+                    fontSize: cocktail.engName.toString().length > 18 ? 13 : 16,
+                    height: 1.5,
+                  ),
+                ),
+              ]),
+              /* 둘째줄 */
+              Text(cocktail.desc.toString(),
+                  style: TextStyle(
+                    height: 1.5,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white.withOpacity(0.85),
+                  )),
+              const SizedBox(
+                height: 15,
+              ),
+              /* 셋째줄 */
+              Text("alcohol ${cocktail.strength.toString()}%",
+                  style: const TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFFDA6C31),
+                  )),
+            ],
+          )),
     ],
   );
 }

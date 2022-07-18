@@ -128,14 +128,14 @@ class _RecommendResultState extends State<RecommendResult> {
                               buildCocktailContainer(
                                   state.recommend.fitCocktails![0].id!,
                                   state.recommend.fitCocktails![0].name!,
-                                  state.recommend.fitCocktails![0].img!,
+                                  state.recommend.fitCocktails![0].img2!,
                                   state.recommend.fitCocktails![0]
                                       .backgroundColor!)
                             else
                               buildCocktailContainer(
                                   state.recommend.similarCocktails![0].id!,
                                   state.recommend.similarCocktails![0].name!,
-                                  state.recommend.similarCocktails![0].img!,
+                                  state.recommend.similarCocktails![0].img2!,
                                   state.recommend.similarCocktails![0]
                                       .backgroundColor!),
                           ]);
@@ -210,7 +210,11 @@ class _RecommendResultState extends State<RecommendResult> {
               width: 98,
               height: 98,
               alignment: Alignment.topCenter,
-              child: Image.network(sc[i].img!, fit: BoxFit.cover),
+              child: Image.network(
+                  sc[i].img2 == null || sc[i].img2!.isEmpty
+                      ? sc[i].img!
+                      : sc[i].img2!,
+                  fit: BoxFit.cover),
             ),
 
             /* 이미지
@@ -281,9 +285,9 @@ class _RecommendResultState extends State<RecommendResult> {
       int id, String name, String imgUrl, String backgroundColor) {
     return Container(
         margin: const EdgeInsets.fromLTRB(0, 22, 0, 0),
-        decoration: const BoxDecoration(
-          color: Colors.pink,
-          borderRadius: BorderRadius.all(Radius.circular(11.5)),
+        decoration: BoxDecoration(
+          color: Color(int.parse('0xff$backgroundColor')),
+          borderRadius: const BorderRadius.all(Radius.circular(11.5)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
