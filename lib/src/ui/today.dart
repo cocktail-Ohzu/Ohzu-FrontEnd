@@ -27,225 +27,217 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => todaysCocktailbloc,
-        child: Container(
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomCenter,
-              stops: [0.0, 0.2],
-              colors: [
-                Color(0xff8C5B40),
-                Color(0xff121212),
-              ],
-            )),
-            child: Scaffold(
-                backgroundColor: Colors.transparent,
-                appBar: AppBar(
-                    toolbarHeight: 40,
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                    //middle: Text(widget.title),
-                    actions: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed('/search');
-                          },
-                          splashRadius: 18,
-                          icon: const Icon(
-                            Icons.search,
-                            size: 25,
-                          ),
-                          color: Colors.white.withOpacity(0.6),
+      create: (_) => todaysCocktailbloc,
+      child: Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomCenter,
+          stops: [0.0, 0.2],
+          colors: [
+            Color(0xff8C5B40),
+            Color(0xff121212),
+          ],
+        )),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+              toolbarHeight: 40,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              //middle: Text(widget.title),
+              actions: [
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/search');
+                    },
+                    splashRadius: 18,
+                    icon: const Icon(
+                      Icons.search,
+                      size: 25,
+                    ),
+                    color: Colors.white.withOpacity(0.6),
+                  ),
+                )
+              ]),
+          body: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(24, 0, 24, 5),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    /* 추천 칵테일 타이틀 */
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        "오늘의 추천 칵테일",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18,
                         ),
-                      )
-                    ]),
-                body: SingleChildScrollView(
-                    child: Container(
-                        margin: const EdgeInsets.fromLTRB(24, 0, 24, 5),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              /* 추천 칵테일 타이틀 */
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                child: const Text(
-                                  "오늘의 추천 칵테일",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              ),
+                      ),
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    ),
 
-                              /* 추천 칵테일 컨테이너 */
-                              Container(
-                                  margin:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                  height: 464,
-                                  decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: <Color>[
-                                        Color.fromRGBO(255, 172, 190, 1),
-                                        Color.fromRGBO(255, 241, 244, 0.06),
-                                      ],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Color.fromRGBO(
-                                              240, 143, 164, 0.4),
-                                          blurRadius: 28)
-                                    ],
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(12)),
-                                  ),
-                                  child: BlocBuilder<TodaysCocktailBloc,
-                                          TodaysCocktailState>(
-                                      builder: (context, state) {
-                                    if (state is TodaysCocktailLoadingState) {
-                                      return Center(
-                                          child: CircularProgressIndicator(
-                                        color: Colors.white.withOpacity(0.5),
-                                      ));
-                                    } else if (state
-                                        is TodaysCocktailLoadedState) {
-                                      return buildCocktailContainer(
-                                          context, state.todaysCocktail);
-                                    }
-                                    if (state is TodaysCocktailErrorState) {
-                                      return const Text("snapshot is empty");
-                                    }
-                                    return Container();
-                                  })),
-                              const SizedBox(
-                                height: 20,
+                    /* 추천 칵테일 컨테이너 */
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
+                      child:
+                          BlocBuilder<TodaysCocktailBloc, TodaysCocktailState>(
+                              builder: (context, state) {
+                        if (state is TodaysCocktailLoadingState) {
+                          return Container(
+                            decoration: const BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Color.fromRGBO(240, 143, 164, 0.4),
+                                    blurRadius: 28)
+                              ],
+                              gradient: LinearGradient(
+                                colors: <Color>[
+                                  Color.fromRGBO(255, 172, 190, 1),
+                                  Color.fromRGBO(255, 241, 244, 0.06),
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
                               ),
-                              /* 하단 버튼 1 */
-                              buildGetRecommendButton(context),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              /* 하단 버튼 2 */
-                              BlocBuilder<TodaysCocktailBloc,
-                                      TodaysCocktailState>(
-                                  builder: (context, state) {
-                                if (state is TodaysCocktailLoadingState) {
-                                  return const Center(
-                                      child: CircularProgressIndicator(
-                                    color: Colors.transparent,
-                                  ));
-                                } else if (state is TodaysCocktailLoadedState) {
-                                  return buildShowDetailButton(
-                                      context, state.todaysCocktail.id!);
-                                }
-                                if (state is TodaysCocktailErrorState) {
-                                  return const Text("snapshot is empty");
-                                }
-                                return Container();
-                              }),
-                            ]))))));
+                            ),
+                            child: Center(
+                                child: CircularProgressIndicator(
+                              color: Colors.white.withOpacity(0.5),
+                            )),
+                          );
+                        } else if (state is TodaysCocktailLoadedState) {
+                          return buildCocktailContainer(
+                              context, state.todaysCocktail);
+                        }
+                        if (state is TodaysCocktailErrorState) {
+                          return const Text("snapshot is empty");
+                        }
+                        return Container();
+                      }),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    /* 하단 버튼 1 */
+                    buildGetRecommendButton(context),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    /* 하단 버튼 2 */
+                    BlocBuilder<TodaysCocktailBloc, TodaysCocktailState>(
+                        builder: (context, state) {
+                      if (state is TodaysCocktailLoadingState) {
+                        return const Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.transparent,
+                        ));
+                      } else if (state is TodaysCocktailLoadedState) {
+                        return buildShowDetailButton(
+                            context, state.todaysCocktail.id!);
+                      }
+                      if (state is TodaysCocktailErrorState) {
+                        return const Text("snapshot is empty");
+                      }
+                      return Container();
+                    }),
+                  ]),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
 @override
 Widget buildCocktailContainer(
     BuildContext context, TodaysCocktailModel cocktail) {
-  return Container(
-      margin: const EdgeInsets.all(1.5),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-            begin: const Alignment(0.10, 0.0),
-            end: Alignment.bottomCenter,
-            stops: const [
-              0.4,
-              0.8,
-              1
+  return Stack(
+    alignment: Alignment.bottomLeft,
+    children: [
+      /* 추천 칵테일 이미지 */
+      Container(
+          decoration: BoxDecoration(
+            color: Color(int.parse("0xff${cocktail.backgroundColor}")),
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+            boxShadow: [
+              BoxShadow(
+                  //color: Color.fromRGBO(240, 143, 164, 0.4),
+                  color: Color(int.parse("0xff${cocktail.backgroundColor}"))
+                      .withOpacity(0.4),
+                  blurRadius: 28)
             ],
-            colors: <Color>[
-              Color(int.parse("0xff${cocktail.backgroundColor}")),
-              const Color(0xff956570),
-              const Color.fromRGBO(82, 82, 82, 0.6)
-            ]),
-        borderRadius: const BorderRadius.all(Radius.circular(11.5)),
-      ),
-      child: Column(
-        children: [
-          /* 추천 칵테일 이미지 */
-          Container(
-              margin: const EdgeInsets.fromLTRB(7, 7, 7, 0),
-              width: double.infinity,
-              height: 328,
-              decoration: BoxDecoration(
-                color: Color(int.parse("0xff${cocktail.backgroundColor}")),
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-              ),
-              child: Image.network(cocktail.img.toString(), fit: BoxFit.cover)),
+          ),
+          child: cocktail.img != null
+              ? Image.network(cocktail.img!, fit: BoxFit.cover)
+              : Image.asset('asset/images/default.png', fit: BoxFit.cover)),
 
-          /* 추천 칵테일 텍스트 */
-          Container(
-              margin: const EdgeInsets.fromLTRB(25, 21, 25, 5),
-              alignment: Alignment.centerLeft,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /* 첫째줄 */
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    Text(
-                      cocktail.name.toString(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: cocktail.name.toString().length > 7 ? 21 : 24,
-                        color: Colors.white,
-                      ),
-                    ),
-                    /* Vertical Divider */
-                    Container(
-                      color: Colors.white.withOpacity(0.6),
-                      height: 22,
-                      width: 1,
-                      margin: const EdgeInsets.fromLTRB(12, 3, 12, 0),
-                    ),
-                    Text(
-                      cocktail.engName.toString(),
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white.withOpacity(0.6),
-                        fontSize:
-                            cocktail.engName.toString().length > 18 ? 13 : 16,
-                        height: 1.5,
-                      ),
-                    ),
-                  ]),
-                  /* 둘째줄 */
-                  Text(cocktail.desc.toString(),
-                      style: TextStyle(
-                        height: 1.5,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white.withOpacity(0.85),
-                      )),
-                  const SizedBox(
-                    height: 15,
+      /* 추천 칵테일 텍스트 */
+      Container(
+          margin: const EdgeInsets.fromLTRB(24, 21, 24, 25),
+          alignment: Alignment.bottomLeft,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /* 첫째줄 */
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                Text(
+                  cocktail.name.toString(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: cocktail.name.toString().length > 7 ? 21 : 24,
+                    color: Colors.white,
                   ),
-                  /* 셋째줄 */
-                  Text("alcohol ${cocktail.strength.toString()}%",
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFFDA6C31),
-                      )),
-                ],
-              )),
-        ],
-      ));
+                ),
+                /* Vertical Divider */
+                Container(
+                  color: Colors.white.withOpacity(0.6),
+                  height: 22,
+                  width: 1,
+                  margin: const EdgeInsets.fromLTRB(12, 3, 12, 0),
+                ),
+                Text(
+                  cocktail.engName.toString(),
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white.withOpacity(0.6),
+                    fontSize: cocktail.engName.toString().length > 18 ? 13 : 16,
+                    height: 1.5,
+                  ),
+                ),
+              ]),
+              /* 둘째줄 */
+              Text(cocktail.desc.toString(),
+                  style: TextStyle(
+                    height: 1.5,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white.withOpacity(0.85),
+                  )),
+              const SizedBox(
+                height: 15,
+              ),
+              /* 셋째줄 */
+              Text("alcohol ${cocktail.strength.toString()}%",
+                  style: const TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFFDA6C31),
+                  )),
+            ],
+          )),
+    ],
+  );
 }
 
 /* 다른 칵테일 추천 받기 버튼 */

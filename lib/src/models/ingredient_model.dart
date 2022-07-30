@@ -83,8 +83,10 @@ class IngredientElement {
   String? img;
   String? tagColor;
   String? desc;
+  String? category;
 
-  IngredientElement({this.id, this.name, this.img, this.tagColor, this.desc});
+  IngredientElement(
+      {this.id, this.name, this.img, this.tagColor, this.desc, this.category});
 
   IngredientElement.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -92,6 +94,7 @@ class IngredientElement {
     img = json['img'];
     tagColor = json['tag_color'];
     desc = json['desc'];
+    category = json['category'];
   }
 
   Map<String, dynamic> toJson() {
@@ -100,6 +103,8 @@ class IngredientElement {
     data['name'] = name;
     data['img'] = img;
     data['tag_color'] = tagColor;
+    data['desc'] = desc;
+    data['category'] = category;
     return data;
   }
 }

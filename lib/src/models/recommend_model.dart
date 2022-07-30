@@ -36,14 +36,16 @@ class FitCocktails {
   int? id;
   String? name;
   String? img;
+  String? img2;
   String? backgroundColor;
 
-  FitCocktails({this.id, this.name, this.img, this.backgroundColor});
+  FitCocktails({this.id, this.name, this.img, this.img2, this.backgroundColor});
 
   FitCocktails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     img = json['img'];
+    img2 = json['img2'];
     backgroundColor = json['background_color'];
   }
 
@@ -52,6 +54,7 @@ class FitCocktails {
     data['id'] = id;
     data['name'] = name;
     data['img'] = img;
+    data['img2'] = img2;
     data['background_color'] = backgroundColor;
     return data;
   }
@@ -61,14 +64,17 @@ class SimilarCocktails {
   int? id;
   String? name;
   String? img;
+  String? img2;
   String? backgroundColor;
 
-  SimilarCocktails({this.id, this.name, this.img, this.backgroundColor});
+  SimilarCocktails(
+      {this.id, this.name, this.img, this.img2, this.backgroundColor});
 
   SimilarCocktails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     img = json['img'];
+    img2 = json['img2'];
     backgroundColor = json['background_color'];
   }
 
@@ -77,6 +83,7 @@ class SimilarCocktails {
     data['id'] = id;
     data['name'] = name;
     data['img'] = img;
+    data['img2'] = img2;
     data['background_color'] = backgroundColor;
     return data;
   }

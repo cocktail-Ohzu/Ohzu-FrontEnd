@@ -14,6 +14,7 @@ https://www.notion.so/1-API-9eede01a48ca4bc5b6ffeceab8e773bc
 class TodaysCocktailModel {
   int? id;
   String? img;
+  String? img2;
   String? backgroundColor;
   String? name;
   String? engName;
@@ -23,6 +24,7 @@ class TodaysCocktailModel {
   TodaysCocktailModel(
       {this.id,
       this.img,
+      this.img2,
       this.backgroundColor,
       this.name,
       this.engName,
@@ -32,6 +34,7 @@ class TodaysCocktailModel {
   TodaysCocktailModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     img = json['img'];
+    img2 = json['img2'];
     backgroundColor = json['background_color'];
     name = json['name'];
     engName = json['eng_name'];
@@ -43,6 +46,7 @@ class TodaysCocktailModel {
     final Map<String, dynamic> data = <String, dynamic>{
       "id": id,
       "img": img,
+      "img2": img2,
       "background_color": backgroundColor,
       "name": name,
       "eng_name": engName,

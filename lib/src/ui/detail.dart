@@ -83,7 +83,7 @@ class _DetailPageState extends State<DetailPage> {
                   children: [
                     buildCocktailImg(
                       context: context,
-                      img: state.cocktailDetail.info!.img!,
+                      img: state.cocktailDetail.info!.img2!,
                       color: state.cocktailDetail.info!.backgroundColor!,
                     ),
                     buildCocktailName(
@@ -226,7 +226,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                                 buildIngredients(
                                     context: context,
-                                    img: state.cocktailDetail.info!.img,
+                                    img: state.cocktailDetail.info!.img2,
                                     scrollController: _recipeScrollController,
                                     ingredients:
                                         state.cocktailDetail.ingredients),
@@ -294,12 +294,18 @@ Widget buildCocktailImg({
       width: double.infinity,
       height: 388,
       decoration: BoxDecoration(
-        image: DecorationImage(image: NetworkImage(img), fit: BoxFit.cover),
+        image: DecorationImage(
+            image: img.isEmpty
+                ? Image.asset('asset/images/c.png').image
+                : Image.network(img).image,
+            fit: BoxFit.cover),
         color: Color(int.parse("0xf$color")),
         borderRadius: const BorderRadius.only(
             bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
-        boxShadow: const [
-          BoxShadow(color: Color.fromRGBO(240, 143, 164, 0.4), blurRadius: 28)
+        boxShadow: [
+          BoxShadow(
+              color: Color(int.parse("0xf$color")).withOpacity(0.4),
+              blurRadius: 28),
         ],
       ));
 }
@@ -423,7 +429,7 @@ Widget buildOhzuPoint(
   );
 }
 
-/* 재료 사진 및 리스트 위젯 */
+/// 재료 사진 및 리스트 위젯
 Widget buildIngredients(
     {required BuildContext context,
     required ScrollController scrollController,
