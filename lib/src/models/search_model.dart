@@ -1,5 +1,3 @@
-import 'package:equatable/equatable.dart';
-
 class SearchModel {
   int? id;
   String? name;
@@ -99,8 +97,7 @@ class SearchModel {
   }
 }
 
-// ignore: must_be_immutable
-class Tag extends Equatable {
+class Tag {
   String? name;
   String? tagColor;
 
@@ -117,8 +114,4 @@ class Tag extends Equatable {
     data['tag_color'] = tagColor;
     return data;
   }
-
-  //중복 검사시 사용
-  @override
-  List<Object?> get props => [name];
 }
