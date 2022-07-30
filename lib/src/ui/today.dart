@@ -175,7 +175,9 @@ Widget buildCocktailContainer(
                   blurRadius: 28)
             ],
           ),
-          child: Image.network(cocktail.img.toString(), fit: BoxFit.cover)),
+          child: cocktail.img != null
+              ? Image.network(cocktail.img!, fit: BoxFit.cover)
+              : Image.asset('asset/images/default.png', fit: BoxFit.cover)),
 
       /* 추천 칵테일 텍스트 */
       Container(

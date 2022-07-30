@@ -294,7 +294,11 @@ Widget buildCocktailImg({
       width: double.infinity,
       height: 388,
       decoration: BoxDecoration(
-        image: DecorationImage(image: NetworkImage(img), fit: BoxFit.cover),
+        image: DecorationImage(
+            image: img.isEmpty
+                ? Image.asset('asset/images/c.png').image
+                : Image.network(img).image,
+            fit: BoxFit.cover),
         color: Color(int.parse("0xf$color")),
         borderRadius: const BorderRadius.only(
             bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
@@ -425,7 +429,7 @@ Widget buildOhzuPoint(
   );
 }
 
-/* 재료 사진 및 리스트 위젯 */
+/// 재료 사진 및 리스트 위젯
 Widget buildIngredients(
     {required BuildContext context,
     required ScrollController scrollController,

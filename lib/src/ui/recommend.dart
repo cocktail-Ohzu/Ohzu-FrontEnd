@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -82,15 +84,18 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                     child: TextButton(
                       style: const ButtonStyle(
                           splashFactory: NoSplash.splashFactory),
-                      child: Text(
-                        "완료",
+                      child: AnimatedDefaultTextStyle(
+                        duration: Duration(milliseconds: 250),
                         style: TextStyle(
                             color: isControllerEmpty()
                                 ? Colors.grey.withOpacity(0.5)
                                 : Colors.white,
-                            fontSize: 18,
+                            fontSize: 17,
                             fontWeight: FontWeight.w100,
                             height: 0.4),
+                        child: const Text(
+                          "완료",
+                        ),
                       ),
                       onPressed: () => //선택한 내역으로 추천 진행하기
                           isControllerEmpty()
@@ -189,6 +194,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
       required List<IngredientElement> item,
       required List<IngredientElement> controllerList}) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         /* 타이틀 및 설명 */
         Container(
@@ -198,7 +204,6 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
               title: "원하는 $name 선택해 주세요",
               desc: "원하는 재료를 선택해 주세요!\n관심 없는 선택지는 넘겨도 좋아요."),
         ),
-        /* 베이스 술 선택 */
         Expanded(
           child: GridView(
             shrinkWrap: true,
@@ -221,30 +226,30 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                       print(itemListController); //
                     })
                   },
-                  child: AnimatedContainer(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: const Color(0xff272727),
-                        // color: controllerList.contains(item[i])
-                        //     ? Color(0xff474747)
-                        //     : Color(int.parse("0xff${item[i].tagColor!}")),//태그컬러로사용?임시
-                        border: Border.all(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: Container(
+                      key: ValueKey<bool>(controllerList.contains(item[i])),
+                      margin: const EdgeInsets.only(bottom: 8),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: const Color(0xff272727),
+                          border: Border.all(
+                            color: controllerList.contains(item[i])
+                                ? Color(int.parse("0xff${item[i].tagColor!}"))
+                                : Colors.transparent,
+                          )),
+                      child: Text(
+                        item[i].name!,
+                        style: TextStyle(
+                          fontSize: 14,
                           color: controllerList.contains(item[i])
                               ? Color(int.parse("0xff${item[i].tagColor!}"))
-                              : Colors.transparent,
-                        )),
-                    duration: const Duration(milliseconds: 300),
-                    child: Text(
-                      item[i].name!,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: controllerList.contains(item[i])
-                            ? Color(int.parse("0xff${item[i].tagColor!}"))
-                            : Colors.white,
+                              : Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
@@ -258,117 +263,8 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                 mainAxisSpacing: 12),
           ),
         ),
-        // /* 설명 칸 */
-        // if (controllerList.isNotEmpty && controllerList.last.desc != null)
-        //   Center(
-        //     child: Container(
-        //       alignment: Alignment.bottomLeft,
-        //       decoration: BoxDecoration(
-        //         border: Border.all(
-        //           color: const Color(0xFFDA6C31),
-        //           width: 1,
-        //         ),
-        //         borderRadius: const BorderRadius.all(Radius.circular(12)),
-        //         color: const Color(0xFF1E1E1E),
-        //       ),
-        //       padding: const EdgeInsets.fromLTRB(29, 20, 29, 20),
-        //       margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-        //       child: Column(
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: [
-        //             Text(
-        //               controllerList.last.name!,
-        //               style: const TextStyle(
-        //                   fontSize: 16, fontWeight: FontWeight.w600),
-        //             ),
-        //             const SizedBox(
-        //               height: 12,
-        //             ),
-        //             Text(
-        //               controllerList.last.desc!,
-        //               style: const TextStyle(
-        //                   fontSize: 12, fontWeight: FontWeight.w500),
-        //               textAlign: TextAlign.start,
-        //             ),
-        //           ]),
-        //     ),
-        //   ),
         /* 하단 버튼 */
-        Container(
-            height: 52,
-            margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-            alignment: Alignment.bottomCenter,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: CupertinoButton(
-                    padding: const EdgeInsets.all(17),
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    color: const Color(0xff181818),
-                    child: const Text(
-                      "건너뛰기",
-                      style: TextStyle(
-                          color: Color(0xffDA6C31),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    onPressed: () {
-                      if (_tabController!.index + 1 < _tabController!.length) {
-                        _tabController!.index++;
-                      } else {
-                        //선택한 내역으로 추천 진행하기
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  width: 11,
-                ),
-                Expanded(
-                  child: CupertinoButton(
-                    padding: const EdgeInsets.all(17),
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    color: controllerList.isNotEmpty
-                        ? Color(0xffDA6C31)
-                        : Colors.grey,
-                    child: const Text(
-                      "추가하기",
-                      style: TextStyle(
-                          color: Color(0xffffffff),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    onPressed: () {
-                      if (_tabController!.index + 1 < _tabController!.length &&
-                          controllerList.isNotEmpty) {
-                        _tabController!.index++;
-                      } else if (!isControllerEmpty()) {
-                        //선택한 내역으로 추천 진행하기
-                        openRecommendConfirmPage(context, itemListController);
-                      }
-                    },
-                  ),
-                ),
-              ],
-            )
-            // child: SizedBox(
-            //   width: double.infinity,
-            //   child: CupertinoButton(
-            //     padding: const EdgeInsets.all(19),
-            //     borderRadius: const BorderRadius.all(Radius.circular(8)),
-            //     color: const Color(0xffDA6C31),
-            //     child: const Text(
-            //       "추가하기",
-            //       style: TextStyle(
-            //           color: Color(0xffffffff),
-            //           fontSize: 14,
-            //           fontWeight: FontWeight.w400),
-            //     ),
-            //     onPressed: () {},
-            //   ),
-            // ),
-            )
+        buildBottomButton(controllerList: controllerList)
       ],
     );
   }
@@ -394,7 +290,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
       children: [
         /* 타이틀 및 설명 */
         Container(
-          padding: const EdgeInsets.only(top: 38, bottom: 40),
+          padding: const EdgeInsets.only(top: 38, bottom: 20),
           alignment: Alignment.centerLeft,
           child: buildTabViewTitle(
               title: "원하는 $name 선택해 주세요",
@@ -409,15 +305,6 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                     tilePadding: const EdgeInsets.fromLTRB(0, 0, 0, 0.5),
                     initiallyExpanded: true,
                     trailing: const Text(""),
-                    //key: expansionTileKey,
-                    // onExpansionChanged: (bool isExpanded) {
-                    //   setState(
-                    //       () => {_expansionController[title] = isExpanded});
-                    //   /* 자동 스크롤 */
-                    //   //   _scrollToSelectedContent(
-                    //   //       expansionTileKey: expansionTileKey);
-                    //   //
-                    // },
                     title: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -463,32 +350,37 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                                   }
                                 }),
                               },
-                              child: AnimatedContainer(
-                                margin: const EdgeInsets.only(bottom: 8),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: const Color(0xff272727),
-                                    // color: controllerList.contains(item[i])
-                                    //     ? Color(0xff474747)
-                                    //     : Color(int.parse("0xff${item[i].tagColor!}")),//태그컬러로사용?임시
-                                    border: Border.all(
+                              child: AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 300),
+                                child: Container(
+                                  key: ValueKey<bool>(
+                                      controllerList.contains(ingredient)),
+                                  margin: const EdgeInsets.only(bottom: 8),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: const Color(0xff272727),
+                                      // color: controllerList.contains(item[i])
+                                      //     ? Color(0xff474747)
+                                      //     : Color(int.parse("0xff${item[i].tagColor!}")),//태그컬러로사용?임시
+                                      border: Border.all(
+                                        color: controllerList
+                                                .contains(ingredient)
+                                            ? Color(int.parse(
+                                                "0xff${ingredient.tagColor!}"))
+                                            : Colors.transparent,
+                                      )),
+                                  child: Text(
+                                    ingredient.name!,
+                                    style: TextStyle(
+                                      fontSize: 14,
                                       color: controllerList.contains(ingredient)
                                           ? Color(int.parse(
                                               "0xff${ingredient.tagColor!}"))
-                                          : Colors.transparent,
-                                    )),
-                                duration: const Duration(milliseconds: 300),
-                                child: Text(
-                                  ingredient.name!,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: controllerList.contains(ingredient)
-                                        ? Color(int.parse(
-                                            "0xff${ingredient.tagColor!}"))
-                                        : Colors.white,
+                                          : Colors.white,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
                               ),
                             ),
@@ -513,61 +405,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
         ),
 
         /* 하단 버튼 */
-        Container(
-          height: 52,
-          margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-          alignment: Alignment.bottomCenter,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: CupertinoButton(
-                  padding: const EdgeInsets.all(17),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  color: const Color(0xff181818),
-                  child: const Text(
-                    "건너뛰기",
-                    style: TextStyle(
-                        color: Color(0xffDA6C31),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400),
-                  ),
-                  onPressed: () {
-                    if (_tabController!.index + 1 < _tabController!.length) {
-                      _tabController!.index++;
-                    } else {
-                      //선택한 내역으로 추천 진행하기
-                    }
-                  },
-                ),
-              ),
-              const SizedBox(
-                width: 11,
-              ),
-              Expanded(
-                child: CupertinoButton(
-                  padding: const EdgeInsets.all(17),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  color: controllerList.isNotEmpty
-                      ? const Color(0xffDA6C31)
-                      : Colors.grey,
-                  child: const Text(
-                    "추가하기",
-                    style: TextStyle(
-                        color: Color(0xffffffff),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400),
-                  ),
-                  onPressed: () {
-                    if (controllerList.isNotEmpty) {
-                      _tabController!.index++;
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+        buildBottomButton(controllerList: controllerList)
       ],
     );
   }
@@ -604,30 +442,30 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                       print(itemListController); //
                     })
                   },
-                  child: AnimatedContainer(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: const Color(0xff272727),
-                        // color: controllerList.contains(item[i])
-                        //     ? Color(0xff474747)
-                        //     : Color(int.parse("0xff${item[i].tagColor!}")),//태그컬러로사용?임시
-                        border: Border.all(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: Container(
+                      key: ValueKey<bool>(controllerList.contains(item[i])),
+                      margin: const EdgeInsets.only(bottom: 8),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: const Color(0xff272727),
+                          border: Border.all(
+                            color: controllerList.contains(item[i])
+                                ? Color(int.parse("0xff${item[i].tagColor!}"))
+                                : Colors.transparent,
+                          )),
+                      child: Text(
+                        item[i].name!,
+                        style: TextStyle(
+                          fontSize: 14,
                           color: controllerList.contains(item[i])
                               ? Color(int.parse("0xff${item[i].tagColor!}"))
-                              : Colors.transparent,
-                        )),
-                    duration: const Duration(milliseconds: 300),
-                    child: Text(
-                      item[i].name!,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: controllerList.contains(item[i])
-                            ? Color(int.parse("0xff${item[i].tagColor!}"))
-                            : Colors.white,
+                              : Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
@@ -643,62 +481,47 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
         ),
 
         /* 하단 버튼 */
-        Container(
-          height: 52,
-          margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-          alignment: Alignment.bottomCenter,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: CupertinoButton(
-                  padding: const EdgeInsets.all(17),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  color: const Color(0xff181818),
-                  child: const Text(
-                    "건너뛰기",
-                    style: TextStyle(
-                        color: Color(0xffDA6C31),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400),
-                  ),
-                  onPressed: () {
-                    if (_tabController!.index + 1 < _tabController!.length) {
-                      _tabController!.index++;
-                    } else {
-                      //선택한 내역으로 추천 진행하기
-                    }
-                  },
-                ),
-              ),
-              const SizedBox(
-                width: 11,
-              ),
-              Expanded(
-                child: CupertinoButton(
-                  padding: const EdgeInsets.all(17),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  color: controllerList.isNotEmpty
-                      ? const Color(0xffDA6C31)
-                      : Colors.grey,
-                  child: const Text(
-                    "추가하기",
-                    style: TextStyle(
-                        color: Color(0xffffffff),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400),
-                  ),
-                  onPressed: () {
-                    if (controllerList.isNotEmpty) {
-                      _tabController!.index++;
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+        buildBottomButton(controllerList: controllerList)
       ],
+    );
+  }
+
+  Widget buildBottomButton({required List<IngredientElement> controllerList}) {
+    const duration = Duration(milliseconds: 200);
+
+    return Container(
+      height: 52,
+      margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+      child: AnimatedSwitcher(
+        duration: duration,
+        child: CupertinoButton(
+          minSize: double.infinity,
+          key: ValueKey<bool>(controllerList.isEmpty),
+          padding: const EdgeInsets.all(17),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          color: controllerList.isEmpty
+              ? const Color(0xff181818)
+              : const Color(0xffDA6C31),
+          child: Text(
+            controllerList.isEmpty ? "건너뛰기" : "추가하기",
+            style: TextStyle(
+                color: controllerList.isEmpty
+                    ? const Color(0xffDA6C31)
+                    : const Color(0xffffffff),
+                fontSize: 14,
+                fontWeight: FontWeight.w400),
+          ),
+          onPressed: () {
+            if (_tabController!.index + 1 < _tabController!.length &&
+                controllerList.isNotEmpty) {
+              _tabController!.index++;
+            } else if (!isControllerEmpty()) {
+              //선택한 내역으로 추천 진행하기
+              openRecommendConfirmPage(context, itemListController);
+            }
+          },
+        ),
+      ),
     );
   }
 }
@@ -713,32 +536,49 @@ void showDescriptionPopup(
         contentPadding: EdgeInsets.zero,
         backgroundColor: const Color(0xff272727),
         content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(34, 38, 34, 0),
-                child: Text(
-                  item.name!,
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    color: Color(0xffDA6C31),
-                    fontSize: 16,
-                  ),
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(34, 38, 34, 0),
+              child: Text(
+                item.name!,
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                  color: Color(0xffDA6C31),
+                  fontSize: 16,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(34, 30, 34, 38),
-                child: Text(
-                  item.desc!,
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    color: Colors.white,
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(34, 30, 34, 0),
+              child: Text(
+                item.desc!,
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(34, 32, 34, 32),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  "닫기",
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Color(0xffA9A9A9),
                     fontSize: 14,
                   ),
                 ),
-              )
-            ]),
+              ),
+            ),
+          ],
+        ),
       );
     },
   );
