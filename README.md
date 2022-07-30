@@ -22,14 +22,12 @@
 <table>
     <tr align="center">
         <td><B>프론트엔드<B></td>
-        <td><B>프론트엔드<B></td>
         <td><B>백엔드<B></td>
         <td><B>백엔드<B></td>
         <td><B>디자인<B></td>
     </tr>
     <tr align="center">
         <td><B>노경민<B></td>
-        <td><B>한규진<B></td>
         <td><B>이수진<B></td>
         <td><B>서수경<B></td>
         <td><B>이윤경<B></td>
@@ -39,11 +37,6 @@
             <img src="https://github.com/gengminy.png?size=100">
             <br>
             <a href="https://github.com/gengminy"><I>gengminy</I></a>
-        </td>
-        <td>
-            <img src="https://github.com/9yujin.png?size=100">
-            <br>
-            <a href="https://github.com/9yujin"><I>9yujin</I></a>
         </td>
         <td>
             <img src="https://github.com/ssssujini99.png?size=100">
