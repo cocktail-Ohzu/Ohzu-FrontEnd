@@ -23,6 +23,15 @@ class _RecommendConfirmState extends State<RecommendConfirm> {
 
   _RecommendConfirmState({required this.itemList});
 
+  bool isItemListEmpty() {
+    for (var list in itemList) {
+      if (list.isNotEmpty) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -92,11 +101,17 @@ class _RecommendConfirmState extends State<RecommendConfirm> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        /* 아무것도 선택 안함 */
+                        if (isItemListEmpty())
+                          const Center(
+                            child: Text("선택 내역이 없습니다"),
+                          ),
                         /* 아이템 태그 리스트 */
-                        for (int i = 0; i < title.length; ++i)
-                          if (itemList[i].isNotEmpty)
-                            buildSelectedItemLine(
-                                title: title[i], itemList: itemList[i]),
+                        if (!isItemListEmpty())
+                          for (int i = 0; i < title.length; ++i)
+                            if (itemList[i].isNotEmpty)
+                              buildSelectedItemLine(
+                                  title: title[i], itemList: itemList[i]),
                       ],
                     ),
                   ),

@@ -84,24 +84,16 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                     child: TextButton(
                       style: const ButtonStyle(
                           splashFactory: NoSplash.splashFactory),
-                      child: AnimatedDefaultTextStyle(
-                        duration: Duration(milliseconds: 250),
+                      child: const Text(
+                        "완료",
                         style: TextStyle(
-                            color: isControllerEmpty()
-                                ? Colors.grey.withOpacity(0.5)
-                                : Colors.white,
-                            fontSize: 17,
+                            color: Colors.white,
+                            fontSize: 18,
                             fontWeight: FontWeight.w100,
                             height: 0.4),
-                        child: const Text(
-                          "완료",
-                        ),
                       ),
                       onPressed: () => //선택한 내역으로 추천 진행하기
-                          isControllerEmpty()
-                              ? null
-                              : openRecommendConfirmPage(
-                                  context, itemListController),
+                          openRecommendConfirmPage(context, itemListController),
                     ),
                   )
                 ]),
@@ -512,10 +504,10 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                 fontWeight: FontWeight.w400),
           ),
           onPressed: () {
-            if (_tabController!.index + 1 < _tabController!.length &&
-                controllerList.isNotEmpty) {
+            if (_tabController!.index + 1 < _tabController!.length) {
               _tabController!.index++;
-            } else if (!isControllerEmpty()) {
+            } else if (!isControllerEmpty() ||
+                _tabController!.index + 1 == _tabController!.length) {
               //선택한 내역으로 추천 진행하기
               openRecommendConfirmPage(context, itemListController);
             }
