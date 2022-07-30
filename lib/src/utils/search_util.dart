@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ohzu/src/models/search_model.dart';
 
 /* 해쉬태그 검색 시 해당 텍스트가 있는지 검사 */
@@ -16,9 +18,9 @@ bool hasTag(dynamic _list, String _text) {
   return false;
 }
 
-// SearchModel _elem 에서
-// text 가 포함되어 있는 Tag 들의 리스트를 추출하는 함수
-// @return List<Tag>
+/// SearchModel _elem 에서
+/// text 가 포함되어 있는 Tag 들의 리스트를 추출하는 함수
+/// @return List<Tag>
 List<Tag> getTag(SearchModel _elem, String _text) {
   List<Tag> ret = [];
   ret +=
@@ -36,6 +38,17 @@ List<Tag> getTag(SearchModel _elem, String _text) {
   ret += _elem.ingredients!
       .where((ingredientElem) => hasTag(ingredientElem, _text))
       .toList();
+
+  //중복제거 로직 (Tag -> JSON -> Tag)
+  final jsonList = ret.map((item) => jsonEncode(item)).toList();
+  final uniqueJsonList = jsonList.toSet().toList();
+  final result = uniqueJsonList.map((item) => jsonDecode(item)).toList();
+
+  ret.clear();
+  for (int i = 0; i < result.length; ++i) {
+    ret.add(Tag.fromJson(result[i]));
+  }
+
   return ret;
 }
 

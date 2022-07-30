@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 class IngredientModel {
   List<IngredientElement>? bases;
   List<IngredientElement>? ingredients;
@@ -77,7 +79,8 @@ class IngredientModel {
   }
 }
 
-class IngredientElement {
+// ignore: must_be_immutable
+class IngredientElement extends Equatable {
   int? id;
   String? name;
   String? img;
@@ -107,4 +110,8 @@ class IngredientElement {
     data['category'] = category;
     return data;
   }
+
+  //중복 검사시 사용
+  @override
+  List<Object?> get props => [name];
 }
