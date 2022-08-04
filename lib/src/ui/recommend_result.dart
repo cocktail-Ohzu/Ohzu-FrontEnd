@@ -170,8 +170,11 @@ class _RecommendResultState extends State<RecommendResult> {
                                 ),
                               );
                             } else if (state is RecommendLoadedState) {
-                              return buildSimilarCocktailCards(
-                                  state.recommend.similarCocktails!);
+                              return Container(
+                                  margin:
+                                      const EdgeInsets.fromLTRB(0, 0, 0, 40),
+                                  child: buildSimilarCocktailCards(
+                                      state.recommend.similarCocktails!));
                             }
                             if (state is RecommendErrorState) {
                               return const Text("snapshot is empty");
