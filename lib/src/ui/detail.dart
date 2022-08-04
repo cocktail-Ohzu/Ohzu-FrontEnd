@@ -244,14 +244,16 @@ class _DetailPageState extends State<DetailPage> {
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   margin:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: Text(
-                                    "미도리 : 스윗 앤 사워 믹스 : 스프라이트 = 1 : 1 : 2",
-                                    style: TextStyle(
-                                        color: Colors.white.withOpacity(0.8),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w100),
-                                  ),
+                                      const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                                  // margin:
+                                  //     const EdgeInsets.symmetric(vertical: 10),
+                                  // child: Text(
+                                  //   "미도리 : 스윗 앤 사워 믹스 : 스프라이트 = 1 : 1 : 2",
+                                  //   style: TextStyle(
+                                  //       color: Colors.white.withOpacity(0.8),
+                                  //       fontSize: 14,
+                                  //       fontWeight: FontWeight.w100),
+                                  // ),
                                 ),
                                 /* 제조 방법 */
                                 buildRecipe(
