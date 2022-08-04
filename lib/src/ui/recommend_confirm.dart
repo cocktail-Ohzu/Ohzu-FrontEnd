@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ohzu/src/models/ingredient_model.dart';
 import 'package:ohzu/src/ui/recommend_result.dart';
@@ -46,93 +47,143 @@ class _RecommendConfirmState extends State<RecommendConfirm> {
         ],
       )),
       child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-              toolbarHeight: 40,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              actions: []),
-          body: Container(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+            toolbarHeight: 40,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            actions: []),
+        body: Container(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            child: buildSelectedItemContainer()),
+      ),
+    );
+  }
+
+  Widget buildSelectedItemContainer() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        /* 상단 텍스트 */
+        Container(
+          margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+          alignment: Alignment.topLeft,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                /* 상단 텍스트 */
+                Text(
+                  isItemListEmpty() ? "선택한 내역이 아직 없어요!" : "아래 선택 내역으로",
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w600),
+                ),
                 Container(
-                  margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
-                  alignment: Alignment.topLeft,
+                  margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                  child: Text(
+                      isItemListEmpty()
+                          ? "나만의 칵테일을 만들러 가볼까요?"
+                          : "칵테일 추천을 진행할까요?",
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w600)),
+                )
+              ]),
+        ),
+
+        /* 중앙 박스 */
+        isItemListEmpty()
+            ? //아무것도 선택안함
+            Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text("선택 내역이 없습니다"),
+                ),
+              )
+            : //선택한 태그 리스트
+            Container(
+                // constraints: BoxConstraints(
+                //   maxHeight: MediaQuery.of(context).size.height / 2,
+                // ), //가변 크기
+                height: 320, //고정크기
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color(0xFFDA6C31),
+                    width: 1,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  color: const Color(0xFF1E1E1E),
+                ),
+                padding: const EdgeInsets.fromLTRB(33, 20, 30, 20),
+                margin: const EdgeInsets.fromLTRB(0, 28, 0, 24),
+                child: SingleChildScrollView(
+                  physics: const ClampingScrollPhysics(), //scroll bouncing 제거
                   child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const Text(
-                          "아래 선택 내역으로",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w600),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                          child: const Text("칵테일 추천을 진행할까요?",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w600)),
-                        )
-                      ]),
-                ),
-
-                /* 중앙 박스 */
-                Container(
-                  constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height / 2),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: const Color(0xFFDA6C31),
-                      width: 1,
-                    ),
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    color: const Color(0xFF1E1E1E),
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      /* 아이템 태그 리스트 */
+                      for (int i = 0; i < title.length; ++i)
+                        if (itemList[i].isNotEmpty)
+                          buildSelectedItemLine(
+                              title: title[i], itemList: itemList[i]),
+                    ],
                   ),
-                  padding: const EdgeInsets.fromLTRB(33, 20, 30, 20),
-                  margin: const EdgeInsets.fromLTRB(0, 28, 0, 24),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        /* 아무것도 선택 안함 */
-                        if (isItemListEmpty())
-                          const Center(
-                            child: Text("선택 내역이 없습니다"),
+                ),
+              ),
+
+        /* 하단 버튼 */
+        Expanded(
+          child: Container(
+            height: 196,
+            margin: const EdgeInsets.only(bottom: 65),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  isItemListEmpty()
+                      ? CupertinoButton(
+                          padding: const EdgeInsets.all(16),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
+                          color: const Color(0xffDA6C31),
+                          child: const Text(
+                            "만들러 가기",
+                            style: TextStyle(
+                                color: Color(0xffffffff),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400),
                           ),
-                        /* 아이템 태그 리스트 */
-                        if (!isItemListEmpty())
-                          for (int i = 0; i < title.length; ++i)
-                            if (itemList[i].isNotEmpty)
-                              buildSelectedItemLine(
-                                  title: title[i], itemList: itemList[i]),
-                      ],
-                    ),
-                  ),
-                ),
-
-                /* 하단 버튼 */
-                Expanded(
-                  child: Container(
-                    height: 196,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          buildConfirmButton(),
-                          buildReturnButton(),
-                        ]),
-                  ),
-                ),
-              ],
-            ),
-          )),
+                          onPressed: () => Navigator.of(context).pop())
+                      : buildConfirmButton(),
+                  isItemListEmpty()
+                      ? Container(
+                          margin: const EdgeInsets.fromLTRB(0, 14, 0, 0),
+                          child: TextButton(
+                            style: ButtonStyle(
+                              overlayColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                  const EdgeInsets.all(0)),
+                            ),
+                            onPressed: () =>
+                                openRecommendResultPage(context, itemList),
+                            child: const Text(
+                              "랜덤으로 추천 받을게요",
+                              style: TextStyle(
+                                  color: Color(0xffDA6C31),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        )
+                      : buildReturnButton(),
+                ]),
+          ),
+        ),
+      ],
     );
   }
 
@@ -209,7 +260,7 @@ class _RecommendConfirmState extends State<RecommendConfirm> {
   /* 취소 버튼 */
   Widget buildReturnButton() {
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 14, 0, 48),
+      margin: const EdgeInsets.fromLTRB(0, 14, 0, 0),
       child: TextButton(
         style: ButtonStyle(
           overlayColor: MaterialStateProperty.all(Colors.transparent),

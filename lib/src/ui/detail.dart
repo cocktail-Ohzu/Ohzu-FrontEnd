@@ -68,6 +68,7 @@ class _DetailPageState extends State<DetailPage> {
                 // )
               ]),
           body: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
             child: BlocBuilder<CocktailDetailBloc, CocktailDetailState>(
                 builder: (context, state) {
               if (state is CocktailDetailLoadingState) {

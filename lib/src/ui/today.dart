@@ -175,8 +175,8 @@ Widget buildCocktailContainer(
                   blurRadius: 28)
             ],
           ),
-          child: cocktail.img != null
-              ? Image.network(cocktail.img!, fit: BoxFit.cover)
+          child: cocktail.img2 != null && cocktail.img2!.isNotEmpty
+              ? Image.network(cocktail.img2!, fit: BoxFit.cover)
               : Image.asset('asset/images/default.png', fit: BoxFit.cover)),
 
       /* 추천 칵테일 텍스트 */
@@ -219,7 +219,7 @@ Widget buildCocktailContainer(
               Text(cocktail.desc.toString(),
                   style: TextStyle(
                     height: 1.5,
-                    fontSize: 18,
+                    fontSize: cocktail.desc!.length < 23 ? 18 : 16,
                     fontWeight: FontWeight.w600,
                     color: Colors.white.withOpacity(0.85),
                   )),
