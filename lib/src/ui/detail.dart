@@ -464,7 +464,10 @@ Widget buildIngredients(
               margin: const EdgeInsets.only(right: 20),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: NetworkImage(img), fit: BoxFit.cover),
+                  image: img.isEmpty
+                      ? Image.asset('asset/images/image 58.png').image
+                      : Image.network(img).image,
+                ),
                 color: const Color(0xffF08FA4),
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
               ),
@@ -579,16 +582,18 @@ Widget buildIngrediantItem({
         const SizedBox(
           height: 8,
         ),
-        Text(
-          description,
-          style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w100,
-              color: Colors.white.withOpacity(0.8)),
-        ),
-        const SizedBox(
-          height: 4,
-        ),
+        if (description.isNotEmpty)
+          Text(
+            description,
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w100,
+                color: Colors.white.withOpacity(0.8)),
+          ),
+        if (description.isNotEmpty)
+          const SizedBox(
+            height: 4,
+          ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
