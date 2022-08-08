@@ -34,7 +34,7 @@
 <br/>
 
 
-## 🏛 Strategy
+## 🏛 Architecture Strategy
 
 ![image](https://user-images.githubusercontent.com/72291860/183359850-85e37df4-b1f0-4314-ac08-c5853822a40f.png)
 
