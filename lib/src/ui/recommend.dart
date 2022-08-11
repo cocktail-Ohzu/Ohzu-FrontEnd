@@ -198,6 +198,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
         ),
         Expanded(
           child: GridView(
+            physics: const ClampingScrollPhysics(),
             shrinkWrap: true,
             children: [
               /* 아이템 리스트에서 꺼내옴 */
@@ -290,6 +291,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
         ),
         Expanded(
           child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
             child: Column(
               children: [
                 for (String title in _categoryItemList.keys)
@@ -418,6 +420,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
         /* 베이스 술 선택 */
         Expanded(
           child: GridView(
+            physics: const ClampingScrollPhysics(),
             shrinkWrap: true,
             children: [
               /* 아이템 리스트에서 꺼내옴 */

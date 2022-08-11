@@ -145,6 +145,7 @@ class _SearchPageState extends State<SearchPage> {
 /* 검색 내역이 없을 때 제안 생성 */
   Widget buildSuggestion(IngredientModel ingredientlist) {
     return SingleChildScrollView(
+      physics: const ClampingScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -320,6 +321,7 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     return SingleChildScrollView(
+      physics: const ClampingScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         children: [for (int i = 0; i < ret.length; ++i) ret[i]],
@@ -385,6 +387,7 @@ class _SearchPageState extends State<SearchPage> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
                       child: SingleChildScrollView(
+                          physics: const ClampingScrollPhysics(),
                           scrollDirection: Axis.horizontal,
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -457,6 +460,7 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     return GridView(
+      physics: const ClampingScrollPhysics(),
       padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
       children: [for (int i = 0; i < ret.length; ++i) ret[i]],
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

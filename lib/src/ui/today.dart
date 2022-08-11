@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -160,80 +162,117 @@ class _MainPageState extends State<MainPage> {
 Widget buildCocktailContainer(
     BuildContext context, TodaysCocktailModel cocktail) {
   return Stack(
-    alignment: Alignment.bottomLeft,
+    // alignment: Alignment.bottomLeft,
     children: [
       /* 추천 칵테일 이미지 */
       Container(
-          decoration: BoxDecoration(
-            color: Color(int.parse("0xff${cocktail.backgroundColor}")),
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
-            boxShadow: [
-              BoxShadow(
-                  //color: Color.fromRGBO(240, 143, 164, 0.4),
-                  color: Color(int.parse("0xff${cocktail.backgroundColor}"))
-                      .withOpacity(0.4),
-                  blurRadius: 28)
-            ],
-          ),
-          child: cocktail.img != null
-              ? Image.network(cocktail.img!, fit: BoxFit.cover)
-              : Image.asset('asset/images/default.png', fit: BoxFit.cover)),
+        decoration: BoxDecoration(
+          color: Color(int.parse("0xff${cocktail.backgroundColor}")),
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          boxShadow: [
+            BoxShadow(
+                //color: Color.fromRGBO(240, 143, 164, 0.4),
+                color: Color(int.parse("0xff${cocktail.backgroundColor}"))
+                    .withOpacity(0.4),
+                blurRadius: 28)
+          ],
+        ),
+        child: cocktail.img != null && cocktail.img!.isNotEmpty
+            ? Image.network(cocktail.img!, fit: BoxFit.cover)
+            : Image.asset('asset/images/default.png', fit: BoxFit.cover),
+      ),
 
       /* 추천 칵테일 텍스트 */
       Container(
-          margin: const EdgeInsets.fromLTRB(24, 21, 24, 25),
+          // margin: const EdgeInsets.fromLTRB(24, 21, 24, 25),
+          margin: const EdgeInsets.fromLTRB(7, 7, 7, 7),
           alignment: Alignment.bottomLeft,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /* 첫째줄 */
-              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                Text(
-                  cocktail.name.toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: cocktail.name.toString().length > 7 ? 21 : 24,
-                    color: Colors.white,
-                  ),
-                ),
-                /* Vertical Divider */
-                Container(
-                  color: Colors.white.withOpacity(0.6),
-                  height: 22,
-                  width: 1,
-                  margin: const EdgeInsets.fromLTRB(12, 3, 12, 0),
-                ),
-                Text(
-                  cocktail.engName.toString(),
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white.withOpacity(0.6),
-                    fontSize: cocktail.engName.toString().length > 18 ? 13 : 16,
-                    height: 1.5,
-                  ),
-                ),
-              ]),
-              /* 둘째줄 */
-              Text(cocktail.desc.toString(),
-                  style: TextStyle(
-                    height: 1.5,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white.withOpacity(0.85),
-                  )),
-              const SizedBox(
-                height: 15,
+              /* 마진 띄우기 용 정사각 컨테이너 */
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final size = min(constraints.maxWidth, constraints.maxHeight);
+                  return Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: size * 1.04792332,
+                      width: size,
+                      // color: Colors.amber.withOpacity(0.4),
+                    ),
+                  );
+                },
               ),
-              /* 셋째줄 */
-              Text("alcohol ${cocktail.strength.toString()}%",
-                  style: const TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFFDA6C31),
-                  )),
+
+              /* 첫째줄 */
+              Container(
+                margin: const EdgeInsets.fromLTRB(17, 21, 17, 22),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          cocktail.name.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize:
+                                cocktail.name.toString().length > 7 ? 21 : 24,
+                            color: Colors.white,
+                          ),
+                        ),
+                        /* Vertical Divider */
+                        Container(
+                          color: Colors.white.withOpacity(0.6),
+                          height: 22,
+                          width: 1,
+                          margin: const EdgeInsets.fromLTRB(12, 3, 12, 0),
+                        ),
+                        Text(
+                          cocktail.engName.toString(),
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white.withOpacity(0.6),
+                            fontSize: cocktail.engName.toString().length > 18
+                                ? 13
+                                : 16,
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                    /* 둘째줄 */
+                    Text(
+                      cocktail.desc.toString(),
+                      style: TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: 18,
+                        height: 1.5,
+                        // fontSize: cocktail.desc!.length < 25 ? 18 : 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white.withOpacity(0.85),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    /* 셋째줄 */
+                    Text(
+                      "alcohol ${cocktail.strength.toString()}%",
+                      style: const TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFFDA6C31),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           )),
     ],

@@ -68,6 +68,7 @@ class _DetailPageState extends State<DetailPage> {
                 // )
               ]),
           body: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
             child: BlocBuilder<CocktailDetailBloc, CocktailDetailState>(
                 builder: (context, state) {
               if (state is CocktailDetailLoadingState) {
@@ -103,7 +104,7 @@ class _DetailPageState extends State<DetailPage> {
                         margin: const EdgeInsets.fromLTRB(24, 50, 24, 16),
                         alignment: Alignment.centerLeft,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const Text(
                               "이 칵테일은,",
@@ -128,52 +129,61 @@ class _DetailPageState extends State<DetailPage> {
                               padding:
                                   const EdgeInsets.fromLTRB(22, 23, 22, 23),
                               margin: const EdgeInsets.fromLTRB(0, 15, 0, 24),
-                              child: Column(
+                              child: Wrap(
+                                runSpacing: 8,
                                 children: [
                                   /* 맛 태그 */
-                                  buildTagItemList(
-                                      context: context,
-                                      tagList:
-                                          state.cocktailDetail.info!.flavors,
-                                      tailString: "맛이 나요."),
+                                  if (state
+                                      .cocktailDetail.info!.flavors!.isNotEmpty)
+                                    buildTagItemList(
+                                        context: context,
+                                        tagList:
+                                            state.cocktailDetail.info!.flavors,
+                                        tailString: "맛이 나요."),
 
                                   /* 분위기 태그 */
-                                  buildTagItemList(
-                                      context: context,
-                                      tagList: state.cocktailDetail.info!.moods,
-                                      tailString: "분위기로,"),
+                                  if (state
+                                      .cocktailDetail.info!.moods!.isNotEmpty)
+                                    buildTagItemList(
+                                        context: context,
+                                        tagList:
+                                            state.cocktailDetail.info!.moods,
+                                        tailString: "분위기로,"),
 
                                   /* 날씨 태그 */
-                                  buildTagItemList(
-                                      context: context,
-                                      tagList:
-                                          state.cocktailDetail.info!.weathers,
-                                      tailString: "날에 어울려요."),
+                                  if (state.cocktailDetail.info!.weathers!
+                                      .isNotEmpty)
+                                    buildTagItemList(
+                                        context: context,
+                                        tagList:
+                                            state.cocktailDetail.info!.weathers,
+                                        tailString: "날에 어울려요."),
 
                                   /* 가니쉬 텍스트 */
-                                  state.cocktailDetail.info!.ornaments!
-                                          .isNotEmpty
-                                      ? Container(
-                                          alignment: Alignment.centerLeft,
-                                          margin: const EdgeInsets.fromLTRB(
-                                              0, 15, 0, 7),
-                                          child: Text(
-                                            "자주 올라가는 장식으로는",
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.white
-                                                    .withOpacity(0.7)),
-                                          ),
-                                        )
-                                      : const SizedBox(),
+                                  if (state.cocktailDetail.info!.ornaments!
+                                      .isNotEmpty)
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      margin:
+                                          const EdgeInsets.fromLTRB(0, 7, 0, 7),
+                                      child: Text(
+                                        "자주 올라가는 장식으로는",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                            color:
+                                                Colors.white.withOpacity(0.7)),
+                                      ),
+                                    ),
 
                                   /* 가니쉬 태그 */
-                                  buildTagItemList(
-                                      context: context,
-                                      tagList:
-                                          state.cocktailDetail.info!.ornaments,
-                                      tailString: "등이 있어요."),
+                                  if (state.cocktailDetail.info!.ornaments!
+                                      .isNotEmpty)
+                                    buildTagItemList(
+                                        context: context,
+                                        tagList: state
+                                            .cocktailDetail.info!.ornaments,
+                                        tailString: "등이 있어요."),
                                 ],
                               ),
                             ),
@@ -243,14 +253,16 @@ class _DetailPageState extends State<DetailPage> {
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   margin:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: Text(
-                                    "미도리 : 스윗 앤 사워 믹스 : 스프라이트 = 1 : 1 : 2",
-                                    style: TextStyle(
-                                        color: Colors.white.withOpacity(0.8),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w100),
-                                  ),
+                                      const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                                  // margin:
+                                  //     const EdgeInsets.symmetric(vertical: 10),
+                                  // child: Text(
+                                  //   "미도리 : 스윗 앤 사워 믹스 : 스프라이트 = 1 : 1 : 2",
+                                  //   style: TextStyle(
+                                  //       color: Colors.white.withOpacity(0.8),
+                                  //       fontSize: 14,
+                                  //       fontWeight: FontWeight.w100),
+                                  // ),
                                 ),
                                 /* 제조 방법 */
                                 buildRecipe(
@@ -274,7 +286,7 @@ class _DetailPageState extends State<DetailPage> {
                 );
               }
               if (state is CocktailDetailErrorState) {
-                return const Text("snapshot is empty");
+                return const Text("서버 연결 오류");
               }
               return Container();
             }),
@@ -290,24 +302,42 @@ Widget buildCocktailImg({
   required String color,
 }) {
   return Container(
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      width: double.infinity,
-      height: 388,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: img.isEmpty
-                ? Image.asset('asset/images/c.png').image
-                : Image.network(img).image,
-            fit: BoxFit.cover),
-        color: Color(int.parse("0xf$color")),
-        borderRadius: const BorderRadius.only(
-            bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
-        boxShadow: [
-          BoxShadow(
-              color: Color(int.parse("0xf$color")).withOpacity(0.4),
-              blurRadius: 28),
-        ],
-      ));
+    margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+    width: double.infinity,
+    height: 388,
+    decoration: BoxDecoration(
+      image: DecorationImage(
+          image: img.isNotEmpty
+              ? Image.network(img).image
+              : Image.asset('asset/images/c.png').image,
+          fit: BoxFit.cover),
+      color: Color(int.parse("0xf$color")),
+      borderRadius: const BorderRadius.only(
+          bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
+      boxShadow: [
+        BoxShadow(
+            color: Color(int.parse("0xf$color")).withOpacity(0.4),
+            blurRadius: 28),
+      ],
+    ),
+    // child: Image.network(
+    //   img,
+    //   fit: BoxFit.fill,
+    //   errorBuilder:
+    //       (BuildContext context, Object exception, StackTrace? stackTrace) {
+    //     return Image.asset('asset/images/58.png', fit: BoxFit.cover);
+    //   },
+    //   loadingBuilder: (BuildContext context, Widget child,
+    //       ImageChunkEvent? loadingProgress) {
+    //     if (loadingProgress == null) return child;
+    //     return const Center(
+    //       child: CircularProgressIndicator(
+    //         color: Colors.grey,
+    //       ),
+    //     );
+    //   },
+    // ),
+  );
 }
 
 /* 칵테일 이름 및 도수 위젯 */
@@ -452,7 +482,25 @@ Widget buildIngredients(
               margin: const EdgeInsets.only(right: 20),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: NetworkImage(img), fit: BoxFit.cover),
+                  image: Image.network(
+                    img,
+                    fit: BoxFit.cover,
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                      return Image.asset('asset/images/image 58.png',
+                          fit: BoxFit.cover);
+                    },
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.grey,
+                        ),
+                      );
+                    },
+                  ).image,
+                ),
                 color: const Color(0xffF08FA4),
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
               ),
@@ -472,7 +520,8 @@ Widget buildIngredients(
                         buildIngrediantItem(
                           context: context,
                           name: ingredients[i].ingredient,
-                          description: "멜론 리큐어",
+                          description: "",
+                          // "멜론 리큐어",
                           ratio: ingredients[i].amount,
                           //isDrink: true
                         ),
@@ -491,14 +540,14 @@ Widget buildTagItemList(
     {required BuildContext context,
     required List<Tag>? tagList,
     required String? tailString}) {
-  if (tagList == null || tagList.isEmpty) return const Text("");
-  final int tagListLength = tagList.length;
+  final int tagListLength = tagList!.length;
 
   return Container(
-    margin: const EdgeInsets.only(top: 8),
+    // margin: const EdgeInsets.only(top: 8),
     alignment: Alignment.centerLeft,
     child: Wrap(
       alignment: WrapAlignment.start,
+      runSpacing: 8,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         for (int i = 0; i < tagListLength; ++i)
@@ -508,7 +557,7 @@ Widget buildTagItemList(
             color: Color(int.parse("0xff${tagList[i].tagColor.toString()}")),
           )),
         Container(
-          padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),
+          // padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),
           child: Text(
             tailString.toString(),
             style: TextStyle(
@@ -566,16 +615,18 @@ Widget buildIngrediantItem({
         const SizedBox(
           height: 8,
         ),
-        Text(
-          description,
-          style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w100,
-              color: Colors.white.withOpacity(0.8)),
-        ),
-        const SizedBox(
-          height: 4,
-        ),
+        if (description.isNotEmpty)
+          Text(
+            description,
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w100,
+                color: Colors.white.withOpacity(0.8)),
+          ),
+        if (description.isNotEmpty)
+          const SizedBox(
+            height: 4,
+          ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
