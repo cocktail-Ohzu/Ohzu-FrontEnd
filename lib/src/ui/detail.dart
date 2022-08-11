@@ -286,7 +286,7 @@ class _DetailPageState extends State<DetailPage> {
                 );
               }
               if (state is CocktailDetailErrorState) {
-                return const Text("snapshot is empty");
+                return const Text("서버 연결 오류");
               }
               return Container();
             }),
@@ -302,24 +302,42 @@ Widget buildCocktailImg({
   required String color,
 }) {
   return Container(
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      width: double.infinity,
-      height: 388,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: img.isEmpty
-                ? Image.asset('asset/images/c.png').image
-                : Image.network(img).image,
-            fit: BoxFit.cover),
-        color: Color(int.parse("0xf$color")),
-        borderRadius: const BorderRadius.only(
-            bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
-        boxShadow: [
-          BoxShadow(
-              color: Color(int.parse("0xf$color")).withOpacity(0.4),
-              blurRadius: 28),
-        ],
-      ));
+    margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+    width: double.infinity,
+    height: 388,
+    decoration: BoxDecoration(
+      image: DecorationImage(
+          image: img.isNotEmpty
+              ? Image.network(img).image
+              : Image.asset('asset/images/c.png').image,
+          fit: BoxFit.cover),
+      color: Color(int.parse("0xf$color")),
+      borderRadius: const BorderRadius.only(
+          bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
+      boxShadow: [
+        BoxShadow(
+            color: Color(int.parse("0xf$color")).withOpacity(0.4),
+            blurRadius: 28),
+      ],
+    ),
+    // child: Image.network(
+    //   img,
+    //   fit: BoxFit.fill,
+    //   errorBuilder:
+    //       (BuildContext context, Object exception, StackTrace? stackTrace) {
+    //     return Image.asset('asset/images/58.png', fit: BoxFit.cover);
+    //   },
+    //   loadingBuilder: (BuildContext context, Widget child,
+    //       ImageChunkEvent? loadingProgress) {
+    //     if (loadingProgress == null) return child;
+    //     return const Center(
+    //       child: CircularProgressIndicator(
+    //         color: Colors.grey,
+    //       ),
+    //     );
+    //   },
+    // ),
+  );
 }
 
 /* 칵테일 이름 및 도수 위젯 */
@@ -464,9 +482,24 @@ Widget buildIngredients(
               margin: const EdgeInsets.only(right: 20),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: img.isEmpty
-                      ? Image.asset('asset/images/image 58.png').image
-                      : Image.network(img).image,
+                  image: Image.network(
+                    img,
+                    fit: BoxFit.cover,
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                      return Image.asset('asset/images/image 58.png',
+                          fit: BoxFit.cover);
+                    },
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.grey,
+                        ),
+                      );
+                    },
+                  ).image,
                 ),
                 color: const Color(0xffF08FA4),
                 borderRadius: const BorderRadius.all(Radius.circular(12)),

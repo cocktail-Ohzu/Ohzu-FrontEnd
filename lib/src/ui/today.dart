@@ -177,8 +177,8 @@ Widget buildCocktailContainer(
                 blurRadius: 28)
           ],
         ),
-        child: cocktail.img2 != null && cocktail.img2!.isNotEmpty
-            ? Image.network(cocktail.img2!, fit: BoxFit.cover)
+        child: cocktail.img != null && cocktail.img!.isNotEmpty
+            ? Image.network(cocktail.img!, fit: BoxFit.cover)
             : Image.asset('asset/images/default.png', fit: BoxFit.cover),
       ),
 

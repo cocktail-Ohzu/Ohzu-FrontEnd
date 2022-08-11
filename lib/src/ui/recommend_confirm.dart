@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -95,12 +97,7 @@ class _RecommendConfirmState extends State<RecommendConfirm> {
         /* 중앙 박스 */
         isItemListEmpty()
             ? //아무것도 선택안함
-            Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text("선택 내역이 없습니다"),
-                ),
-              )
+            buildNoChoiceImage()
             : //선택한 태그 리스트
             Container(
                 // constraints: BoxConstraints(
@@ -135,53 +132,50 @@ class _RecommendConfirmState extends State<RecommendConfirm> {
               ),
 
         /* 하단 버튼 */
-        Expanded(
-          child: Container(
-            height: 196,
-            margin: const EdgeInsets.only(bottom: 65),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  isItemListEmpty()
-                      ? CupertinoButton(
-                          padding: const EdgeInsets.all(16),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8)),
-                          color: const Color(0xffDA6C31),
+        Container(
+          margin: const EdgeInsets.only(bottom: 65),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                isItemListEmpty()
+                    ? CupertinoButton(
+                        padding: const EdgeInsets.all(16),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
+                        color: const Color(0xffDA6C31),
+                        child: const Text(
+                          "만들러 가기",
+                          style: TextStyle(
+                              color: Color(0xffffffff),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        onPressed: () => Navigator.of(context).pop())
+                    : buildConfirmButton(),
+                isItemListEmpty()
+                    ? Container(
+                        margin: const EdgeInsets.fromLTRB(0, 14, 0, 0),
+                        child: TextButton(
+                          style: ButtonStyle(
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                const EdgeInsets.all(0)),
+                          ),
+                          onPressed: () =>
+                              openRecommendResultPage(context, itemList),
                           child: const Text(
-                            "만들러 가기",
+                            "랜덤으로 추천 받을게요",
                             style: TextStyle(
-                                color: Color(0xffffffff),
+                                color: Color(0xffDA6C31),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400),
                           ),
-                          onPressed: () => Navigator.of(context).pop())
-                      : buildConfirmButton(),
-                  isItemListEmpty()
-                      ? Container(
-                          margin: const EdgeInsets.fromLTRB(0, 14, 0, 0),
-                          child: TextButton(
-                            style: ButtonStyle(
-                              overlayColor:
-                                  MaterialStateProperty.all(Colors.transparent),
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                  const EdgeInsets.all(0)),
-                            ),
-                            onPressed: () =>
-                                openRecommendResultPage(context, itemList),
-                            child: const Text(
-                              "랜덤으로 추천 받을게요",
-                              style: TextStyle(
-                                  color: Color(0xffDA6C31),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        )
-                      : buildReturnButton(),
-                ]),
-          ),
+                        ),
+                      )
+                    : buildReturnButton(),
+              ]),
         ),
       ],
     );
@@ -274,6 +268,30 @@ class _RecommendConfirmState extends State<RecommendConfirm> {
               color: Color(0xffDA6C31),
               fontSize: 14,
               fontWeight: FontWeight.w400),
+        ),
+      ),
+    );
+  }
+
+  Widget buildNoChoiceImage() {
+    return Expanded(
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(22, 95, 22, 2),
+        alignment: Alignment.center,
+        child: Image.network(
+          "https://ohzu.s3.ap-northeast-2.amazonaws.com/%EB%B9%88%EC%B9%B5%ED%85%8C%EC%9D%BC.png",
+          fit: BoxFit.cover,
+          errorBuilder:
+              (BuildContext context, Object exception, StackTrace? stackTrace) {
+            return const Text("이미지를 찾을 수 없습니다");
+          },
+          loadingBuilder: (BuildContext context, Widget child,
+              ImageChunkEvent? loadingProgress) {
+            if (loadingProgress == null) return child;
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
         ),
       ),
     );
