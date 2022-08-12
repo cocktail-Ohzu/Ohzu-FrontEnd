@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -139,6 +141,7 @@ class _RecommendResultState extends State<RecommendResult> {
                           ]);
                     }
                     if (state is RecommendErrorState) {
+                      log("[Recommend_result]::" + state.error);
                       return const Text("서버 연결 오류");
                     }
                     return Container();
@@ -155,6 +158,7 @@ class _RecommendResultState extends State<RecommendResult> {
                           child: buildSimilarCocktailCards(state.recommend));
                     }
                     if (state is RecommendErrorState) {
+                      log("[Recommend_result]::" + state.error);
                       return const Text("서버 연결 오류");
                     }
                     return Container();

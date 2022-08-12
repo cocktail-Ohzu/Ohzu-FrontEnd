@@ -131,7 +131,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                     if (state is IngredientLoadingState) {
                       return Container(
                         alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height / 2,
+                        height: MediaQuery.of(context).size.height / 1.5,
                         child: CircularProgressIndicator(
                           color: Colors.white.withOpacity(0.5),
                         ),

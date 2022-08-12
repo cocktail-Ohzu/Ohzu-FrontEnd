@@ -288,8 +288,13 @@ class _RecommendConfirmState extends State<RecommendConfirm> {
           loadingBuilder: (BuildContext context, Widget child,
               ImageChunkEvent? loadingProgress) {
             if (loadingProgress == null) return child;
-            return const Center(
-              child: CircularProgressIndicator(),
+            return const Align(
+              alignment: Alignment.topCenter,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: Colors.grey,
+                ),
+              ),
             );
           },
         ),

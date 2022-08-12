@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' show Client, Request, Response;
 import 'package:ohzu/src/models/detail_model.dart';
 import 'package:ohzu/src/models/search_model.dart';
@@ -76,7 +77,7 @@ class OhzuApiProvider {
       "ornament_id"
     ];
     Map<String, List<int>> body = {};
-    final url = Uri.parse("$_baseurl/recommend");
+    Uri url = Uri.parse("$_baseurl/recommend");
 
     try {
       for (int i = 0; i < name.length; ++i) {
@@ -91,8 +92,8 @@ class OhzuApiProvider {
       print(err);
     }
 
-    print(body);
-    print(json.encode(body));
+    // print(body);
+    // print(json.encode(body));
 
     final response = await client.post(url,
         headers: <String, String>{
@@ -100,7 +101,7 @@ class OhzuApiProvider {
         },
         body: json.encode(body));
 
-    print("response = ${response.body}");
+    // print("response = ${response.body}");
 
     if (response.statusCode == 200) {
       print(response); //
