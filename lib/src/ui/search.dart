@@ -102,38 +102,51 @@ class _SearchPageState extends State<SearchPage> {
   /* 검색 바 위젯 생성 */
   Widget buildSearchBar(TextEditingController controller, dynamic onSearch) {
     return CupertinoTextField(
-        controller: controller,
-        placeholder: "원하는 맛 또는 재료를 검색해보세요!",
-        placeholderStyle: const TextStyle(color: Color(0xffa9a9a9)),
-        padding: const EdgeInsets.fromLTRB(0, 6, 11, 6),
-        onChanged: onSearch,
-        suffix: controller.text.isNotEmpty
-            ? IconButton(
-                icon: const Icon(
+      controller: controller,
+      placeholder: "원하는 맛 또는 재료를 검색해보세요!",
+      placeholderStyle: const TextStyle(
+        color: Color(0xffa9a9a9),
+      ),
+      padding: const EdgeInsets.fromLTRB(0, 7.5, 11, 7.5),
+      maxLength: 20,
+      onChanged: onSearch,
+      suffix: controller.text.isNotEmpty
+          ? GestureDetector(
+              child: Container(
+                margin: const EdgeInsets.only(right: 12),
+                child: const Icon(
                   Icons.cancel,
                   size: 20,
                 ),
-                onPressed: () => {
-                  setState(
-                    () => {controller.text = ""},
-                  )
-                },
-              )
-            : null,
-        style: const TextStyle(
-            fontSize: 14, color: Colors.white, fontWeight: FontWeight.w600),
-        prefix: Container(
-          child: const Icon(
-            Icons.search,
-            size: 20,
-            color: Color(0xff7c7c7c),
-          ),
-          margin: const EdgeInsets.fromLTRB(11, 0, 6, 0),
+              ),
+              onTap: () => {
+                setState(
+                  () => controller.clear(),
+                )
+              },
+            )
+          : null,
+      style: const TextStyle(
+        fontSize: 14,
+        height: 1.2,
+        color: Colors.white,
+        fontWeight: FontWeight.w600,
+      ),
+      prefix: Container(
+        child: const Icon(
+          Icons.search,
+          size: 20,
+          color: Color(0xff7c7c7c),
         ),
-        decoration: const BoxDecoration(
-          color: Color(0xff1e1e1e),
-          borderRadius: BorderRadius.all(Radius.circular(4)),
-        ));
+        margin: const EdgeInsets.fromLTRB(11, 0, 6, 0),
+      ),
+      decoration: const BoxDecoration(
+        color: Color(0xff1e1e1e),
+        borderRadius: BorderRadius.all(
+          Radius.circular(4),
+        ),
+      ),
+    );
   }
 
 /*

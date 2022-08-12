@@ -179,6 +179,7 @@ class Ingredients {
   String? ingredient;
   String? tagColor;
   String? amount;
+  String? desc;
 
   Ingredients({this.ingredient, this.tagColor, this.amount});
 
@@ -186,6 +187,7 @@ class Ingredients {
     ingredient = json['ingredient'];
     tagColor = json['tag_color'];
     amount = json['amount'];
+    desc = json['desc'];
   }
 
   Map<String, dynamic> toJson() {
@@ -193,6 +195,7 @@ class Ingredients {
     data['ingredient'] = ingredient;
     data['tag_color'] = tagColor;
     data['amount'] = amount;
+    data['desc'] = desc;
     return data;
   }
 }

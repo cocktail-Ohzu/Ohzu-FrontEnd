@@ -302,15 +302,37 @@ Widget buildCocktailImg({
   required String color,
 }) {
   return Container(
-    margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
     width: double.infinity,
     height: 388,
     decoration: BoxDecoration(
-      image: DecorationImage(
-          image: img.isNotEmpty
-              ? Image.network(img).image
-              : Image.asset('asset/images/c.png').image,
-          fit: BoxFit.cover),
+      // image: DecorationImage(
+      //     image: img.isNotEmpty
+      //         ? Image.network(img).image
+      //         : Image.asset('asset/images/c.png').image,
+      //     fit: BoxFit.cover),
+      image: img.toString().isNotEmpty
+          ? DecorationImage(
+              image: Image.network(
+                img,
+                fit: BoxFit.cover,
+                errorBuilder: (BuildContext context, Object exception,
+                    StackTrace? stackTrace) {
+                  return Image.asset('asset/images/image 58.png',
+                      fit: BoxFit.cover);
+                },
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  print("loading!!!!");
+                  if (loadingProgress == null) return child;
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.grey,
+                    ),
+                  );
+                },
+              ).image,
+              fit: BoxFit.cover)
+          : null,
       color: Color(int.parse("0xf$color")),
       borderRadius: const BorderRadius.only(
           bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
@@ -351,14 +373,16 @@ Widget buildCocktailName(
     return const Text("파라미터 값 오류입니다");
   }
   return Container(
-      margin: const EdgeInsets.fromLTRB(24, 32, 24, 28),
-      alignment: Alignment.centerLeft,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /* 첫째줄 */
-          Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+    margin: const EdgeInsets.fromLTRB(24, 32, 24, 28),
+    alignment: Alignment.centerLeft,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        /* 첫째줄 */
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
             Text(
               koName,
               style: TextStyle(
@@ -384,34 +408,39 @@ Widget buildCocktailName(
                 height: 1.5,
               ),
             ),
-          ]),
-          /* 둘째줄 */
-          Text(desc,
-              style: TextStyle(
-                height: 1.7,
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                color: Colors.white.withOpacity(0.85),
-              )),
-          const SizedBox(
-            height: 28,
+          ],
+        ),
+        /* 둘째줄 */
+        Text(
+          desc,
+          style: TextStyle(
+            height: 1.7,
+            fontSize: 18,
+            fontWeight: FontWeight.w400,
+            color: Colors.white.withOpacity(0.85),
           ),
-          /* 셋째줄 */
-          Container(
-              padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                color: Color(0xFFDA6C31),
-              ),
-              child: Text(
-                "$koName의 도수는 $strength도 입니다",
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                ),
-              )),
-        ],
-      ));
+        ),
+        const SizedBox(
+          height: 28,
+        ),
+        /* 셋째줄 */
+        Container(
+          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            color: Color(0xFFDA6C31),
+          ),
+          child: Text(
+            "$koName의 도수는 $strength도 입니다",
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 /* 태그 아이템 리스트 한 줄 생성 메소드 */
@@ -464,10 +493,7 @@ Widget buildIngredients(
     {required BuildContext context,
     required ScrollController scrollController,
     required String? img,
-    required List? ingredients}) {
-  if (img == null || ingredients == null) return const Text("");
-  int listLength = ingredients.length;
-
+    required List<Ingredients>? ingredients}) {
   return IntrinsicHeight(
     child: Container(
         height: 270, //재료 스크롤을 위한 높이지정
@@ -481,26 +507,28 @@ Widget buildIngredients(
               width: 115,
               margin: const EdgeInsets.only(right: 20),
               decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: Image.network(
-                    img,
-                    fit: BoxFit.cover,
-                    errorBuilder: (BuildContext context, Object exception,
-                        StackTrace? stackTrace) {
-                      return Image.asset('asset/images/image 58.png',
-                          fit: BoxFit.cover);
-                    },
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.grey,
-                        ),
-                      );
-                    },
-                  ).image,
-                ),
+                image: img.toString().isNotEmpty
+                    ? DecorationImage(
+                        image: Image.network(
+                          img!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace? stackTrace) {
+                            return Image.asset('asset/images/image 58.png',
+                                fit: BoxFit.cover);
+                          },
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.grey,
+                              ),
+                            );
+                          },
+                        ).image,
+                        fit: BoxFit.cover)
+                    : null,
                 color: const Color(0xffF08FA4),
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
               ),
@@ -512,21 +540,22 @@ Widget buildIngredients(
                 controller: scrollController,
                 child: SingleChildScrollView(
                   controller: scrollController,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      for (int i = 0; i < listLength; ++i)
-                        buildIngrediantItem(
-                          context: context,
-                          name: ingredients[i].ingredient,
-                          description: "",
-                          // "멜론 리큐어",
-                          ratio: ingredients[i].amount,
-                          //isDrink: true
-                        ),
-                    ],
-                  ),
+                  child: ingredients != null
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            for (int i = 0; i < ingredients.length; ++i)
+                              buildIngrediantItem(
+                                context: context,
+                                name: ingredients[i].ingredient ?? "",
+                                description: ingredients[i].desc ?? "",
+                                ratio: ingredients[i].amount ?? "",
+                                //isDrink: true
+                              ),
+                          ],
+                        )
+                      : Text("서버 통신 오류"),
                 ),
               ),
             ),
