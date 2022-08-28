@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:http/http.dart' show Client, Request, Response;
 import 'package:ohzu/src/models/detail_model.dart';
 import 'package:ohzu/src/models/search_model.dart';
@@ -65,8 +64,6 @@ class OhzuApiProvider {
 
   Future<RecommendModel> fetchRecommendItem(
       List<List<IngredientElement>> itemList) async {
-    print("called"); //
-
     final List<String> name = [
       "base_id",
       "ingredient_id",
@@ -77,7 +74,7 @@ class OhzuApiProvider {
       "ornament_id"
     ];
     Map<String, List<int>> body = {};
-    Uri url = Uri.parse("$_baseurl/recommend");
+    final url = Uri.parse("$_baseurl/recommend");
 
     try {
       for (int i = 0; i < name.length; ++i) {
@@ -104,12 +101,12 @@ class OhzuApiProvider {
     // print("response = ${response.body}");
 
     if (response.statusCode == 200) {
-      print(response); //
+      // print(response); //
       return RecommendModel.fromJson(
           json.decode(utf8.decode(response.bodyBytes)));
     } else {
-      print(
-          "status code: ${response.statusCode} failed to load recommend : ${response.body}"); //
+      // print(
+      //     "status code: ${response.statusCode} failed to load recommend : ${response.body}"); //
       throw Exception("Failed to load Recommend");
     }
   }

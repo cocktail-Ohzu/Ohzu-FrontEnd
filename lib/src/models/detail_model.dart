@@ -44,6 +44,7 @@ class Info {
   String? engName;
   String? img;
   String? img2;
+  String? img3;
   String? desc;
   int? strength;
   List<Tag>? flavors;
@@ -60,6 +61,7 @@ class Info {
       this.engName,
       this.img,
       this.img2,
+      this.img3,
       this.desc,
       this.strength,
       this.flavors,
@@ -76,6 +78,7 @@ class Info {
     engName = json['eng_name'];
     img = json['img'];
     img2 = json['img2'];
+    img3 = json['img3'];
     desc = json['desc'];
     strength = json['strength'];
     if (json['flavors'] != null) {
@@ -114,6 +117,7 @@ class Info {
     data['eng_name'] = engName;
     data['img'] = img;
     data['img2'] = img2;
+    data['img3'] = img3;
     data['desc'] = desc;
     data['strength'] = strength;
     if (flavors != null) {

@@ -364,124 +364,143 @@ class _SearchPageState extends State<SearchPage> {
 
       if (tagToShowLen > 0) {
         ret.add(
-          GestureDetector(
-            onTap: () {
-              openDetailPage(context, _list[i].id!);
-            },
-            child: Container(
-              decoration: const BoxDecoration(
+          Container(
+            padding: const EdgeInsets.fromLTRB(5, 3, 5, 3),
+            child: GestureDetector(
+              onTap: () {
+                openDetailPage(context, _list[i].id!);
+              },
+              child: Container(
+                decoration: const BoxDecoration(
                   color: Color(0xff1e1e1e),
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
                       alignment: Alignment.topCenter,
-                      child: const Image(
-                          image: AssetImage('asset/images/c.png'),
+                      child: Image(
+                          image: NetworkImage(_list[i].img4!),
                           fit: BoxFit.cover),
                     ),
 
                     /* 이미지
-              Container(
-                alignment: Alignment.topCenter,
-                child: Image.network(list[i].img.toString(), fit: BoxFit.cover),
-              ),
-              */
+                Container(
+                  alignment: Alignment.topCenter,
+                  child: Image.network(list[i].img.toString(), fit: BoxFit.cover),
+                ),
+                */
                     Container(
+                        height: 43,
                         padding: const EdgeInsets.fromLTRB(12, 13, 12, 12),
                         child: Text(
                           cocktailName,
-                          style: const TextStyle(
+                          style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
-                              fontSize: 16),
+                              fontSize: cocktailName.length > 9 ? 15 : 16),
                         )),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                      child: SingleChildScrollView(
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                        child: SingleChildScrollView(
                           physics: const ClampingScrollPhysics(),
                           scrollDirection: Axis.horizontal,
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                for (int i = 0; i < tagToShowLen; ++i)
-                                  buildTagItem(
-                                      RichText(
-                                          text: TextSpan(
-                                              style: TextStyle(
-                                                  color: Colors.white
-                                                      .withOpacity(0.5),
-                                                  fontWeight: FontWeight.bold),
-                                              children: [
-                                            /* 태그 별 키워드 색상 하이라이트 부분 */ TextSpan(
-                                                children: [
-                                                  TextSpan(
-                                                    text: tagToShow[i]
-                                                        .name!
-                                                        .substring(
-                                                            0,
-                                                            tagToShow[i]
-                                                                .name!
-                                                                .indexOf(
-                                                                    replacedText)),
-                                                  ),
-                                                  /* 키워드 색상 하이라이트 */
-                                                  TextSpan(
-                                                      text: tagToShow[i]
-                                                          .name!
-                                                          .substring(
-                                                              tagToShow[i]
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            /* 좌우 간격 */
+                            spacing: 4,
+                            children: [
+                              for (int i = 0; i < tagToShowLen; ++i)
+                                buildTagItem(
+                                    RichText(
+                                      text: TextSpan(
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            color:
+                                                Colors.white.withOpacity(0.5),
+                                            fontWeight: FontWeight.w600),
+                                        children: [
+                                          /* 태그 별 키워드 색상 하이라이트 부분 */ TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: tagToShow[i]
+                                                    .name!
+                                                    .substring(
+                                                        0,
+                                                        tagToShow[i]
+                                                            .name!
+                                                            .indexOf(
+                                                                replacedText)),
+                                              ),
+                                              /* 키워드 색상 하이라이트 */
+                                              TextSpan(
+                                                  text: tagToShow[i]
+                                                      .name!
+                                                      .substring(
+                                                          tagToShow[i]
+                                                              .name!
+                                                              .indexOf(
+                                                                  replacedText),
+                                                          tagToShow[i]
                                                                   .name!
                                                                   .indexOf(
-                                                                      replacedText),
-                                                              tagToShow[i]
-                                                                      .name!
-                                                                      .indexOf(
-                                                                          replacedText) +
-                                                                  replacedText
-                                                                      .length),
-                                                      style: TextStyle(
-                                                          color: Colors.white
-                                                              .withOpacity(
-                                                                  1.0))),
-                                                  TextSpan(
-                                                    text: tagToShow[i]
-                                                        .name!
-                                                        .substring(
-                                                            tagToShow[i]
-                                                                    .name!
-                                                                    .indexOf(
-                                                                        replacedText) +
-                                                                replacedText
-                                                                    .length,
-                                                            tagToShow[i]
-                                                                .name!
-                                                                .length),
-                                                  ),
-                                                ]),
-                                          ])),
-                                      tagToShow[i].tagColor!),
-                              ])),
-                    )
-                  ]),
+                                                                      replacedText) +
+                                                              replacedText
+                                                                  .length),
+                                                  style: TextStyle(
+                                                      color: Colors.white
+                                                          .withOpacity(1.0))),
+                                              TextSpan(
+                                                text: tagToShow[i].name!.substring(
+                                                    tagToShow[i].name!.indexOf(
+                                                            replacedText) +
+                                                        replacedText.length,
+                                                    tagToShow[i].name!.length),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    tagToShow[i].tagColor!),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         );
       }
     }
 
-    return GridView(
-      physics: const ClampingScrollPhysics(),
+    return GridView.count(
       padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+      crossAxisCount: 2,
       children: [for (int i = 0; i < ret.length; ++i) ret[i]],
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          mainAxisExtent: 220,
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 12),
+      childAspectRatio: 155 / 210,
+      mainAxisSpacing: 12,
+      crossAxisSpacing: 16,
     );
+    // return GridView(
+    //   physics: const ClampingScrollPhysics(),
+    //   padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+
+    //   shrinkWrap: true,
+    //   children: [for (int i = 0; i < ret.length; ++i) ret[i]],
+    //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+    //       crossAxisCount: 2,
+    //       crossAxisSpacing: 16,
+    //       childAspectRatio: 155 / 210,
+    //       mainAxisSpacing: 12),
+    // );
   }
 
   /* 태그 블록 위젯 */
@@ -489,10 +508,10 @@ class _SearchPageState extends State<SearchPage> {
     return Container(
         decoration: BoxDecoration(
           color: Color(int.parse("0xf$colorCode")).withOpacity(0.5),
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
-        padding: const EdgeInsets.fromLTRB(11, 7, 11, 7),
-        margin: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+        padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
+        margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: text);
   }
 }

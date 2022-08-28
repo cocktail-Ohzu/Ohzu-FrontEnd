@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ohzu/src/models/detail_model.dart';
 import 'package:ohzu/src/blocs/cocktail_detail_bloc/cocktail_detail_bloc.dart';
@@ -236,7 +239,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                                 buildIngredients(
                                     context: context,
-                                    img: state.cocktailDetail.info!.img2,
+                                    img: state.cocktailDetail.info!.img3,
                                     scrollController: _recipeScrollController,
                                     ingredients:
                                         state.cocktailDetail.ingredients),
@@ -322,7 +325,7 @@ Widget buildCocktailImg({
                 },
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent? loadingProgress) {
-                  print("loading!!!!");
+                  // print("loading!!!!");
                   if (loadingProgress == null) return child;
                   return const Center(
                     child: CircularProgressIndicator(
@@ -494,73 +497,69 @@ Widget buildIngredients(
     required ScrollController scrollController,
     required String? img,
     required List<Ingredients>? ingredients}) {
-  return IntrinsicHeight(
-    child: Container(
-        height: 270, //재료 스크롤을 위한 높이지정
-        alignment: Alignment.centerLeft,
-        margin: const EdgeInsets.fromLTRB(0, 16, 0, 44),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            /* 칵테일 이미지 */
-            Container(
-              width: 115,
-              margin: const EdgeInsets.only(right: 20),
-              decoration: BoxDecoration(
-                image: img.toString().isNotEmpty
-                    ? DecorationImage(
-                        image: Image.network(
-                          img!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (BuildContext context, Object exception,
-                              StackTrace? stackTrace) {
-                            return Image.asset('asset/images/image 58.png',
-                                fit: BoxFit.cover);
-                          },
-                          loadingBuilder: (BuildContext context, Widget child,
-                              ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.grey,
-                              ),
-                            );
-                          },
-                        ).image,
-                        fit: BoxFit.cover)
-                    : null,
-                color: const Color(0xffF08FA4),
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-              ),
-            ),
-            /* 칵테일 재료들 */
-            Expanded(
-              child: Scrollbar(
-                trackVisibility: true,
-                controller: scrollController,
-                child: SingleChildScrollView(
-                  controller: scrollController,
-                  child: ingredients != null
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            for (int i = 0; i < ingredients.length; ++i)
-                              buildIngrediantItem(
-                                context: context,
-                                name: ingredients[i].ingredient ?? "",
-                                description: ingredients[i].desc ?? "",
-                                ratio: ingredients[i].amount ?? "",
-                                //isDrink: true
-                              ),
-                          ],
-                        )
-                      : Text("서버 통신 오류"),
-                ),
-              ),
-            ),
-          ],
-        )),
+  return Container(
+    constraints: const BoxConstraints(minHeight: 168, maxHeight: 224),
+    alignment: Alignment.centerLeft,
+    margin: const EdgeInsets.fromLTRB(0, 16, 0, 44),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        /* 칵테일 이미지 */
+        Container(
+          width: 140,
+          margin: const EdgeInsets.only(right: 20),
+          decoration: BoxDecoration(
+            image: img.toString().isNotEmpty
+                ? DecorationImage(
+                    fit: BoxFit.fitWidth,
+                    image: Image.network(
+                      img!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (BuildContext context, Object exception,
+                          StackTrace? stackTrace) {
+                        return Image.asset('asset/images/detail_high.png',
+                            fit: BoxFit.cover);
+                      },
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.grey,
+                          ),
+                        );
+                      },
+                    ).image)
+                : null,
+
+            // color: const Color(0xffF08FA4),
+            // borderRadius: const BorderRadius.all(Radius.circular(12)),
+          ),
+          // child: Image.asset('asset/images/detail_short.png'),
+        ),
+        /* 칵테일 재료들 */
+        Expanded(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: ingredients != null
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      for (int i = 0; i < ingredients.length; ++i)
+                        buildIngrediantItem(
+                          context: context,
+                          name: ingredients[i].ingredient ?? "",
+                          description: ingredients[i].desc ?? "",
+                          ratio: ingredients[i].amount ?? "",
+                        ),
+                    ],
+                  )
+                : const Text("서버 통신 오류"),
+          ),
+        ),
+      ],
+    ),
   );
 }
 
@@ -668,20 +667,6 @@ Widget buildIngrediantItem({
                 fontWeight: FontWeight.w100,
               ),
             ),
-            // if (isDrink)
-            //   Container(
-            //     padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
-            //     decoration: BoxDecoration(
-            //         border:
-            //             Border.all(width: 1, color: const Color(0xFFDA6C31)),
-            //         borderRadius: const BorderRadius.all(Radius.circular(8))),
-            //     alignment: Alignment.bottomRight,
-            //     child: const Text(
-            //       "칵테일 한 잔 기준",
-            //       textAlign: TextAlign.right,
-            //       style: TextStyle(color: Color(0xFFDA6C31)),
-            //     ),
-            //   ),
           ],
         ),
       ],
@@ -694,47 +679,48 @@ Widget buildRecipeItem(
     required int number,
     required String description}) {
   return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFF1E1E1E),
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      padding: const EdgeInsets.fromLTRB(22, 22, 22, 24),
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-            margin: const EdgeInsets.fromLTRB(0, 3, 12, 0),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-              color: Colors.white,
-            ),
+    decoration: const BoxDecoration(
+      color: Color(0xFF1E1E1E),
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+    ),
+    padding: const EdgeInsets.fromLTRB(22, 22, 22, 24),
+    margin: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+          margin: const EdgeInsets.fromLTRB(0, 3, 12, 0),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(4)),
+            color: Colors.white,
+          ),
+          child: Text(
+            number.toString(),
+            style: const TextStyle(
+                color: Color(0xFF1E1E1E),
+                fontSize: 14,
+                fontWeight: FontWeight.w500),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            alignment: Alignment.topLeft,
             child: Text(
-              number.toString(),
+              description,
+              textAlign: TextAlign.start,
               style: const TextStyle(
-                  color: Color(0xFF1E1E1E),
+                  height: 1.5,
                   fontSize: 14,
+                  color: Colors.white,
                   fontWeight: FontWeight.w500),
             ),
           ),
-          Expanded(
-            child: Container(
-              alignment: Alignment.topLeft,
-              child: Text(
-                description,
-                textAlign: TextAlign.start,
-                style: const TextStyle(
-                    height: 1.5,
-                    fontSize: 14,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-          ),
-        ],
-      ));
+        ),
+      ],
+    ),
+  );
 }
 
 void openDetailPage(BuildContext context, int id) {
@@ -743,4 +729,15 @@ void openDetailPage(BuildContext context, int id) {
       CupertinoPageRoute(
         builder: (context) => DetailPage(cocktailId: id),
       ));
+}
+
+/// 이미지 사이즈 글로벌 키로 가져오는 함수
+getSize(GlobalKey ingrediantImageKey) {
+  final keyContext = ingrediantImageKey.currentContext;
+  if (keyContext != null) {
+    final RenderImage renderImage =
+        keyContext.findRenderObject() as RenderImage;
+    Size size = renderImage.size;
+    return size;
+  }
 }
