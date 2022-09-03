@@ -215,8 +215,8 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                       } else {
                         controllerList.add(item[i]);
                       }
-                      print(controllerList); //
-                      print(itemListController); //
+                      // print(controllerList); //
+                      // print(itemListController); //
                     })
                   },
                   child: AnimatedSwitcher(
@@ -433,8 +433,8 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                       } else {
                         controllerList.add(item[i]);
                       }
-                      print(controllerList); //
-                      print(itemListController); //
+                      // print(controllerList); //
+                      // print(itemListController); //
                     })
                   },
                   child: AnimatedSwitcher(

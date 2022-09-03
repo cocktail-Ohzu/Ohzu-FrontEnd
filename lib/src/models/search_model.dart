@@ -3,6 +3,8 @@ class SearchModel {
   String? name;
   String? engName;
   String? img;
+  String? img2;
+  String? img4;
   String? backgroundColor;
   List<Tag>? bases;
   List<Tag>? ingredients;
@@ -16,6 +18,8 @@ class SearchModel {
       this.name,
       this.engName,
       this.img,
+      this.img2,
+      this.img4,
       this.backgroundColor,
       this.bases,
       this.ingredients,
@@ -29,6 +33,8 @@ class SearchModel {
     name = json['name'];
     engName = json['eng_name'];
     img = json['img'];
+    img2 = json['img2'];
+    img4 = json['img4'];
     backgroundColor = json['background_color'];
     if (json['bases'] != null) {
       bases = <Tag>[];
@@ -74,6 +80,8 @@ class SearchModel {
     data['name'] = name;
     data['eng_name'] = engName;
     data['img'] = img;
+    data['img2'] = img2;
+    data['img4'] = img4;
     data['background_color'] = backgroundColor;
     if (bases != null) {
       data['bases'] = bases!.map((v) => v.toJson()).toList();
