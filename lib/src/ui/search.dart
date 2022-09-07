@@ -365,7 +365,7 @@ class _SearchPageState extends State<SearchPage> {
       if (tagToShowLen > 0) {
         ret.add(
           Container(
-            padding: const EdgeInsets.fromLTRB(5, 3, 5, 3),
+            padding: const EdgeInsets.fromLTRB(13, 3, 13, 3),
             child: GestureDetector(
               onTap: () {
                 openDetailPage(context, _list[i].id!);
@@ -382,9 +382,25 @@ class _SearchPageState extends State<SearchPage> {
                   children: [
                     Container(
                       alignment: Alignment.topCenter,
-                      child: Image(
-                          image: NetworkImage(_list[i].img4!),
-                          fit: BoxFit.cover),
+                      child: Image.network(
+                        _list[i].img4!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                          return Image.asset('asset/images/c.png',
+                              fit: BoxFit.cover);
+                        },
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          // print("loading!!!!");
+                          if (loadingProgress == null) return child;
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.grey,
+                            ),
+                          );
+                        },
+                      ),
                     ),
 
                     /* 이미지
@@ -481,26 +497,25 @@ class _SearchPageState extends State<SearchPage> {
       }
     }
 
-    return GridView.count(
-      padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
-      crossAxisCount: 2,
-      children: [for (int i = 0; i < ret.length; ++i) ret[i]],
-      childAspectRatio: 155 / 210,
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 16,
-    );
-    // return GridView(
-    //   physics: const ClampingScrollPhysics(),
+    // return GridView.count(
     //   padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
-
-    //   shrinkWrap: true,
+    //   crossAxisCount: 2,
     //   children: [for (int i = 0; i < ret.length; ++i) ret[i]],
-    //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-    //       crossAxisCount: 2,
-    //       crossAxisSpacing: 16,
-    //       childAspectRatio: 155 / 210,
-    //       mainAxisSpacing: 12),
+    //   childAspectRatio: 155 / 210,
+    //   mainAxisSpacing: 12,
+    //   crossAxisSpacing: 16,
     // );
+    return GridView(
+      physics: const ClampingScrollPhysics(),
+      padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+      shrinkWrap: true,
+      children: [for (int i = 0; i < ret.length; ++i) ret[i]],
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          mainAxisExtent: 220,
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 12),
+    );
   }
 
   /* 태그 블록 위젯 */
