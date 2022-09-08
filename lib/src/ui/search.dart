@@ -511,7 +511,7 @@ class _SearchPageState extends State<SearchPage> {
       shrinkWrap: true,
       children: [for (int i = 0; i < ret.length; ++i) ret[i]],
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          mainAxisExtent: 220,
+          mainAxisExtent: 210,
           crossAxisCount: 2,
           crossAxisSpacing: 16,
           mainAxisSpacing: 12),

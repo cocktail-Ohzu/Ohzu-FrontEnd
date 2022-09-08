@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ohzu/src/ui/search.dart';
 import 'package:ohzu/src/ui/recommend.dart';
-import 'package:ohzu/src/ui/recommend_confirm.dart';
 import 'package:ohzu/src/ui/today.dart';
 
 class MyApp extends StatelessWidget {
