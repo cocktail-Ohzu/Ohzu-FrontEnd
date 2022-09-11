@@ -197,7 +197,7 @@ Widget buildCocktailContainer(
                   final size = min(constraints.maxWidth, constraints.maxHeight);
                   return Align(
                     alignment: Alignment.center,
-                    child: Container(
+                    child: SizedBox(
                       height: size * 1.04792332,
                       width: size,
                       // color: Colors.amber.withOpacity(0.4),
@@ -231,16 +231,21 @@ Widget buildCocktailContainer(
                           width: 1,
                           margin: const EdgeInsets.fromLTRB(12, 3, 12, 0),
                         ),
-                        Text(
-                          cocktail.engName.toString(),
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white.withOpacity(0.6),
-                            fontSize: cocktail.engName.toString().length > 18
-                                ? 13
-                                : 16,
-                            height: 1.5,
+                        Expanded(
+                          child: Text(
+                            cocktail.engName.toString(),
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white.withOpacity(0.6),
+                              fontSize: cocktail.engName.toString().length > 18
+                                  ? 13
+                                  : 16,
+                              height: 1.5,
+                            ),
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
+                            softWrap: false,
                           ),
                         ),
                       ],
