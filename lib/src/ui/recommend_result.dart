@@ -106,8 +106,9 @@ class _RecommendResultState extends State<RecommendResult> {
                                       state.recommend.fitCocktails != null &&
                                               state.recommend.fitCocktails!
                                                   .isNotEmpty
-                                          ? "당신을 위한 오늘의 칵테일은"
+                                          ? "당신을 위한 칵테일은"
                                           : "일치하는 검색 결과가 없어요.",
+                                      // "오쥬가 제안하는 칵테일은", //랜덤추천
                                       textAlign: TextAlign.start,
                                       style: const TextStyle(
                                           fontSize: 20,
@@ -121,8 +122,10 @@ class _RecommendResultState extends State<RecommendResult> {
                                                       null &&
                                                   state.recommend.fitCocktails!
                                                       .isNotEmpty
-                                              ? "${state.recommend.fitCocktails![0].name} 네요!"
+                                              ? "${state.recommend.fitCocktails![0].name} 입니다!"
                                               : "유사한 칵테일을 추천해드릴게요!",
+
+                                          // "${state.recommend.similarCocktails![0].name} 입니다!", //랜덤추천
                                           textAlign: TextAlign.start,
                                           style: const TextStyle(
                                               fontSize: 20,
