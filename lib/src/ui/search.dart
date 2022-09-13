@@ -43,12 +43,14 @@ class _SearchPageState extends State<SearchPage> {
       child: Scaffold(
         backgroundColor: const Color(0xFF121212),
         appBar: AppBar(
-            toolbarHeight: 44,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            title: buildSearchBar(searchController, onSearch),
-            leadingWidth: 60,
-            actions: const []),
+          toolbarHeight: 44,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: buildSearchBar(searchController, onSearch),
+          // leadingWidth: 60,
+          leadingWidth: 50,
+          actions: const [],
+        ),
         body: BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
           if (state is SearchLoadingState) {
             return const Center(
@@ -103,7 +105,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget buildSearchBar(TextEditingController controller, dynamic onSearch) {
     return CupertinoTextField(
       controller: controller,
-      placeholder: "원하는 맛 또는 재료를 검색해보세요!",
+      placeholder: "칵테일 이름 또는 #해시태그로 검색해보세요",
       placeholderStyle: const TextStyle(
         color: Color(0xffa9a9a9),
       ),
@@ -167,7 +169,7 @@ class _SearchPageState extends State<SearchPage> {
           Container(
             margin: const EdgeInsets.only(top: 38),
             child: const Text(
-              "검색 추천 키워드",
+              "추천 해시태그",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
           ),
@@ -176,27 +178,29 @@ class _SearchPageState extends State<SearchPage> {
               child: Column(
                 children: [
                   buildSuggestionItemLine(
-                      title: "재료", itemList: ingredientlist.bases!, maxItem: 8),
-                  const SizedBox(
-                    height: 36,
-                  ),
-                  buildSuggestionItemLine(
                       title: "맛",
                       itemList: ingredientlist.flavors!,
-                      maxItem: 4),
-                  const SizedBox(
-                    height: 36,
-                  ),
-                  buildSuggestionItemLine(
-                      title: "분위기",
-                      itemList: ingredientlist.moods!,
-                      maxItem: 6),
+                      maxItem: 19),
                   const SizedBox(
                     height: 36,
                   ),
                   buildSuggestionItemLine(
                       title: "날씨",
                       itemList: ingredientlist.weathers!,
+                      maxItem: 8),
+                  const SizedBox(
+                    height: 36,
+                  ),
+                  buildSuggestionItemLine(
+                      title: "분위기",
+                      itemList: ingredientlist.moods!,
+                      maxItem: 10),
+                  const SizedBox(
+                    height: 36,
+                  ),
+                  buildSuggestionItemLine(
+                      title: "베이스",
+                      itemList: ingredientlist.bases!,
                       maxItem: 7),
                 ],
               )),
@@ -246,37 +250,39 @@ class _SearchPageState extends State<SearchPage> {
   Widget buildSuggestionTagItem(IngredientElement ingredientElem) {
     final myName = ingredientElem.name! + ingredientElem.id!.toString();
     return GestureDetector(
-        onTap: () {
-          _selectedItemName = myName;
+      onTap: () {
+        _selectedItemName = myName;
+        setState(() {});
+        Future.delayed(const Duration(milliseconds: 180), () {
+          searchController.text = "#" + ingredientElem.name!;
           setState(() {});
-          Future.delayed(const Duration(milliseconds: 180), () {
-            searchController.text = "#" + ingredientElem.name!;
-            setState(() {});
-          });
-        },
-        child: AnimatedContainer(
-            decoration: BoxDecoration(
-              color: _selectedItemName == myName
-                  ? Color(int.parse("0xf${ingredientElem.tagColor}"))
-                      .withOpacity(0.5)
-                  : Colors.transparent,
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
-              border: _selectedItemName == myName
-                  ? null
-                  : Border.all(
-                      color: const Color(0xffA9A9A9),
-                      width: 1,
-                    ),
-            ),
-            padding: _selectedItemName == myName
-                ? const EdgeInsets.fromLTRB(11, 7, 11, 7)
-                : const EdgeInsets.fromLTRB(10, 6, 10, 6),
-            margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            duration: const Duration(milliseconds: 100),
-            child: Text(
-              ingredientElem.name!,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-            )));
+        });
+      },
+      child: AnimatedContainer(
+        decoration: BoxDecoration(
+          color: _selectedItemName == myName
+              ? Color(int.parse("0xf${ingredientElem.tagColor}"))
+                  .withOpacity(0.5)
+              : Colors.transparent,
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          border: _selectedItemName == myName
+              ? null
+              : Border.all(
+                  color: const Color(0xffA9A9A9),
+                  width: 0.6, //relative1
+                ),
+        ),
+        padding: _selectedItemName == myName
+            ? const EdgeInsets.fromLTRB(11, 7, 11, 7)
+            : const EdgeInsets.fromLTRB(10.4, 6.4, 10.4, 6.4), //relative2
+        margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+        duration: const Duration(milliseconds: 100),
+        child: Text(
+          ingredientElem.name!,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+        ),
+      ),
+    );
   }
 
 /*
@@ -380,11 +386,38 @@ class _SearchPageState extends State<SearchPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    /* 태그 검색 시 칵테일 사진 */
                     Container(
                       alignment: Alignment.topCenter,
-                      child: Image(
-                          image: NetworkImage(_list[i].img4!),
-                          fit: BoxFit.cover),
+                      height: 128,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                        ),
+                        image: DecorationImage(
+                            image: Image.network(
+                              _list[i].img4!,
+                              fit: BoxFit.cover,
+                              errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace? stackTrace) {
+                                return Image.asset('asset/images/c.png',
+                                    fit: BoxFit.cover);
+                              },
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                // print("loading!!!!");
+                                if (loadingProgress == null) return child;
+                                return const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.grey,
+                                  ),
+                                );
+                              },
+                            ).image,
+                            fit: BoxFit.cover),
+                      ),
                     ),
 
                     /* 이미지
@@ -393,82 +426,74 @@ class _SearchPageState extends State<SearchPage> {
                   child: Image.network(list[i].img.toString(), fit: BoxFit.cover),
                 ),
                 */
-                    Container(
-                        height: 43,
-                        padding: const EdgeInsets.fromLTRB(12, 13, 12, 12),
-                        child: Text(
-                          cocktailName,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: cocktailName.length > 9 ? 15 : 16),
-                        )),
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                        child: SingleChildScrollView(
-                          physics: const ClampingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          child: Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.start,
-                            /* 좌우 간격 */
-                            spacing: 4,
-                            children: [
-                              for (int i = 0; i < tagToShowLen; ++i)
-                                buildTagItem(
-                                    RichText(
-                                      text: TextSpan(
-                                        style: TextStyle(
-                                            fontSize: 13,
-                                            color:
-                                                Colors.white.withOpacity(0.5),
-                                            fontWeight: FontWeight.w600),
-                                        children: [
-                                          /* 태그 별 키워드 색상 하이라이트 부분 */ TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text: tagToShow[i]
-                                                    .name!
-                                                    .substring(
-                                                        0,
-                                                        tagToShow[i]
-                                                            .name!
-                                                            .indexOf(
-                                                                replacedText)),
-                                              ),
-                                              /* 키워드 색상 하이라이트 */
-                                              TextSpan(
-                                                  text: tagToShow[i]
-                                                      .name!
-                                                      .substring(
-                                                          tagToShow[i]
-                                                              .name!
-                                                              .indexOf(
-                                                                  replacedText),
-                                                          tagToShow[i]
-                                                                  .name!
-                                                                  .indexOf(
-                                                                      replacedText) +
-                                                              replacedText
-                                                                  .length),
-                                                  style: TextStyle(
-                                                      color: Colors.white
-                                                          .withOpacity(1.0))),
-                                              TextSpan(
+                          padding: const EdgeInsets.fromLTRB(12, 13, 12, 12),
+                          child: Text(
+                            cocktailName,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: cocktailName.length > 9 ? 15 : 16),
+                          )),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(12, 0, 12, 16),
+                      child: SingleChildScrollView(
+                        physics: const ClampingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          /* 좌우 간격 */
+                          spacing: 4,
+                          children: [
+                            for (int i = 0; i < tagToShowLen; ++i)
+                              buildTagItem(
+                                  RichText(
+                                    text: TextSpan(
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.white.withOpacity(0.5),
+                                          fontWeight: FontWeight.w600),
+                                      children: [
+                                        /* 태그 별 키워드 색상 하이라이트 부분 */ TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: tagToShow[i]
+                                                  .name!
+                                                  .substring(
+                                                      0,
+                                                      tagToShow[i]
+                                                          .name!
+                                                          .indexOf(
+                                                              replacedText)),
+                                            ),
+                                            /* 키워드 색상 하이라이트 */
+                                            TextSpan(
                                                 text: tagToShow[i].name!.substring(
+                                                    tagToShow[i]
+                                                        .name!
+                                                        .indexOf(replacedText),
                                                     tagToShow[i].name!.indexOf(
                                                             replacedText) +
-                                                        replacedText.length,
-                                                    tagToShow[i].name!.length),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                                        replacedText.length),
+                                                style: TextStyle(
+                                                    color: Colors.white
+                                                        .withOpacity(1.0))),
+                                            TextSpan(
+                                              text: tagToShow[i].name!.substring(
+                                                  tagToShow[i].name!.indexOf(
+                                                          replacedText) +
+                                                      replacedText.length,
+                                                  tagToShow[i].name!.length),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                    tagToShow[i].tagColor!),
-                            ],
-                          ),
+                                  ),
+                                  tagToShow[i].tagColor!),
+                          ],
                         ),
                       ),
                     ),
@@ -481,26 +506,25 @@ class _SearchPageState extends State<SearchPage> {
       }
     }
 
-    return GridView.count(
-      padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
-      crossAxisCount: 2,
-      children: [for (int i = 0; i < ret.length; ++i) ret[i]],
-      childAspectRatio: 155 / 210,
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 16,
-    );
-    // return GridView(
-    //   physics: const ClampingScrollPhysics(),
+    // return GridView.count(
     //   padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
-
-    //   shrinkWrap: true,
+    //   crossAxisCount: 2,
     //   children: [for (int i = 0; i < ret.length; ++i) ret[i]],
-    //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-    //       crossAxisCount: 2,
-    //       crossAxisSpacing: 16,
-    //       childAspectRatio: 155 / 210,
-    //       mainAxisSpacing: 12),
+    //   childAspectRatio: 155 / 210,
+    //   mainAxisSpacing: 12,
+    //   crossAxisSpacing: 16,
     // );
+    return GridView(
+      physics: const ClampingScrollPhysics(),
+      padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+      shrinkWrap: true,
+      children: [for (int i = 0; i < ret.length; ++i) ret[i]],
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          mainAxisExtent: 224,
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 12),
+    );
   }
 
   /* 태그 블록 위젯 */

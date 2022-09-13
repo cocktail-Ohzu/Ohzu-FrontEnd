@@ -32,12 +32,12 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
   Map<String, bool> _expansionController = {};
 
   List<List<IngredientElement>> itemListController = [
-    [], //0 baseId
-    [], //1 ingredientId
-    [], //2 strength
     [], //3 flavorId
+    [], //2 strength
     [], //4 moodId
     [], //5 weatherId
+    [], //0 baseId
+    [], //1 ingredientId
     [] //6 ornamentId
   ];
 
@@ -107,12 +107,12 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                       child: TabBar(
                         labelPadding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
                         tabs: [
-                          buildTabBarItem(name: "베이스"),
-                          buildTabBarItem(name: "재료"),
-                          buildTabBarItem(name: "도수"),
                           buildTabBarItem(name: "맛"),
+                          buildTabBarItem(name: "도수"),
                           buildTabBarItem(name: "무드/기분"),
                           buildTabBarItem(name: "날씨/계절"),
+                          buildTabBarItem(name: "베이스"),
+                          buildTabBarItem(name: "재료"),
                           buildTabBarItem(name: "가니쉬"),
                         ],
                         controller: _tabController,
@@ -141,27 +141,27 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                         child:
                             TabBarView(controller: _tabController, children: [
                           buildTabView(
-                              name: "베이스 술을",
-                              item: state.ingredient.bases!.toList(),
-                              controllerList: itemListController[0]),
-                          buildTabViewIngredients(
-                              name: "재료를",
-                              item: state.ingredient.ingredients!.toList(),
-                              controllerList: itemListController[1]),
-                          buildTabViewStrength(
-                              item: _strengthItem,
-                              controllerList: itemListController[2]),
-                          buildTabView(
                               name: "맛을",
                               item: state.ingredient.flavors!.toList(),
-                              controllerList: itemListController[3]),
+                              controllerList: itemListController[0]),
+                          buildTabViewStrength(
+                              item: _strengthItem,
+                              controllerList: itemListController[1]),
                           buildTabView(
                               name: "무드나 기분을",
                               item: state.ingredient.moods!.toList(),
-                              controllerList: itemListController[4]),
+                              controllerList: itemListController[2]),
                           buildTabView(
                               name: "날씨나 계절을",
                               item: state.ingredient.weathers!.toList(),
+                              controllerList: itemListController[3]),
+                          buildTabView(
+                              name: "베이스 술을",
+                              item: state.ingredient.bases!.toList(),
+                              controllerList: itemListController[4]),
+                          buildTabViewIngredients(
+                              name: "재료를",
+                              item: state.ingredient.ingredients!.toList(),
                               controllerList: itemListController[5]),
                           buildTabView(
                               name: "가니쉬를",
