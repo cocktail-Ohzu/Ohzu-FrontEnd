@@ -7,6 +7,8 @@ import 'package:ohzu/src/utils/search_util.dart';
 import 'package:ohzu/src/models/search_model.dart';
 import 'package:ohzu/src/models/ingredient_model.dart';
 import 'package:ohzu/src/ui/detail.dart';
+//힌트 팝업 최초 띄우기 의한 플러그인
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -27,12 +29,36 @@ class _SearchPageState extends State<SearchPage> {
     setState(() {});
   }
 
+  //힌트 팝업 다시 보지 않기 선택했는지 로드
+  _loadHintPopupPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!(prefs.getBool('hintPopup') ?? false)) {
+      // print("show hint");
+      showHintPopup();
+    }
+    // else {
+    //   print("Do not show hint");
+    // }
+  }
+
+  //다음부터 힌트 팝업을 띄우지 않도록 저장하는 메소드
+  _saveNotShowHintPopupPreference(bool status) async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setBool('hintPopup', status);
+    });
+  }
+
   @override
   void initState() {
     /* 검색 페이지 Bloc 주입 */
     searchBloc.add(LoadSearchEvent());
     /* recommend 위한 Bloc 주입 */
     ingredientBloc.add(LoadIngredientEvent());
+
+    //테스트용 팝업 초기화
+    // _saveNotShowHintPopupPreference(false);
+
     super.initState();
   }
 
@@ -72,6 +98,8 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       );
                     } else if (ingredientState is IngredientLoadedState) {
+                      //힌트 팝업 띄우기
+                      _loadHintPopupPreference();
                       return buildSuggestion(ingredientState.ingredient);
                     } else if (ingredientState is IngredientErrorState) {
                       return const Text("recommend api error");
@@ -537,5 +565,82 @@ class _SearchPageState extends State<SearchPage> {
         padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
         margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: text);
+  }
+
+  void showHintPopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          contentPadding: EdgeInsets.zero,
+          backgroundColor: const Color(0xff272727),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                padding: const EdgeInsets.fromLTRB(34, 38, 34, 0),
+                child: const Text(
+                  "Hint",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: Color(0xffDA6C31),
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(34, 20, 34, 0),
+                child: const Text(
+                  "칵테일 이름으로 검색하거나\n#해시태그 검색이 가능해요!\n\n추천 해시태그를 눌러서\n오쥬가 제안하는 키워드를\n빠르게 검색해보세요 :)",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(34, 32, 34, 32),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _saveNotShowHintPopupPreference(true);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        "다시 보지 않기",
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Color(0xffA9A9A9),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        "닫기",
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Color(0xffA9A9A9),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

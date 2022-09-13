@@ -280,29 +280,54 @@ class _RecommendResultState extends State<RecommendResult> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Container(
-              decoration: const BoxDecoration(
-                  color: Color(0xff1e1e1e),
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
               width: 98,
               height: 98,
               alignment: Alignment.topCenter,
-              child: Image.network(
-                sc[i].img2!,
-                fit: BoxFit.cover,
-                errorBuilder: (BuildContext context, Object exception,
-                    StackTrace? stackTrace) {
-                  return Image.asset('asset/images/c.png', fit: BoxFit.cover);
-                },
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.grey,
-                    ),
-                  );
-                },
+              decoration: BoxDecoration(
+                color: const Color(0xff1e1e1e),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(8),
+                ),
+                image: DecorationImage(
+                  image: Image.network(
+                    sc[i].img2!,
+                    fit: BoxFit.cover,
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                      return Image.asset('asset/images/c.png',
+                          fit: BoxFit.cover);
+                    },
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.grey,
+                        ),
+                      );
+                    },
+                  ).image,
+                  fit: BoxFit.cover,
+                ),
               ),
+
+              // child: Image.network(
+              //   sc[i].img2!,
+              //   fit: BoxFit.cover,
+              //   errorBuilder: (BuildContext context, Object exception,
+              //       StackTrace? stackTrace) {
+              //     return Image.asset('asset/images/c.png', fit: BoxFit.cover);
+              //   },
+              //   loadingBuilder: (BuildContext context, Widget child,
+              //       ImageChunkEvent? loadingProgress) {
+              //     if (loadingProgress == null) return child;
+              //     return const Center(
+              //       child: CircularProgressIndicator(
+              //         color: Colors.grey,
+              //       ),
+              //     );
+              //   },
+              // ),
             ),
 
             /* 이미지
