@@ -65,12 +65,12 @@ class OhzuApiProvider {
   Future<RecommendModel> fetchRecommendItem(
       List<List<IngredientElement>> itemList) async {
     final List<String> name = [
-      "base_id",
-      "ingredient_id",
-      "strength",
       "flavor_id",
+      "strength",
       "mood_id",
       "weather_id",
+      "base_id",
+      "ingredient_id",
       "ornament_id"
     ];
     Map<String, List<int>> body = {};

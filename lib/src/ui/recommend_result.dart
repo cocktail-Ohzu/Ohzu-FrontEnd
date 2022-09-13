@@ -29,6 +29,15 @@ class _RecommendResultState extends State<RecommendResult> {
     bloc.add(LoadRecommendEvent());
   }
 
+  bool isItemListEmpty() {
+    for (var list in itemList) {
+      if (list.isNotEmpty) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   /* BloC 주입 */
   _RecommendResultState({required this.itemList});
 
@@ -103,11 +112,14 @@ class _RecommendResultState extends State<RecommendResult> {
                                       CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
-                                      state.recommend.fitCocktails != null &&
-                                              state.recommend.fitCocktails!
-                                                  .isNotEmpty
-                                          ? "당신을 위한 칵테일은"
-                                          : "일치하는 검색 결과가 없어요.",
+                                      isItemListEmpty()
+                                          ? "오쥬가 제안하는 칵테일은"
+                                          : state.recommend.fitCocktails !=
+                                                      null &&
+                                                  state.recommend.fitCocktails!
+                                                      .isNotEmpty
+                                              ? "당신을 위한 칵테일은"
+                                              : "일치하는 검색 결과가 없어요.",
                                       // "오쥬가 제안하는 칵테일은", //랜덤추천
                                       textAlign: TextAlign.start,
                                       style: const TextStyle(
@@ -118,14 +130,16 @@ class _RecommendResultState extends State<RecommendResult> {
                                       margin:
                                           const EdgeInsets.fromLTRB(0, 8, 0, 0),
                                       child: Text(
-                                          state.recommend.fitCocktails !=
-                                                      null &&
-                                                  state.recommend.fitCocktails!
-                                                      .isNotEmpty
-                                              ? "${state.recommend.fitCocktails![0].name} 입니다!"
-                                              : "유사한 칵테일을 추천해드릴게요!",
-
-                                          // "${state.recommend.similarCocktails![0].name} 입니다!", //랜덤추천
+                                          isItemListEmpty()
+                                              ? "${state.recommend.similarCocktails![0].name} 입니다!"
+                                              : state.recommend.fitCocktails !=
+                                                          null &&
+                                                      state
+                                                          .recommend
+                                                          .fitCocktails!
+                                                          .isNotEmpty
+                                                  ? "${state.recommend.fitCocktails![0].name} 입니다!"
+                                                  : "유사한 칵테일을 추천해드릴게요!",
                                           textAlign: TextAlign.start,
                                           style: const TextStyle(
                                               fontSize: 20,
@@ -133,10 +147,12 @@ class _RecommendResultState extends State<RecommendResult> {
                                     )
                                   ]),
                             ),
+                            //일치하는 칵테일
                             if (state.recommend.fitCocktails != null &&
                                 state.recommend.fitCocktails!.isNotEmpty)
                               buildCocktailContainer(
                                   state.recommend.fitCocktails![0])
+                            //추천 칵테일
                             else if (state.recommend.similarCocktails != null &&
                                 state.recommend.similarCocktails!.isNotEmpty)
                               buildCocktailContainer(
@@ -150,8 +166,7 @@ class _RecommendResultState extends State<RecommendResult> {
                     return Container();
                   }),
 
-                  /* 하단 박스 */
-
+                  /* 이런 칵테일은 어때요? */
                   BlocBuilder<RecommendBloc, RecommendState>(
                       builder: (context, state) {
                     if (state is RecommendLoadingState) {
@@ -240,8 +255,14 @@ class _RecommendResultState extends State<RecommendResult> {
 
   Widget buildSimilarCocktailCards(RecommendModel cocktails) {
     List<RecommendCocktail> sc = [];
-    sc += cocktails.fitCocktails ?? [];
-    sc += cocktails.similarCocktails ?? [];
+
+    //타이틀 칵테일 1개 제외하는 로직
+    if (cocktails.fitCocktails != null) {
+      sc += cocktails.fitCocktails?.sublist(1) ?? [];
+      sc += cocktails.similarCocktails ?? [];
+    } else {
+      sc += cocktails.similarCocktails?.sublist(1) ?? [];
+    }
     final int len = sc.length;
 
     if (len == 0) {

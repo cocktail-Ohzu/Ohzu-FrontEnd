@@ -17,7 +17,7 @@ class RecommendConfirm extends StatefulWidget {
 
 class _RecommendConfirmState extends State<RecommendConfirm> {
   final List<List<IngredientElement>> itemList;
-  final List<String> title = ["기본 술", "추가 재료", "도수", "맛", "무드&기분", "날씨", "가니쉬"];
+  final List<String> title = ["맛", "도수", "무드&기분", "날씨", "기본 술", "추가 재료", "가니쉬"];
 
   @override
   void initState() {
