@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ohzu.ohzu">
    <application
-        android:label="ohzu"
+        android:label="오쥬"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
