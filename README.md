@@ -18,11 +18,9 @@
 <br/>
 
 ## 📱 UI/UX
+![merge](https://user-images.githubusercontent.com/72291860/190214684-fd63e2a1-6803-4e56-873d-261cf396a50f.png)
 
-![s](https://user-images.githubusercontent.com/72291860/183367064-1ec51197-6cc7-4cf4-b909-04455c8f3c07.png)
-
-
-<img src="https://user-images.githubusercontent.com/72291860/183365351-43fb4d31-2744-4922-9ef3-fe119df134a0.png" width="30%"></img>
+![merge_from_ofoct (3)](https://user-images.githubusercontent.com/72291860/190215266-a8532263-554f-4836-9ecd-f9d2b80f39f1.png)
 
 
 <br/>
