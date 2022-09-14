@@ -60,7 +60,7 @@ Bloc Pattern Strategy
 │      │  ├─cocktail_detail_bloc
 │      │  ├─ingredient_bloc
 │      │  ├─recommend_bloc
-│      │  ├─serach_bloc
+│      │  ├─search_bloc
 │      │  └─todays_cocktail_bloc
 │      ├─models
 │      ├─resources
