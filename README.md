@@ -22,6 +22,7 @@
 
 ![merge_from_ofoct (3)](https://user-images.githubusercontent.com/72291860/190215266-a8532263-554f-4836-9ecd-f9d2b80f39f1.png)
 
+<b> (칵테일 일러스트 이미지의 저작권은 Ohzu 및 Ohzu의 디자이너에게 있습니다) </b>
 
 <br/>
 
