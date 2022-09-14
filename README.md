@@ -1,5 +1,7 @@
 # 🍹 Ohzu
 ---
+![main](https://user-images.githubusercontent.com/72291860/190209133-1e5cdc33-ab43-48c5-9562-117be0ce8046.png)
+![ohzu](https://user-images.githubusercontent.com/72291860/190209889-86e3aa37-f02f-4090-ad2b-e793553a2ee5.png)
 
 칵테일 고르기 힘들 때, 칵테일 추천 어플리케이션 오쥬
 
@@ -21,6 +23,7 @@
 
 
 <img src="https://user-images.githubusercontent.com/72291860/183365351-43fb4d31-2744-4922-9ef3-fe119df134a0.png" width="30%"></img>
+
 
 <br/>
 
