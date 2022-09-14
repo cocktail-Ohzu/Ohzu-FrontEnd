@@ -597,6 +597,7 @@ class _SearchPageState extends State<SearchPage> {
                   "칵테일 이름으로 검색하거나\n#해시태그 검색이 가능해요!\n\n추천 해시태그를 눌러서\n오쥬가 제안하는 키워드를\n빠르게 검색해보세요 :)",
                   textAlign: TextAlign.left,
                   style: TextStyle(
+                    height: 1.5,
                     color: Colors.white,
                     fontSize: 16,
                   ),
