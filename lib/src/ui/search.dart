@@ -55,7 +55,8 @@ class _SearchPageState extends State<SearchPage> {
     searchBloc.add(LoadSearchEvent());
     /* recommend 위한 Bloc 주입 */
     ingredientBloc.add(LoadIngredientEvent());
-
+    //힌트 팝업 띄우기
+    _loadHintPopupPreference();
     //테스트용 팝업 초기화
     // _saveNotShowHintPopupPreference(false);
 
@@ -98,8 +99,6 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       );
                     } else if (ingredientState is IngredientLoadedState) {
-                      //힌트 팝업 띄우기
-                      _loadHintPopupPreference();
                       return buildSuggestion(ingredientState.ingredient);
                     } else if (ingredientState is IngredientErrorState) {
                       return const Text("recommend api error");
@@ -581,29 +580,30 @@ class _SearchPageState extends State<SearchPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                padding: const EdgeInsets.fromLTRB(34, 38, 34, 0),
+                padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
                 child: const Text(
                   "Hint",
                   textAlign: TextAlign.left,
                   style: TextStyle(
+                    fontWeight: FontWeight.w500,
                     color: Color(0xffDA6C31),
-                    fontSize: 18,
+                    fontSize: 19,
                   ),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(34, 20, 34, 0),
+                padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
                 child: const Text(
                   "칵테일 이름으로 검색하거나\n#해시태그 검색이 가능해요!\n\n추천 해시태그를 눌러서\n오쥬가 제안하는 키워드를\n빠르게 검색해보세요 :)",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 14,
+                    fontSize: 16,
                   ),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(34, 32, 34, 32),
+                padding: const EdgeInsets.fromLTRB(30, 32, 30, 30),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -616,8 +616,9 @@ class _SearchPageState extends State<SearchPage> {
                         "다시 보지 않기",
                         textAlign: TextAlign.right,
                         style: TextStyle(
+                          fontWeight: FontWeight.w500,
                           color: Color(0xffA9A9A9),
-                          fontSize: 14,
+                          fontSize: 16,
                         ),
                       ),
                     ),
@@ -629,8 +630,9 @@ class _SearchPageState extends State<SearchPage> {
                         "닫기",
                         textAlign: TextAlign.right,
                         style: TextStyle(
+                          fontWeight: FontWeight.w500,
                           color: Color(0xffA9A9A9),
-                          fontSize: 14,
+                          fontSize: 16,
                         ),
                       ),
                     ),
