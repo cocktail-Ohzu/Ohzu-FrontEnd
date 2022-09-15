@@ -103,9 +103,9 @@ Bloc Pattern Strategy
             <a href="https://github.com/sukyeongs"><I>sukyeongs</I></a>
         </td>
         <td>
-          <img src="https://github.com.png?size=100">
+          <img src="https://user-images.githubusercontent.com/72291860/190303601-2552f215-f0ac-4275-b161-1d56f40ffe3a.png" width="100px" height="100px">
             <br>
-            <a href="#"><I></I></a>
+            <a href="https://www.instagram.com/dldbsrud0121/"><I>dldbsrud0121</I></a>
         </td>
     </tr>
 </table>
