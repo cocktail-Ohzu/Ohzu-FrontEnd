@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ohzu/src/blocs/serach_bloc/search_bloc.dart';
+import 'package:ohzu/src/blocs/search_bloc/search_bloc.dart';
 import 'package:ohzu/src/blocs/ingredient_bloc/ingredient_bloc.dart';
 import 'package:ohzu/src/utils/search_util.dart';
 import 'package:ohzu/src/models/search_model.dart';
