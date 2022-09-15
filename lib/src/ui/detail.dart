@@ -199,6 +199,8 @@ class _DetailPageState extends State<DetailPage> {
 
                             /* 레시피 익스펜션 타일 */
                             ExpansionTile(
+                              //v1.0.2 피드백 요청, 처음부터 펼친 상태로
+                              initiallyExpanded: true,
                               tilePadding:
                                   const EdgeInsets.fromLTRB(0, 0, 0, 12),
                               trailing: const Text(""),
