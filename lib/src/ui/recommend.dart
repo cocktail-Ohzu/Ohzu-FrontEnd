@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ohzu/src/blocs/ingredient_bloc/ingredient_bloc.dart';
 import 'package:ohzu/src/models/ingredient_model.dart';
 import 'package:ohzu/src/ui/recommend_confirm.dart';
+//힌트 팝업 최초 띄우기 의한 플러그인
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Recommend extends StatefulWidget {
   const Recommend({Key? key}) : super(key: key);
@@ -41,6 +43,25 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
     [] //6 ornamentId
   ];
 
+  _loadHintPopupPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!(prefs.getBool('hintPopupRecommend') ?? false)) {
+      // print("show hint");
+      showHintPopup();
+    }
+    // else {
+    //   print("Do not show hint");
+    // }
+  }
+
+  //다음부터 힌트 팝업을 띄우지 않도록 저장하는 메소드
+  _saveNotShowHintPopupPreference(bool status) async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setBool('hintPopupRecommend', status);
+    });
+  }
+
   bool isControllerEmpty() {
     for (var list in itemListController) {
       if (list.isNotEmpty) {
@@ -55,6 +76,10 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
     super.initState();
     _tabController = TabController(length: 7, vsync: this);
     ingredientBloc.add(LoadIngredientEvent());
+    //힌트 팝업 띄우기
+    _loadHintPopupPreference();
+    //테스트용 팝업 초기화
+    // _saveNotShowHintPopupPreference(false);
   }
 
   @override
@@ -194,7 +219,8 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
           alignment: Alignment.centerLeft,
           child: buildTabViewTitle(
               title: "원하는 $name 선택해 주세요",
-              desc: "원하는 재료를 선택해 주세요!\n관심 없는 선택지는 넘겨도 좋아요."),
+              desc: "관심 없는 선택지는 넘겨도 좋아요.",
+              hint: name == "베이스 술을" ? "태그를 꾹 누르면 설명을 볼 수 있습니다." : null),
         ),
         Expanded(
           child: GridView(
@@ -209,15 +235,17 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
                       showDescriptionPopup(context: context, item: item[i])
                   },
                   onTap: () => {
-                    setState(() {
-                      if (controllerList.contains(item[i])) {
-                        controllerList.remove(item[i]);
-                      } else {
-                        controllerList.add(item[i]);
-                      }
-                      // print(controllerList); //
-                      // print(itemListController); //
-                    })
+                    setState(
+                      () {
+                        if (controllerList.contains(item[i])) {
+                          controllerList.remove(item[i]);
+                        } else {
+                          controllerList.add(item[i]);
+                        }
+                        // print(controllerList); //
+                        // print(itemListController); //
+                      },
+                    ),
                   },
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
@@ -287,7 +315,8 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
           alignment: Alignment.centerLeft,
           child: buildTabViewTitle(
               title: "원하는 $name 선택해 주세요",
-              desc: "원하는 재료를 선택해 주세요!\n관심 없는 선택지는 넘겨도 좋아요."),
+              desc: "관심 없는 선택지는 넘겨도 좋아요.",
+              hint: "태그를 꾹 누르면 설명을 볼 수 있습니다."),
         ),
         Expanded(
           child: SingleChildScrollView(
@@ -414,8 +443,7 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
           padding: const EdgeInsets.only(top: 38, bottom: 40),
           alignment: Alignment.centerLeft,
           child: buildTabViewTitle(
-              title: "원하는 도수를 선택해 주세요",
-              desc: "원하는 도수를 선택해 주세요!\n관심 없는 선택지는 넘겨도 좋아요."),
+              title: "원하는 도수를 선택해 주세요", desc: "관심 없는 선택지는 넘겨도 좋아요."),
         ),
         /* 베이스 술 선택 */
         Expanded(
@@ -519,6 +547,87 @@ class _RecommendState extends State<Recommend> with TickerProviderStateMixin {
       ),
     );
   }
+
+  void showHintPopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          contentPadding: EdgeInsets.zero,
+          backgroundColor: const Color(0xff272727),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+                child: const Text(
+                  "Hint",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xffDA6C31),
+                    fontSize: 19,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
+                child: const Text(
+                  "고민되거나 원하지 않는 선택지는\n아래 건너뛰기 버튼으로\n생략할 수 있어요!",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    height: 1.5,
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(30, 32, 30, 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _saveNotShowHintPopupPreference(true);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        "다시 보지 않기",
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xffA9A9A9),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        "닫기",
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xffA9A9A9),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
 
 void showDescriptionPopup(
@@ -588,22 +697,93 @@ Widget buildTabBarItem({required String name}) {
   );
 }
 
-Widget buildTabViewTitle({required String title, required String desc}) {
+Widget buildTabViewTitle(
+    {required String title, required String desc, String? hint}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Container(
-          margin: const EdgeInsets.fromLTRB(0, 0, 0, 12),
-          child: Text(
-            title,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-          )),
-      Container(
-          child: Text(
-        desc,
-        style: TextStyle(
-            fontSize: 14, color: Colors.white.withOpacity(0.6), height: 1.5),
-      )),
+        margin: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+        child: Text(
+          title,
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+        ),
+      ),
+
+      if (hint != null)
+        Row(
+          children: [
+            const Text(
+              "Hint! ",
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xffDA6C31),
+                height: 1.5,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                hint,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white.withOpacity(0.6),
+                  height: 1.5,
+                ),
+              ),
+            ),
+          ],
+        ),
+
+      Row(
+        children: [
+          if (hint == null)
+            const Text(
+              "Hint! ",
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xffDA6C31),
+                height: 1.5,
+              ),
+            ),
+          Expanded(
+            child: Text(
+              desc,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white.withOpacity(0.6),
+                height: 1.5,
+              ),
+            ),
+          ),
+        ],
+      ),
+      // if (hint != null)
+      //   Container(
+      //     child: Row(
+      //       children: [
+      //         Expanded(
+      //           child: Text(
+      //             hint,
+      //             style: TextStyle(
+      //               fontSize: 14,
+      //               color: Colors.white.withOpacity(0.6),
+      //               height: 1.5,
+      //             ),
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // Container(
+      //   child: Text(
+      //     desc,
+      //     style: TextStyle(
+      //       fontSize: 14,
+      //       color: Colors.white.withOpacity(0.6),
+      //       height: 1.5,
+      //     ),
+      //   ),
+      // ),
     ],
   );
 }
