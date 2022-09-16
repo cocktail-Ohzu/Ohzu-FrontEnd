@@ -32,7 +32,7 @@ class _SearchPageState extends State<SearchPage> {
   //힌트 팝업 다시 보지 않기 선택했는지 로드
   _loadHintPopupPreference() async {
     final prefs = await SharedPreferences.getInstance();
-    if (!(prefs.getBool('hintPopup') ?? false)) {
+    if (!(prefs.getBool('hintPopupSearch') ?? false)) {
       // print("show hint");
       showHintPopup();
     }
@@ -45,7 +45,7 @@ class _SearchPageState extends State<SearchPage> {
   _saveNotShowHintPopupPreference(bool status) async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      prefs.setBool('hintPopup', status);
+      prefs.setBool('hintPopupSearch', status);
     });
   }
 
@@ -195,42 +195,60 @@ class _SearchPageState extends State<SearchPage> {
         children: [
           Container(
             margin: const EdgeInsets.only(top: 38),
-            child: const Text(
-              "추천 해시태그",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            child: Row(
+              children: [
+                Text(
+                  "추천 해시태그",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    "칵테일 전체보기 ->",
+                    style: TextStyle(fontSize: 15),
+                    textAlign: TextAlign.right,
+                  ),
+                )
+              ],
             ),
           ),
           Container(
-              margin: const EdgeInsets.only(top: 28),
-              child: Column(
-                children: [
-                  buildSuggestionItemLine(
-                      title: "맛",
-                      itemList: ingredientlist.flavors!,
-                      maxItem: 19),
-                  const SizedBox(
-                    height: 36,
-                  ),
-                  buildSuggestionItemLine(
-                      title: "날씨",
-                      itemList: ingredientlist.weathers!,
-                      maxItem: 8),
-                  const SizedBox(
-                    height: 36,
-                  ),
-                  buildSuggestionItemLine(
-                      title: "분위기",
-                      itemList: ingredientlist.moods!,
-                      maxItem: 10),
-                  const SizedBox(
-                    height: 36,
-                  ),
-                  buildSuggestionItemLine(
-                      title: "베이스",
-                      itemList: ingredientlist.bases!,
-                      maxItem: 7),
-                ],
-              )),
+            margin: const EdgeInsets.only(top: 28),
+            child: Column(
+              children: [
+                buildSuggestionItemLine(
+                  title: "맛",
+                  itemList: ingredientlist.flavors!,
+                  maxItem: 14,
+                ),
+                const SizedBox(
+                  height: 36,
+                ),
+                buildSuggestionItemLine(
+                    title: "날씨",
+                    itemList: ingredientlist.weathers!,
+                    maxItem: 8),
+                const SizedBox(
+                  height: 36,
+                ),
+                buildSuggestionItemLine(
+                  title: "분위기",
+                  itemList: ingredientlist.moods!,
+                  maxItem: 10,
+                ),
+                const SizedBox(
+                  height: 36,
+                ),
+                buildSuggestionItemLine(
+                  title: "베이스",
+                  itemList: ingredientlist.bases!,
+                  maxItem: 7,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
