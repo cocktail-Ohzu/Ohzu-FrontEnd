@@ -727,10 +727,11 @@ Widget buildRecipeItem(
 
 void openDetailPage(BuildContext context, int id) {
   Navigator.push(
-      context,
-      CupertinoPageRoute(
-        builder: (context) => DetailPage(cocktailId: id),
-      ));
+    context,
+    CupertinoPageRoute(
+      builder: (context) => DetailPage(cocktailId: id),
+    ),
+  );
 }
 
 /// 이미지 사이즈 글로벌 키로 가져오는 함수

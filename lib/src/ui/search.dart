@@ -7,6 +7,7 @@ import 'package:ohzu/src/utils/search_util.dart';
 import 'package:ohzu/src/models/search_model.dart';
 import 'package:ohzu/src/models/ingredient_model.dart';
 import 'package:ohzu/src/ui/detail.dart';
+import 'package:ohzu/src/ui/list.dart';
 //힌트 팝업 최초 띄우기 의한 플러그인
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -99,7 +100,8 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       );
                     } else if (ingredientState is IngredientLoadedState) {
-                      return buildSuggestion(ingredientState.ingredient);
+                      return buildSuggestion(
+                          ingredientState.ingredient, state.search);
                     } else if (ingredientState is IngredientErrorState) {
                       return const Text("recommend api error");
                     }
@@ -185,7 +187,8 @@ class _SearchPageState extends State<SearchPage> {
  */
 
 /* 검색 내역이 없을 때 제안 생성 */
-  Widget buildSuggestion(IngredientModel ingredientlist) {
+  Widget buildSuggestion(
+      IngredientModel ingredientlist, List<SearchModel> itemList) {
     return SingleChildScrollView(
       physics: const ClampingScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -197,7 +200,7 @@ class _SearchPageState extends State<SearchPage> {
             margin: const EdgeInsets.only(top: 38),
             child: Row(
               children: [
-                Text(
+                const Text(
                   "추천 해시태그",
                   style: TextStyle(
                     fontSize: 18,
@@ -205,12 +208,27 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ),
                 Expanded(
-                  child: Text(
-                    "칵테일 전체보기 ->",
-                    style: TextStyle(fontSize: 15),
-                    textAlign: TextAlign.right,
+                  child: GestureDetector(
+                    onTap: () => {openListPage(context, itemList)},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Text(
+                          "칵테일 전체보기",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_right,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -221,7 +239,7 @@ class _SearchPageState extends State<SearchPage> {
                 buildSuggestionItemLine(
                   title: "맛",
                   itemList: ingredientlist.flavors!,
-                  maxItem: 14,
+                  maxItem: 19,
                 ),
                 const SizedBox(
                   height: 36,
