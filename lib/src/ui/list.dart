@@ -118,12 +118,12 @@ class _ListPageState extends State<ListPage> {
                     ),
                     Container(
                       margin: const EdgeInsets.fromLTRB(12, 0, 12, 16),
-                      child: const SingleChildScrollView(
-                        physics: ClampingScrollPhysics(),
+                      child: SingleChildScrollView(
+                        physics: const ClampingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         child: Text(
-                          "alcohol 24%",
-                          style: TextStyle(
+                          "alcohol ${_list[i].strength ?? "??"}%",
+                          style: const TextStyle(
                             fontFamily: 'Montserrat',
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
