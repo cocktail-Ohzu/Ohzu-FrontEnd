@@ -2,6 +2,7 @@ class SearchModel {
   int? id;
   String? name;
   String? engName;
+  int? strength;
   String? img;
   String? img2;
   String? img4;
@@ -16,6 +17,7 @@ class SearchModel {
   SearchModel(
       {this.id,
       this.name,
+      this.strength,
       this.engName,
       this.img,
       this.img2,
@@ -32,6 +34,7 @@ class SearchModel {
     id = json['id'];
     name = json['name'];
     engName = json['eng_name'];
+    strength = json['strength'];
     img = json['img'];
     img2 = json['img2'];
     img4 = json['img4'];
@@ -79,6 +82,7 @@ class SearchModel {
     data['id'] = id;
     data['name'] = name;
     data['eng_name'] = engName;
+    data['strength'] = strength;
     data['img'] = img;
     data['img2'] = img2;
     data['img4'] = img4;
