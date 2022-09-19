@@ -32,66 +32,69 @@ class _MainPageState extends State<MainPage> {
       create: (_) => todaysCocktailbloc,
       child: Container(
         decoration: const BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomCenter,
-          stops: [0.0, 0.2],
-          colors: [
-            Color(0xff8C5B40),
-            Color(0xff121212),
-          ],
-        )),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomCenter,
+            stops: [0.0, 0.2],
+            colors: [
+              Color(0xff8C5B40),
+              Color(0xff121212),
+            ],
+          ),
+        ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-              toolbarHeight: 40,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              //middle: Text(widget.title),
-              actions: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/search');
-                    },
-                    splashRadius: 18,
-                    icon: const Icon(
-                      Icons.search,
-                      size: 25,
-                    ),
-                    color: Colors.white.withOpacity(0.6),
+            toolbarHeight: 40,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            //middle: Text(widget.title),
+            actions: [
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 5, 10, 0),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/search');
+                  },
+                  splashRadius: 18,
+                  icon: const Icon(
+                    Icons.search,
+                    size: 25,
                   ),
-                )
-              ]),
+                  color: Colors.white.withOpacity(0.6),
+                ),
+              )
+            ],
+          ),
           body: SingleChildScrollView(
             child: Container(
               margin: const EdgeInsets.fromLTRB(24, 0, 24, 5),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    /* 추천 칵테일 타이틀 */
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: const Text(
-                        "오늘의 추천 칵테일",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
-                        ),
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  /* 추천 칵테일 타이틀 */
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: const Text(
+                      "오늘의 추천 칵테일",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
                       ),
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     ),
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  ),
 
-                    /* 추천 칵테일 컨테이너 */
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                  /* 추천 칵테일 컨테이너 */
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(12),
                       ),
-                      child:
-                          BlocBuilder<TodaysCocktailBloc, TodaysCocktailState>(
-                              builder: (context, state) {
+                    ),
+                    child: BlocBuilder<TodaysCocktailBloc, TodaysCocktailState>(
+                      builder: (context, state) {
                         if (state is TodaysCocktailLoadingState) {
                           return Container(
                             decoration: const BoxDecoration(
@@ -110,31 +113,38 @@ class _MainPageState extends State<MainPage> {
                               ),
                             ),
                             child: Center(
-                                child: CircularProgressIndicator(
-                              color: Colors.white.withOpacity(0.5),
-                            )),
+                              child: CircularProgressIndicator(
+                                color: Colors.white.withOpacity(0.5),
+                              ),
+                            ),
                           );
                         } else if (state is TodaysCocktailLoadedState) {
-                          return buildCocktailContainer(
-                              context, state.todaysCocktail);
+                          return GestureDetector(
+                            onTap: () => {
+                              openDetailPage(context, state.todaysCocktail.id!),
+                            },
+                            child: buildCocktailContainer(
+                                context, state.todaysCocktail),
+                          );
                         }
                         if (state is TodaysCocktailErrorState) {
                           return const Text("snapshot is empty");
                         }
                         return Container();
-                      }),
+                      },
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    /* 하단 버튼 1 */
-                    buildGetRecommendButton(context),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    /* 하단 버튼 2 */
-                    BlocBuilder<TodaysCocktailBloc, TodaysCocktailState>(
-                        builder: (context, state) {
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  /* 하단 버튼 1 */
+                  buildGetRecommendButton(context),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  /* 하단 버튼 2 */
+                  BlocBuilder<TodaysCocktailBloc, TodaysCocktailState>(
+                    builder: (context, state) {
                       if (state is TodaysCocktailLoadingState) {
                         return const Center(
                             child: CircularProgressIndicator(
@@ -148,8 +158,10 @@ class _MainPageState extends State<MainPage> {
                         return const Text("snapshot is empty");
                       }
                       return Container();
-                    }),
-                  ]),
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -184,102 +196,103 @@ Widget buildCocktailContainer(
 
       /* 추천 칵테일 텍스트 */
       Container(
-          // margin: const EdgeInsets.fromLTRB(24, 21, 24, 25),
-          margin: const EdgeInsets.fromLTRB(7, 7, 7, 7),
-          alignment: Alignment.bottomLeft,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /* 마진 띄우기 용 정사각 컨테이너 */
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final size = min(constraints.maxWidth, constraints.maxHeight);
-                  return Align(
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      height: size * 1.04792332,
-                      width: size,
-                      // color: Colors.amber.withOpacity(0.4),
-                    ),
-                  );
-                },
-              ),
+        // margin: const EdgeInsets.fromLTRB(24, 21, 24, 25),
+        margin: const EdgeInsets.fromLTRB(7, 7, 7, 7),
+        alignment: Alignment.bottomLeft,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /* 마진 띄우기 용 정사각 컨테이너 */
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final size = min(constraints.maxWidth, constraints.maxHeight);
+                return Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    height: size * 1.04792332,
+                    width: size,
+                    // color: Colors.amber.withOpacity(0.4),
+                  ),
+                );
+              },
+            ),
 
-              /* 첫째줄 */
-              Container(
-                margin: const EdgeInsets.fromLTRB(17, 21, 17, 22),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          cocktail.name.toString(),
+            /* 첫째줄 */
+            Container(
+              margin: const EdgeInsets.fromLTRB(17, 21, 17, 22),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        cocktail.name.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize:
+                              cocktail.name.toString().length > 7 ? 21 : 24,
+                          color: Colors.white,
+                        ),
+                      ),
+                      /* Vertical Divider */
+                      Container(
+                        color: Colors.white.withOpacity(0.6),
+                        height: 22,
+                        width: 1,
+                        margin: const EdgeInsets.fromLTRB(12, 3, 12, 0),
+                      ),
+                      Expanded(
+                        child: Text(
+                          cocktail.engName.toString(),
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize:
-                                cocktail.name.toString().length > 7 ? 21 : 24,
-                            color: Colors.white,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white.withOpacity(0.6),
+                            fontSize: cocktail.engName.toString().length > 18
+                                ? 13
+                                : 16,
+                            height: 1.5,
                           ),
+                          overflow: TextOverflow.fade,
+                          maxLines: 1,
+                          softWrap: false,
                         ),
-                        /* Vertical Divider */
-                        Container(
-                          color: Colors.white.withOpacity(0.6),
-                          height: 22,
-                          width: 1,
-                          margin: const EdgeInsets.fromLTRB(12, 3, 12, 0),
-                        ),
-                        Expanded(
-                          child: Text(
-                            cocktail.engName.toString(),
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white.withOpacity(0.6),
-                              fontSize: cocktail.engName.toString().length > 18
-                                  ? 13
-                                  : 16,
-                              height: 1.5,
-                            ),
-                            overflow: TextOverflow.fade,
-                            maxLines: 1,
-                            softWrap: false,
-                          ),
-                        ),
-                      ],
-                    ),
-                    /* 둘째줄 */
-                    Text(
-                      cocktail.desc.toString(),
-                      style: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 18,
-                        height: 1.5,
-                        // fontSize: cocktail.desc!.length < 25 ? 18 : 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white.withOpacity(0.85),
                       ),
+                    ],
+                  ),
+                  /* 둘째줄 */
+                  Text(
+                    cocktail.desc.toString(),
+                    style: TextStyle(
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: 18,
+                      height: 1.5,
+                      // fontSize: cocktail.desc!.length < 25 ? 18 : 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white.withOpacity(0.85),
                     ),
-                    const SizedBox(
-                      height: 15,
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  /* 셋째줄 */
+                  Text(
+                    "alcohol ${cocktail.strength.toString()}%",
+                    style: const TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFFDA6C31),
                     ),
-                    /* 셋째줄 */
-                    Text(
-                      "alcohol ${cocktail.strength.toString()}%",
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFFDA6C31),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          )),
+            ),
+          ],
+        ),
+      ),
     ],
   );
 }
