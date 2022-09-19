@@ -24,19 +24,32 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF121212),
-      appBar: AppBar(
-        toolbarHeight: 44,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-
-        // leadingWidth: 60,
-        leadingWidth: 50,
-        actions: const [],
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomCenter,
+          stops: [0.0, 0.2],
+          colors: [
+            Color(0xff8C5B40),
+            Color(0xff121212),
+          ],
+        ),
       ),
-      body: buildResultByTag(
-        itemList,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          toolbarHeight: 44,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+
+          // leadingWidth: 60,
+          leadingWidth: 50,
+          actions: const [],
+        ),
+        body: buildResultByTag(
+          itemList,
+        ),
       ),
     );
   }
